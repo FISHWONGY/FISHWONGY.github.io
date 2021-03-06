@@ -1,0 +1,4 @@
+baseURL: "https://FISHWONGY.github.io"
+languageCode: "en-us"
+title: "Hugo Novela"
+pygmentsstyle: 'monokai'

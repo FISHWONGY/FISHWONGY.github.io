@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fish Wong</title>
+    <link>https://FISHWONGY.github.io/</link>
+    <description>Recent content on Fish Wong</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 06 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Generative Art</title>
+      <link>https://FISHWONGY.github.io/post/20210305_generativeart/</link>
+      <pubDate>Sat, 06 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20210305_generativeart/</guid>
+      <description>Ever since I learned how to code, I&amp;rsquo;ve been trying to produce generative art for home decoration. And I will be showing some of them in this blog post.
+  City Map 
+I like to produce this type of city map for cities that I&amp;rsquo;ve lived/ travelled to.
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Apart from that, I&amp;rsquo;ve also tried to produce some random city landscape for fun.
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;  Fractals</description>
+    </item>
+    
+    <item>
+      <title>On Formula 1</title>
+      <link>https://FISHWONGY.github.io/post/20200630_f1/</link>
+      <pubDate>Sat, 12 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200630_f1/</guid>
+      <description>This post initially published on 30 Jun 2020 and editted on 12 Dec 2020.
+ Netflix&amp;rsquo;s Formula 1 series is one of my favourites on the platform. However, due to the covid-19 situation, this year&amp;rsquo;s F1 season has been cancelling its matches.
+  A few days ago, I decided to scrape the competition data from the F1 website and do some data visualisation.
+  Driver&amp;rsquo;s Data</description>
+    </item>
+    
+    <item>
+      <title>On EU Energy</title>
+      <link>https://FISHWONGY.github.io/post/20201010_euenergy/</link>
+      <pubDate>Sat, 10 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20201010_euenergy/</guid>
+      <description>Ever since I have come back to London I always wanted to do a blog post and data viz on something meaning full related to Europe (though the UK is no longer related to the EU). So in this post, I am doing a project on energy usage in different European countries. Firstly, we can have a board sense of the energy production distribution of various energy from 2016 to 2018.</description>
+    </item>
+    
+    <item>
+      <title>On Anime Production</title>
+      <link>https://FISHWONGY.github.io/post/20200907_animeproduction/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200907_animeproduction/</guid>
+      <description>For this analysis on Japanese Anime, data are scraped from the website My Anime List.I divided the analysis into 2 large part, the anime producer and anime studio.
+ First of all, let&amp;rsquo;s briefly check the overall popularity of different anime genre.
+Generally, a larger number of produced anime does not necessarily mean more popularity. Most highly rated anime genre by audiences are Thriller, Josei and psychological. On the other hand, although Kids, Dementia and Music anime are mass-produced, their ratings are the lowest.</description>
+    </item>
+    
+    <item>
+      <title>On Astronauts</title>
+      <link>https://FISHWONGY.github.io/post/20200803_astronauts/</link>
+      <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200803_astronauts/</guid>
+      <description>So last time I have done a data analysis project on F1&amp;rsquo;s data, after watching Nexflix&amp;rsquo;s series - Drive to survive. This time I decided to visualise astronauts&#39; data after watching another Netflix series - Space Force. Data is from the article: Population analysis of space travellers by Tatsuya Corlett, Mariya Stavnichuka and Svetlana V.Komarova Let&amp;rsquo;s first have a glimpse on where are those astronauts from and how much time they spent on space.</description>
+    </item>
+    
+    <item>
+      <title>On BLM and Movements</title>
+      <link>https://FISHWONGY.github.io/post/20200614_blm/</link>
+      <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200614_blm/</guid>
+      <description>Tidy Tuesday has promptly responded to the BLM movement and focus this week&amp;rsquo;s theme on African American&amp;rsquo;s achievements.
+ Let&amp;rsquo;s first have a glimpse on how African American&amp;rsquo;s achievements being recognized throughout the years.
+It looks like it has came a long way, isn&amp;rsquo;t it?
+Apart from different fields, I&amp;rsquo;m also interested in how gender plays its role along the way.
+As obvious as it is, way less African American women have recognisable achievements compare to men despite time or different fields.</description>
+    </item>
+    
+    <item>
+      <title>On Covid-19 (7 Jun)</title>
+      <link>https://FISHWONGY.github.io/post/20200607_covid/</link>
+      <pubDate>Sun, 07 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200607_covid/</guid>
+      <description>Excess deaths seem to be a popular benchmark to check out these days regarding covid-19.
+From the graph below, we can see that seems like some countries are having trouble with reporting deaths?
+And here is the comparison of deaths count in selected countries.
+I saw some people might use this as an indicator for lock-down effectiveness and social measures effectiveness, though, I am not so sure is this the best indicator to use.</description>
+    </item>
+    
+    <item>
+      <title>On Covid-19 (13 May)</title>
+      <link>https://FISHWONGY.github.io/post/20200513_covid/</link>
+      <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200513_covid/</guid>
+      <description>Since early May, many countries around the world have loosened their lockdown restrictions. Is the &amp;ldquo;peak&amp;rdquo; already passed?
+ The graph below shows the number of daily covid-19 cases recorded in different countries.
+Although it seems most of the chosen countries have passed the highest recorded cases day, looking at the active cases might tell another side of the story.
+Furthermore, I produced a version that focuses on different states in the US, that might partly show why the USA curve as it is from the graph above.</description>
+    </item>
+    
+    <item>
+      <title>On Covid-19 (29 Apr)</title>
+      <link>https://FISHWONGY.github.io/post/20200429_covid/</link>
+      <pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200429_covid/</guid>
+      <description>This week I want to explore the relationship between population and the covid-19 situation
+Let&amp;rsquo;s first have a fast glance at the graph below on population and confirmed cases and deaths.
+Apparently, there&amp;rsquo;s a correlation between population and number of cases and deaths. Intuitively reasonable, more populated nation with more affected patients.
+But countries like this US with larger country size doubtlessly will have a higher population thus more affected inhabitants, so what about population density?</description>
+    </item>
+    
+    <item>
+      <title>On Covid-19 (17 Apr)</title>
+      <link>https://FISHWONGY.github.io/post/20200417_covid/</link>
+      <pubDate>Fri, 17 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200417_covid/</guid>
+      <description>This week&amp;rsquo;s covid-19 analysis focuses on mobility and the government&amp;rsquo;s intervention on social policy in fighting covid-19.
+Google is now sharing anonymised mobility data based google map&amp;rsquo;s user.
+Using the given data, I produced visualisation on the region&amp;rsquo;s mobility based in terms of transportation type and destination.
+The general mobility trend has largely decreased for all of the selected countries and continents since the beginning of the covid-19 crisis. And the mobility of southern Europe is generally lower than the northern part.</description>
+    </item>
+    
+    <item>
+      <title>On Covid-19 (8 Apr)</title>
+      <link>https://FISHWONGY.github.io/post/20200408_covid/</link>
+      <pubDate>Wed, 08 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200408_covid/</guid>
+      <description>This week I try to look at the unemployment rate in the US and its relationship with covid-19.
+As the corona situation goes on and government officials from different countries began to take active measure, not only an increasing amount of people are now working from home, some even got laid off due to the depressing economy. Many experts have already pointed out that it is expected to take time for economic recovery after the epidemic ends.</description>
+    </item>
+    
+    <item>
+      <title>On Brexit</title>
+      <link>https://FISHWONGY.github.io/post/20200208_brexit/</link>
+      <pubDate>Sat, 08 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200208_brexit/</guid>
+      <description>More than 3 years after the historically significant referendum, the UK finally left the European Union officially last Friday (31 Jan 2020). As the Economist states, &amp;ldquo;nothing much will change after 2300 GMT on 31 Jan {&amp;hellip;} people, goods and services will continue to move between Britain and the EU.&amp;rdquo; And that&amp;rsquo;s indeed true; life still goes on, as usual, the only little different is that Brexit became the most discussed topics for a while.</description>
+    </item>
+    
+    <item>
+      <title>On Taiwan</title>
+      <link>https://FISHWONGY.github.io/post/20200119_taiwan/</link>
+      <pubDate>Sun, 19 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20200119_taiwan/</guid>
+      <description>Around 12 hours prior to the Taiwan general election, I scrapped around 300,000 tweets on Twitter for some data analysis and visualisation.
+Unsurprisingly, the number of tweets that mentioned Taiwan surged on the day before the election.
+Before I cleaned the data for analysis, I was expecting the most popular hashtags would all related to Taiwan and its election. Then when I saw #HongKong is the 5th most popular hashtag that relates to Taiwan&amp;rsquo;s tweets, I thought, oh interesting.</description>
+    </item>
+    
+    <item>
+      <title>About Fish Wong</title>
+      <link>https://FISHWONGY.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/about/</guid>
+      <description>Data Analyst based in London after pursuing a master degree @LSE.
+I enjoy telling story through data.
+Also love photography, read and sleep.
+I like books, and I do my best to read one book per week. I&amp;rsquo;ve been doing this for just over 2 years now. Here&amp;rsquo;s a list of some of my favourite books. And here&amp;rsquo;s a list of the books that I&amp;rsquo;m planning to read!
+Feel free and please share your book suggestions.</description>
+    </item>
+    
+  </channel>
+</rss>

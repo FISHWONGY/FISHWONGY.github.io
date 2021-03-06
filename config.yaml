@@ -1,0 +1,21 @@
+theme: "hugo-theme-novela"
+baseURL: "https://FISHWONGY.github.io"
+publishDir: "docs"
+languageCode: "en-us"
+title: "Fish Wong"
+pygmentsstyle: 'monokai'
+paginate: 6
+social:
+  twitter: "https://twitter.com/fishwongxd"
+  github: "https://github.com/FISHWONGY"
+  instagram: "https://instagram.com/datavizofficial"
+ # linkedin: "#"
+  dribbble: "https://fishwongy.github.io/about"
+  #youtube: "#"
+taxonomies:
+  author: authors
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
