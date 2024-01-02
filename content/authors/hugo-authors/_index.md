@@ -10,5 +10,5 @@ social:
   url: https://twitter.com/fishwongxd
 - title: instagram
   url: https://instagram.com/datavizofficial
-title: Fish Wong
+title: Yu Wong
 ---

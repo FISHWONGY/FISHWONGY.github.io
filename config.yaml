@@ -2,7 +2,7 @@ theme: "hugo-theme-novela"
 baseURL: "https://FISHWONGY.github.io"
 publishDir: "docs"
 languageCode: "en-us"
-title: "Fish Wong"
+title: "Yu Wong"
 pygmentsstyle: 'monokai'
 paginate: 6
 social:

@@ -1,9 +1,9 @@
 ---
-title: About Fish Wong
+title: About Yu Wong
 ---
-Data Analyst based in London after pursuing a master degree @LSE.
+Data Engineer based in London after pursuing a master degree @LSE.
 
-I enjoy telling story through data.
+I enjoy working with data, talking about data architecture and telling story through data.
 
 Also love photography, read and sleep.
 
