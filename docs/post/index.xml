@@ -6,7 +6,19 @@
     <description>Recent content in Posts on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Google Cloud Functions</title>
+      <link>https://FISHWONGY.github.io/post/20220610_gcf/</link>
+      <pubDate>Fri, 10 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20220610_gcf/</guid>
+      <description>Google cloud functions is a highly scalable serverless FaaS product. Previously, I have used it for some data extraction and cleaning task at work. Recently I have decided to incorporate it into one of my personal projects.
+The workflow looks something like below 👀
+ Cloud Function Setup 
+So, let&amp;rsquo;s look into the set up and begin to write some code. When setting up the cloud function, you will need to have a runtime service account, and depending on development needs, we can we also adjust the memory and timeout limit.</description>
+    </item>
+    
     <item>
       <title>On US Employment status</title>
       <link>https://FISHWONGY.github.io/post/20210411_ussalary/</link>
