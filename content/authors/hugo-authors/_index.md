@@ -1,7 +1,7 @@
 ---
 avatar: /images/profile-02.jpg
 bio: |
-  Telling story through data
+  All about data
 featured: true
 social:
 - title: github

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Fish Wong</title>
+    <title>Yu Wong</title>
     <link>https://FISHWONGY.github.io/</link>
-    <description>Recent content on Fish Wong</description>
+    <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Google Cloud Functions</title>
+      <link>https://FISHWONGY.github.io/post/20220610_gcf/</link>
+      <pubDate>Fri, 10 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20220610_gcf/</guid>
+      <description>Google cloud functions is a highly scalable serverless FaaS product. Previously, I have used it for some data extraction and cleaning task at work. Recently I have decided to incorporate it into one of my personal projects.
+The workflow looks something like below 👀
+ Cloud Function Setup 
+So, let&amp;rsquo;s look into the set up and begin to write some code. When setting up the cloud function, you will need to have a runtime service account, and depending on development needs, we can we also adjust the memory and timeout limit.</description>
+    </item>
+    
     <item>
       <title>On US Employment status</title>
       <link>https://FISHWONGY.github.io/post/20210411_ussalary/</link>
@@ -164,16 +176,15 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
     </item>
     
     <item>
-      <title>About Fish Wong</title>
+      <title>About Yu Wong</title>
       <link>https://FISHWONGY.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/about/</guid>
-      <description>Data Analyst based in London after pursuing a master degree @LSE.
-I enjoy telling story through data.
+      <description>Data Engineer based in London after pursuing a master degree @LSE.
+I enjoy working with data, talking about data architecture and telling story through data.
 Also love photography, read and sleep.
-I like books, and I do my best to read one book per week. I&amp;rsquo;ve been doing this for just over 2 years now. Here&amp;rsquo;s a list of some of my favourite books. And here&amp;rsquo;s a list of the books that I&amp;rsquo;m planning to read!
-Feel free and please share your book suggestions.</description>
+I like books, and I do my best to read one book per week. I&amp;rsquo;ve been doing this for just over 2 years now. Here&amp;rsquo;s a list of some of my favourite books. And here&amp;rsquo;s a list of the books that I&amp;rsquo;m planning to read!</description>
     </item>
     
   </channel>
