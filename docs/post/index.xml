@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Fish Wong</title>
+    <title>Posts on Yu Wong</title>
     <link>https://FISHWONGY.github.io/post/</link>
-    <description>Recent content in Posts on Fish Wong</description>
+    <description>Recent content in Posts on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/post/index.xml" rel="self" type="application/rss+xml" />
