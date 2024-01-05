@@ -26,7 +26,7 @@ The Webex Chatbot uses OpenAI&amp;rsquo;s GPT-3.</description>
       <pubDate>Mon, 23 Oct 2023 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20231023_azuredatabricks/</guid>
-      <description>Recently, I explored Azure Databricks for a PoC project with a machine learning workload. Since Snowflake and GCP are our base, setting up Databricks with Azure proved to be a bit tricky.
+      <description>Recently, I explored Azure Databricks for a PoC project with machine learning workload. Since Snowflake and GCP are our base, setting up Databricks with Azure proved to be a bit tricky.
 I know, I know, using Databricks on GCP would be way easier in this case. There are several reasons why I couldn&amp;rsquo;t do that. And, who likes it easy? (Me, actually&amp;hellip;)
 Anyway, it is what it is. Let&amp;rsquo;s begin with my learning journey.</description>
     </item>
@@ -37,13 +37,13 @@ Anyway, it is what it is. Let&amp;rsquo;s begin with my learning journey.</descr
       <pubDate>Sat, 12 Aug 2023 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20230812_poetry/</guid>
-      <description>For a long time, when developing applications or data pipelines, I used a combination of requirements.txt and Dockerfile. However, since earlier this year, I changed my habit to use Poetry instead of a requirements.txt.
+      <description>For a long time, when developing applications or data pipelines, I used a combination of requirements.txt and Dockerfile. However, since earlier this year, I changed my habit to use Poetry instead of a requirements.txt
  What is Poetry? 
 According to the Poetry Official website, &amp;ldquo;Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on, and it will manage (install/update) them for you.</description>
     </item>
     
     <item>
-      <title>On Orchestration Tool</title>
+      <title>On Orchestration Tools</title>
       <link>https://FISHWONGY.github.io/post/20230625_orchestrationtool/</link>
       <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
       
@@ -62,8 +62,8 @@ Let&amp;rsquo;s jump right in.
       <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20230315_redpandakafka/</guid>
-      <description>Let&amp;rsquo;s talk about streaming data pipeline with RedPanda Kafka and Snowflake today.
-There&amp;rsquo;s a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc. While there&amp;rsquo;s a lot of talking points and Pros &amp;amp; Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe</description>
+      <description>Let&amp;rsquo;s talk about data streaming with RedPanda Kafka and Snowflake today.
+There are many articles discussing whether we should migrate all pipelines to streaming instead of batch, debating whether streaming is overhyped, and comparing Kafka vs RedPanda, among other topics. While there are numerous talking points and pros and cons to consider for each of these topics, our article today focuses on setting up RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe.</description>
     </item>
     
     <item>
@@ -84,8 +84,9 @@ According to the official github website, GitHub Actions is a continuous integra
       <pubDate>Sun, 06 Nov 2022 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20221106_dbtsetup/</guid>
-      <description>When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). And today we will be focusing on the T, and the tool that is currently most used is DBT
-While this article will focus on its set up, I want to first brieflt talk about why I decided to integrate dbt into our team&amp;rsquo;s anlytics infrastruture.</description>
+      <description>When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). Today, we will be focusing on the T, and the tool that is currently most used is DBT
+While this article will focus on its setup, I want to briefly talk about why I decided to integrate dbt into our team&amp;rsquo;s analytics infrastructure.
+ Why DBT?</description>
     </item>
     
     <item>
@@ -94,10 +95,11 @@ While this article will focus on its set up, I want to first brieflt talk about 
       <pubDate>Fri, 10 Jun 2022 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20220610_gcf/</guid>
-      <description>Google cloud functions is a highly scalable serverless FaaS product. Previously, I have used it for some data extraction and cleaning task at work. Recently I have decided to incorporate it into one of my personal projects.
+      <description>Google Cloud Functions is a highly scalable serverless FaaS product. Previously, I have used it for some data extraction and cleaning tasks at work. Recently, I have decided to incorporate it into one of my personal projects.
 The workflow looks something like below 👀
  Cloud Function Setup 
-So, let&amp;rsquo;s look into the set up and begin to write some code. When setting up the cloud function, you will need to have a runtime service account, and depending on development needs, we can we also adjust the memory and timeout limit.</description>
+So, let&amp;rsquo;s look into the setup and begin to write some code.
+When setting up the cloud function, you will need to have a runtime service account, and depending on development needs, we can also adjust the memory and timeout limit.</description>
     </item>
     
     <item>

@@ -131,12 +131,13 @@ You have to answer as the below strcuture, such as <provide-detailed-answer-stru
 ```
 
 - Positivity & Compliment
+
+
 It could be frustrating when Gen AI is constantly not giving the output we are looking for; I get it. But it is better to sound positive for better Gen AI performance.
+
 ```md
 Good job, we are getting there slowly. <part-of-the-gen-ai-response> is what I want, however ... <explicit-comment-on-desire-output>
 ```
-
-
 
 Here is an example of the prompting function that I have for the bot. I tested it many times with different inputs to observe its response, and then I adjusted the user-assistant prompt based on the answer.
 
@@ -169,7 +170,7 @@ And that's it, here is the final working BOT example.
 </p>
 
 
-[Repo](https://github.com/FISHWONGY/webex-bot) for the Webx Chat BOT in this blog post.
+[Code](https://github.com/FISHWONGY/webex-bot) for the Webx Chat BOT in this blog post.
 
 
 Thank you for reading and have a nice day!

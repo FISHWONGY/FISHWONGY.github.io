@@ -25,12 +25,12 @@
 
 
 <title>On RedPanda Kafka | Yu Wong</title>
-<meta name="description" content="Let&rsquo;s talk about streaming data pipeline with RedPanda Kafka and Snowflake today.
-There&rsquo;s a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc. While there&rsquo;s a lot of talking points and Pros &amp; Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe">
+<meta name="description" content="Let&rsquo;s talk about data streaming with RedPanda Kafka and Snowflake today.
+There are many articles discussing whether we should migrate all pipelines to streaming instead of batch, debating whether streaming is overhyped, and comparing Kafka vs RedPanda, among other topics. While there are numerous talking points and pros and cons to consider for each of these topics, our article today focuses on setting up RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe.">
 <meta property="og:title" content="On RedPanda Kafka | Yu Wong">
 <meta property="og:site_name" content="Yu Wong">
-<meta property="og:description" content="Let&rsquo;s talk about streaming data pipeline with RedPanda Kafka and Snowflake today.
-There&rsquo;s a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc. While there&rsquo;s a lot of talking points and Pros &amp; Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe">
+<meta property="og:description" content="Let&rsquo;s talk about data streaming with RedPanda Kafka and Snowflake today.
+There are many articles discussing whether we should migrate all pipelines to streaming instead of batch, debating whether streaming is overhyped, and comparing Kafka vs RedPanda, among other topics. While there are numerous talking points and pros and cons to consider for each of these topics, our article today focuses on setting up RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe.">
 <meta property="og:url" content="https://FISHWONGY.github.io/post/20230315_redpandakafka/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -43,8 +43,8 @@ There&rsquo;s a lot articles out there with the discussion around should we move
 	<meta name="twitter:site" content="@https://twitter.com/fishwongxd">
 	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
 
-	<meta name="twitter:description" content="Let&rsquo;s talk about streaming data pipeline with RedPanda Kafka and Snowflake today.
-There&rsquo;s a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc. While there&rsquo;s a lot of talking points and Pros &amp; Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe">
+	<meta name="twitter:description" content="Let&rsquo;s talk about data streaming with RedPanda Kafka and Snowflake today.
+There are many articles discussing whether we should migrate all pipelines to streaming instead of batch, debating whether streaming is overhyped, and comparing Kafka vs RedPanda, among other topics. While there are numerous talking points and pros and cons to consider for each of these topics, our article today focuses on setting up RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe.">
 <meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_rpkafka/redpanda_kafka_cover.png">
 <meta property="article:published_time" content="2023-03-15T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2023-03-15T00:00:00&#43;00:00">
@@ -170,9 +170,8 @@ There&rsquo;s a lot articles out there with the discussion around should we move
 
     <article  id="articleContent" class="post-content" style="position:relative;">
         <div style="text-align: justify">
-<p>Let&rsquo;s talk about streaming data pipeline with <a href="https://redpanda.com/">RedPanda Kafka</a> and Snowflake today.</p>
-<p>There&rsquo;s a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc.
-While there&rsquo;s a lot of talking points and Pros &amp; Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using <a href="https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro">Snowpipe</a></p>
+<p>Let&rsquo;s talk about data streaming with <a href="https://redpanda.com/">RedPanda Kafka</a> and <a href="https://www.snowflake.com/en/why-snowflake/">Snowflake</a> today.</p>
+<p>There are many articles discussing whether we should migrate all pipelines to streaming instead of batch, debating whether streaming is overhyped, and comparing Kafka vs RedPanda, among other topics. While there are numerous talking points and pros and cons to consider for each of these topics, our article today focuses on setting up RedPanda Kafka and the streaming architecture with Snowflake using <a href="https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro">Snowpipe</a>.</p>
 <p>Prerequisites</p>
 <ul>
 <li>Python or Go</li>
@@ -218,7 +217,7 @@ Streaming data - Python
 <p>A pipe is a named, first-class Snowflake object that contains a COPY statement used by Snowpipe. The COPY statement identifies the source location of the data files (i.e., a stage) and a target table. All data types are supported, including semi-structured data types such as JSON and Avro.</p>
 <p>All cloud platform is supported has cloud storage service support for automated Snowpipe and Snowpipe REST API calls from Snowflake accounts hosted.</p>
 <p><u>Sample Data Architecture</u></p>
-<p>Let&rsquo;s say we have a streaming pipeline extracting data from an API to a kafka topic, and we have 2 consumers consuming the data from the topic to mongo DB and google cloud storage with snowpipe consumption.</p>
+<p>Let&rsquo;s say we have a streaming pipeline extracting data from an API to a Kafka topic, and we have 2 consumers consuming the data from the topic to MongoDB and Google Cloud Storage with Snowpipe consumption.</p>
 <p align="center">
 <img alt = 'png' src='/images/on_rpkafka/redpanda_workflow.png'/>
 </p>
@@ -327,11 +326,13 @@ gsutil notification create -t gcs-bucket-activity <span style="color:#f92672">-f
 
 <span style="color:#75715e"># Create subscriptions under topic</span>
 gcloud pubsub subscriptions create gcs-bucket-activity-sub --topic=gcs-bucket-activity
-</code></pre></div><p>Subscription set as Pull, means when a file arrived in the gcs bucket, it will notify the topic, and the topic will distribute the message across the subscriptions you have set up.</p>
-<p>After that, we will have to add the snowflake service account into under the topic as pub/sub subscriber.</p>
+</code></pre></div><p>Subscription set as Pull means when a file arrives in the GCS bucket, it will notify the topic, and the topic will distribute the message across the subscriptions you have set up.</p>
+<p>After that, we will have to add the Snowflake service account as a pub/sub subscriber under the specified topic.</p>
+<p>Depending on your project setup, sometimes, the notification integration account needs to be added as a <code>Monitoring Viewer</code> at the project level.</p>
 <p>To check the service account details in snowflake</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">DESC</span> INTEGRATION GCP_KAFKA_NTFY_PROD;
 </code></pre></div><p>4 - Create storage integration and notification integration in Snowflake</p>
+<p>Note that the storage integration service account will need sufficient GCP Storage priviledges.</p>
 <p>For storage integration</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">STORAGE</span> INTEGRATION GCS_INIT
   <span style="color:#66d9ef">TYPE</span> <span style="color:#f92672">=</span> EXTERNAL_STAGE
@@ -409,7 +410,7 @@ INTEGRATION <span style="color:#f92672">=</span> GCP_KAFKA_NTFY_PROD <span style
                                 On DBT&#39;s CI/CD Workflow
                             </h2>
                             <p class="article-excerpt">
-                                Integrating up github actions with dbt
+                                Integrating Github Actions with dbt
                             </p>
                             <div class="article-metadata">
                                 December 8, 2022 · 2 min read

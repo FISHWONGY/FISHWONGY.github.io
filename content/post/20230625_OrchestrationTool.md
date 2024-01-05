@@ -4,7 +4,7 @@ authors:
 date: "2023-06-25"
 excerpt: A mini project testing out both tools
 hero: /images/on_orchestrationTool/dagster_prefect.png
-title: On Orchestration Tool
+title: On Orchestration Tools
 ---
 
 <div style="text-align: justify">
