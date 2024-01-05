@@ -180,7 +180,7 @@ And that's it, here is the final working BOT example.
 
 As I am closing off my post now, I just can't help but think about how far we have come with Gen AI.
 
-Let's take a look at the code I wrote in 2020 during lockdown to generate Shakespearean sonnet using TensorFlow.
+Let's take a look at the code back in 2020 during lockdown to generate Shakespearean sonnet using TensorFlow.
 
 ```python
 # Generating sonnet
