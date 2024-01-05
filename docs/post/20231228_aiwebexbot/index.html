@@ -148,7 +148,7 @@ The Webex Chatbot uses OpenAI&rsquo;s GPT-3.">
 
 <script src="/js/collapseAuthors.js"></script>
                     December 28, 2023
-                    • 4 min read
+                    • 3 min read
                 </div>
             </div>
         </header>
@@ -240,20 +240,20 @@ Final Thoughts
 <li>Start with building a personality
 Setting</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">You are a &lt;<span style="color:#f92672">role</span>&gt;, you are good at &lt;<span style="color:#f92672">subject</span>&gt;, your job is to help &lt;<span style="color:#f92672">action</span>&gt;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">You are a &lt;<span style="color:#f92672">role</span>&gt;, you are good at &lt;<span style="color:#f92672">subject</span>&gt;, your job is to &lt;<span style="color:#f92672">action</span>&gt;
 </code></pre></div><ul>
 <li>Giving specific example on the expected answer or outcome</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">For example, I will ask you a question: &lt;<span style="color:#f92672">question</span>&gt;.
-You have to answer as the below strcuture, such as &lt;<span style="color:#f92672">provide-detailed-answer-structure</span>&gt;
+You have to answer as the below strcuture, &lt;<span style="color:#f92672">provide-detailed-answer-structure</span>&gt;
 </code></pre></div><ul>
 <li>Positivity &amp; Compliment</li>
 </ul>
 <p>It could be frustrating when Gen AI is constantly not giving the output we are looking for; I get it. But it is better to sound positive for better Gen AI performance.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">Good job, we are getting there slowly. &lt;<span style="color:#f92672">part-of-the-gen-ai-response</span>&gt; is what I want, however ... &lt;<span style="color:#f92672">explicit-comment-on-desire-output</span>&gt;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">Good job, we are getting there slowly. &lt;<span style="color:#f92672">part-of-the-gen-ai-response</span>&gt; is what I want, however ... &lt;<span style="color:#f92672">explicit-comment-on-desired-output</span>&gt;
 </code></pre></div><p>Here is an example of the prompting function that I have for the bot. I tested it many times with different inputs to observe its response, and then I adjusted the user-assistant prompt based on the answer.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">construct_prompt</span>(query: str) <span style="color:#f92672">-&gt;</span> list:
-    system_prompt <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;{prompt.SQL_REFORMAT_PROMPT}&#34;</span>
+    system_prompt <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;{prompt.YOUR_INITIAL_PROMPT}&#34;</span>
     q <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;&#34;&#34;{query}&#34;&#34;&#34;</span>
     user_prompt <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;&#34;&#34;Good job, let&#39;s keep it going!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Remember the pattern is &lt;something&gt;.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Here is the next &lt;question&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Please make sure you MUST answer in &lt;output-format&gt;&#39;&#34;&#34;&#34;</span>
 

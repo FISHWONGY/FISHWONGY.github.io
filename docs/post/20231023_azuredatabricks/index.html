@@ -227,7 +227,8 @@ Working with Azure Databricks
 az storage account keys list -g contosoResourceGroup5 -n contosoblobstorage5
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create a Key Vault -- for secret setting purpose after</span>
 az keyvault create --name contosoblobstorage5 --resource-group contosoResourceGroup5 --location southcentralus
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"> <span style="color:#75715e"># Create the secret</span>
+</code></pre></div><p>Using contosoKeyVault10 as example provided on the <a href="https://learn.microsoft.com/en-us/azure/key-vault/general/integrate-databricks-blob-storage">Azure documentation</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"> <span style="color:#75715e"># Create the secret</span>
 az keyvault secret set --vault-name contosoKeyVault10 --name storageKey --value <span style="color:#e6db74">&#34;value of your key1&#34;</span>
 </code></pre></div><p>2 - Create Scope on Databricks, go to the link, follow the steps and create scope. Note that this only need tobe created once, there can be multiple secrets under the scope</p>
 <p>https://&lsquo;adb-instance&rsquo;#secrets/createScope</p>
@@ -313,8 +314,8 @@ PYSPARK_PYTHON=/databricks/python3/bin/python3
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df <span style="color:#f92672">=</span> spark<span style="color:#f92672">.</span>read<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;csv&#34;</span>)<span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;compression&#34;</span>, <span style="color:#e6db74">&#34;gzip&#34;</span>)<span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#34;gs://gcs-bucket/FILE_NAME_*.csv.gz&#34;</span>)
 </code></pre></div><p>Saving Spark DF to GCS - execute the below in a databricks notebook cell</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">current_datetime <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>now()<span style="color:#f92672">.</span>strftime(<span style="color:#e6db74">&#34;%Y%m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">%H%M%S&#34;</span>)
-TEMPORARY_TARGET<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;gs://gcs-fbucket/spark-tmp/{current_datetime}&#34;</span>
-DESIRED_TARGET<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;gs://gcs-fbucket/PRED_DATA-{current_datetime}.csv&#34;</span>
+TEMPORARY_TARGET<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;gs://gcs-bucket/spark-tmp/{current_datetime}&#34;</span>
+DESIRED_TARGET<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;gs://gcs-bucket/PRED_DATA-{current_datetime}.csv&#34;</span>
 
 prediction_final_df<span style="color:#f92672">.</span>coalesce(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;header&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>)<span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#34;overwrite&#34;</span>)<span style="color:#f92672">.</span>csv(TEMPORARY_TARGET)
 
