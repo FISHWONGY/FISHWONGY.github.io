@@ -2,7 +2,7 @@
 authors:
 - Hugo Authors
 date: "2022-12-08"
-excerpt: Integrating up github actions with dbt
+excerpt: Integrating Github Actions with dbt
 hero: /images/on_dbt_workflow/gh_actions.png
 title: On DBT's CI/CD Workflow
 ---
@@ -117,9 +117,9 @@ And that's it, you will have a CI/CD dbt workflow deployed with github actions.
 ---
 Some final thoughts...
 
-This is just one of the use case, there's so much more github actions can do. Ensuring code quality & security on branches based on git push, automating deploying on merging branch etc.
+This is just one use case; there's so much more GitHub Actions can do, such as ensuring code quality and security on branches based on git push, automating deployment on merging branches, etc.
 
-That's it for now. 
+That's it for now.
 
-Thank you for reading and have a nice day!
+Thank you for reading, and have a nice day!
 

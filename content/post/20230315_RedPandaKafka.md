@@ -9,10 +9,10 @@ title: On RedPanda Kafka
 
 <div style="text-align: justify">
 
-Let's talk about streaming data pipeline with [RedPanda Kafka](https://redpanda.com/) and Snowflake today.
+Let's talk about data streaming with [RedPanda Kafka](https://redpanda.com/) and [Snowflake](https://www.snowflake.com/en/why-snowflake/) today.
 
-There's a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc. 
-While there's a lot of talking points and Pros & Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using [Snowpipe](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro)
+
+There are many articles discussing whether we should migrate all pipelines to streaming instead of batch, debating whether streaming is overhyped, and comparing Kafka vs RedPanda, among other topics. While there are numerous talking points and pros and cons to consider for each of these topics, our article today focuses on setting up RedPanda Kafka and the streaming architecture with Snowflake using [Snowpipe](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro).
 
 
 Prerequisites
@@ -88,7 +88,7 @@ All cloud platform is supported has cloud storage service support for automated 
 
 <u>Sample Data Architecture</u>
 
-Let's say we have a streaming pipeline extracting data from an API to a kafka topic, and we have 2 consumers consuming the data from the topic to mongo DB and google cloud storage with snowpipe consumption.
+Let's say we have a streaming pipeline extracting data from an API to a Kafka topic, and we have 2 consumers consuming the data from the topic to MongoDB and Google Cloud Storage with Snowpipe consumption.
 
 <p align="center">
 <img alt = 'png' src='/images/on_rpkafka/redpanda_workflow.png'/>
@@ -236,9 +236,11 @@ gsutil notification create -t gcs-bucket-activity -f json gs://gcs-bucket-name/
 gcloud pubsub subscriptions create gcs-bucket-activity-sub --topic=gcs-bucket-activity
 ```
 
-Subscription set as Pull, means when a file arrived in the gcs bucket, it will notify the topic, and the topic will distribute the message across the subscriptions you have set up. 
+Subscription set as Pull means when a file arrives in the GCS bucket, it will notify the topic, and the topic will distribute the message across the subscriptions you have set up.
 
-After that, we will have to add the snowflake service account into under the topic as pub/sub subscriber.
+After that, we will have to add the Snowflake service account as a pub/sub subscriber under the specified topic.
+
+Depending on your project setup, sometimes, the notification integration account needs to be added as a `Monitoring Viewer` at the project level.
 
 To check the service account details in snowflake
 ```sql
@@ -247,6 +249,8 @@ DESC INTEGRATION GCP_KAFKA_NTFY_PROD;
 
 
 4 - Create storage integration and notification integration in Snowflake
+
+Note that the storage integration service account will need sufficient GCP Storage priviledges.
 
 For storage integration
 ```sql

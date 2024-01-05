@@ -25,12 +25,14 @@
 
 
 <title>On DBT | Yu Wong</title>
-<meta name="description" content="When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). And today we will be focusing on the T, and the tool that is currently most used is DBT
-While this article will focus on its set up, I want to first brieflt talk about why I decided to integrate dbt into our team&rsquo;s anlytics infrastruture.">
+<meta name="description" content="When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). Today, we will be focusing on the T, and the tool that is currently most used is DBT
+While this article will focus on its setup, I want to briefly talk about why I decided to integrate dbt into our team&rsquo;s analytics infrastructure.
+ Why DBT?">
 <meta property="og:title" content="On DBT | Yu Wong">
 <meta property="og:site_name" content="Yu Wong">
-<meta property="og:description" content="When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). And today we will be focusing on the T, and the tool that is currently most used is DBT
-While this article will focus on its set up, I want to first brieflt talk about why I decided to integrate dbt into our team&rsquo;s anlytics infrastruture.">
+<meta property="og:description" content="When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). Today, we will be focusing on the T, and the tool that is currently most used is DBT
+While this article will focus on its setup, I want to briefly talk about why I decided to integrate dbt into our team&rsquo;s analytics infrastructure.
+ Why DBT?">
 <meta property="og:url" content="https://FISHWONGY.github.io/post/20221106_dbtsetup/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -43,8 +45,9 @@ While this article will focus on its set up, I want to first brieflt talk about 
 	<meta name="twitter:site" content="@https://twitter.com/fishwongxd">
 	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
 
-	<meta name="twitter:description" content="When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). And today we will be focusing on the T, and the tool that is currently most used is DBT
-While this article will focus on its set up, I want to first brieflt talk about why I decided to integrate dbt into our team&rsquo;s anlytics infrastruture.">
+	<meta name="twitter:description" content="When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). Today, we will be focusing on the T, and the tool that is currently most used is DBT
+While this article will focus on its setup, I want to briefly talk about why I decided to integrate dbt into our team&rsquo;s analytics infrastructure.
+ Why DBT?">
 <meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_dbt/dbt_cover.png">
 <meta property="article:published_time" content="2022-11-06T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2022-11-06T00:00:00&#43;00:00">
@@ -171,8 +174,8 @@ While this article will focus on its set up, I want to first brieflt talk about 
     <article  id="articleContent" class="post-content" style="position:relative;">
         <div style="text-align: justify">
 <p>When it comes to data engineering, one of the phase engineers talk about the most is <code>ETL (Extract Transform Load)/ ELT (Extract Load Transform)</code>.
-And today we will be focusing on the <code>T</code>, and the tool that is currently most used is <a href="https://www.getdbt.com/product/what-is-dbt">DBT</a></p>
-<p>While this article will focus on its set up, I want to first brieflt talk about why I decided to integrate dbt into our team&rsquo;s anlytics infrastruture.</p>
+Today, we will be focusing on the <code>T</code>, and the tool that is currently most used is <a href="https://www.getdbt.com/product/what-is-dbt">DBT</a></p>
+<p>While this article will focus on its setup, I want to briefly talk about why I decided to integrate dbt into our team&rsquo;s analytics infrastructure.</p>
 <p><u><b>
 <p style="font-size:20pt ">
 Why DBT?
@@ -182,9 +185,9 @@ Why DBT?
 <p align="center">
 <img alt = 'png' src='/images/on_dbt/vc.png'/>
 </p>
-<p>For a long time, when my teammates ask me about SQL-related question, we have just been talk through back and forth on Teams. Unlike other pipeline related project that we have our code on github, that we can just collaborate easily on different develop branch, check the code changes and history using various git commands like <code>git diff</code>, there is no way to do so when working with snowflake.</p>
+<p>For a long time, when my teammates ask me about SQL-related questions, we have just been talking back and forth on Teams. Unlike other pipeline-related projects that we have our code on GitHub, where we can collaborate easily on different development branches, check the code changes, and review the history using various git commands like <code>git diff</code>, there is no way to do so when working with Snowflake.</p>
 <p>2 -  Data Quality Test</p>
-<p>With dbt, we can easily set up different test with great expectation or customeised macros. What&rsquo;s better is that with github ci/cd workflow, we can our repo up in way that whenever there is code merging to the <code>main</code> branch, dbt test needs to pass before successful merge to protect the main branch and to gurantee data quality. So that our team can proactively ensure data quality, instead of stakeholders coming to us and flag different data issue.</p>
+<p>With dbt, we can easily set up different tests with Great Expectations or customized macros. What&rsquo;s better is that with GitHub CI/CD workflow, we can set up our repository in a way that whenever there is code merging to the <code>main</code> branch, dbt tests need to pass before a successful merge to protect the main branch and guarantee data quality. This way, our team can proactively ensure data quality, instead of stakeholders coming to us and flagging different data issues.</p>
 <p><u><b>
 <p style="font-size:20pt ">
 Architecture
@@ -204,8 +207,8 @@ Set up dbt
 <ul>
 <li>Database that <a href="https://docs.getdbt.com/docs/supported-data-platforms">dbt supports</a> and the credentials</li>
 </ul>
-<p>Note that we will be using snowflake as an example here, I have tried to set up with Google Biq Query as well, and the process is similar.
-First, let&rsquo;s start with installing python and the required packages.</p>
+<p>Note that we will be using Snowflake as an example here. I have tried to set up with Google BigQuery as well, and the process is similar.</p>
+<p>First, let&rsquo;s start with installing Python and the required packages.</p>
 <p>On mac -</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">/bin/bash -c <span style="color:#e6db74">&#34;</span>$(curl -fsSL https<span style="color:#960050;background-color:#1e0010">:</span>//raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)<span style="color:#e6db74">&#34;</span>
 
@@ -369,20 +372,20 @@ dbt docs serve
 </code></pre></div><p>6 - Materization Type</p>
 <ul>
 <li>
-<p>Table: Rebuilds and stores the all of the data in Snowflake on each run</p>
+<p>Table: Rebuilds and stores all the data in Snowflake on each run</p>
 </li>
 <li>
 <p>View: Doesn&rsquo;t rebuild the data in Snowflake until it is queried</p>
 </li>
 <li>
-<p>Ephemeral: Sets up temporary tables that user can use in other models but does not get stored in DB/WH/LH</p>
+<p>Ephemeral: Sets up temporary tables that users can use in other models but does not get stored in DB/WH/LH</p>
 </li>
 <li>
-<p>Incremental: Allows user to only bring in new or updated records on a given dbt run</p>
+<p>Incremental: Allows users to only bring in new or updated records on a given dbt run</p>
 </li>
 </ul>
 <p>7 - dbt power user (vscode)</p>
-<p>There is an extension in vscode for dbt called - <code>dbt power user</code>, which I found really useful by showing different lineage between models, tests etc.</p>
+<p>There is a VSCode extension for dbt called <code>dbt Power User</code> , which I found really useful as it shows different lineages between models, tests, etc.</p>
 <p>Example -</p>
 <p align="center">
 <img alt = 'png' src='/images/on_dbt/dbt_power_user.png'/>

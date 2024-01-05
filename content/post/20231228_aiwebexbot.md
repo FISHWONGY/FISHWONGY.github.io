@@ -121,28 +121,29 @@ For the project this time, I have tried the below tactics.
 - Start with building a personality
 Setting
 ```md
-You are a <role>, you are good at <subject>, your job is to help <action>
+You are a <role>, you are good at <subject>, your job is to <action>
 ```
 
 - Giving specific example on the expected answer or outcome
 ```md
 For example, I will ask you a question: <question>.
-You have to answer as the below strcuture, such as <provide-detailed-answer-structure>
+You have to answer as the below strcuture, <provide-detailed-answer-structure>
 ```
 
 - Positivity & Compliment
+
+
 It could be frustrating when Gen AI is constantly not giving the output we are looking for; I get it. But it is better to sound positive for better Gen AI performance.
+
 ```md
-Good job, we are getting there slowly. <part-of-the-gen-ai-response> is what I want, however ... <explicit-comment-on-desire-output>
+Good job, we are getting there slowly. <part-of-the-gen-ai-response> is what I want, however ... <explicit-comment-on-desired-output>
 ```
-
-
 
 Here is an example of the prompting function that I have for the bot. I tested it many times with different inputs to observe its response, and then I adjusted the user-assistant prompt based on the answer.
 
 ```python
 def construct_prompt(query: str) -> list:
-    system_prompt = f"{prompt.SQL_REFORMAT_PROMPT}"
+    system_prompt = f"{prompt.YOUR_INITIAL_PROMPT}"
     q = f"""{query}"""
     user_prompt = f"""Good job, let's keep it going!\nRemember the pattern is <something>.\nHere is the next <question>\nPlease make sure you MUST answer in <output-format>'"""
 
@@ -169,7 +170,7 @@ And that's it, here is the final working BOT example.
 </p>
 
 
-[Repo](https://github.com/FISHWONGY/webex-bot) for the Webx Chat BOT in this blog post.
+[Code](https://github.com/FISHWONGY/webex-bot) for the Webx Chat BOT in this blog post.
 
 
 Thank you for reading and have a nice day!

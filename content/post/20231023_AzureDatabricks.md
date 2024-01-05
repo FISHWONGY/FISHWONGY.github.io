@@ -9,7 +9,7 @@ title: On Azure Databricks
 
 <div style="text-align: justify">
 
-Recently, I explored Azure Databricks for a PoC project with a machine learning workload. Since Snowflake and GCP are our base, setting up Databricks with Azure proved to be a bit tricky.
+Recently, I explored Azure Databricks for a PoC project with machine learning workload. Since Snowflake and GCP are our base, setting up Databricks with Azure proved to be a bit tricky.
 
 I know, I know, using Databricks on GCP would be way easier in this case. There are several reasons why I couldn't do that. And, who likes it easy? (Me, actually...)
 
@@ -111,12 +111,14 @@ az storage account keys list -g contosoResourceGroup5 -n contosoblobstorage5
 az keyvault create --name contosoblobstorage5 --resource-group contosoResourceGroup5 --location southcentralus
 ```
 
+
+Using contosoKeyVault10 as example provided on the [Azure documentation]( https://learn.microsoft.com/en-us/azure/key-vault/general/integrate-databricks-blob-storage)
 ```powershell
  # Create the secret
 az keyvault secret set --vault-name contosoKeyVault10 --name storageKey --value "value of your key1"
 ```
 
-2 - Create Scope on Data bricks, go to the link, follow the steps and create scope. Note that this only need tobe created once, there can be multiple secrets under the scope
+2 - Create Scope on Databricks, go to the link, follow the steps and create scope. Note that this only need tobe created once, there can be multiple secrets under the scope
 
 https://'adb-instance'#secrets/createScope
 
@@ -268,8 +270,8 @@ Saving Spark DF to GCS - execute the below in a databricks notebook cell
 
 ```python
 current_datetime = datetime.now().strftime("%Y%m%d%H%M%S")
-TEMPORARY_TARGET=f"gs://gcs-fbucket/spark-tmp/{current_datetime}"
-DESIRED_TARGET=f"gs://gcs-fbucket/PRED_DATA-{current_datetime}.csv"
+TEMPORARY_TARGET=f"gs://gcs-bucket/spark-tmp/{current_datetime}"
+DESIRED_TARGET=f"gs://gcs-bucket/PRED_DATA-{current_datetime}.csv"
 
 prediction_final_df.coalesce(1).write.option("header", "true").mode("overwrite").csv(TEMPORARY_TARGET)
 
@@ -283,6 +285,10 @@ dbutils.fs.cp(temporary_csv, DESIRED_TARGET)
 One of the good thing I like about Databricks' python connector is that it allows to bulk load as much data as I want, and snowflake's connector has a limit of 16384.
 
 ```python
+from databricks import sql
+from typing import Optional, Iterator
+from pydantic import BaseModel, ValidationError
+
 def adbconnect():
     try:
         return sql.connect(
