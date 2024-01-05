@@ -6,7 +6,88 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On AI Webex Chat BOT</title>
+      <link>https://FISHWONGY.github.io/post/20231228_aiwebexbot/</link>
+      <pubDate>Thu, 28 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20231228_aiwebexbot/</guid>
+      <description>I like to build chatbots, because it is fun.
+In the past, I have built chatbots with application like line, and discord
+With Generative AI (Gen AI) being the hot topic this year, I have always wanted to build something I am interested in with it. During this Christmas break, I finally have the time to sit down and build it 🤓.
+ Overview 
+The Webex Chatbot uses OpenAI&amp;rsquo;s GPT-3.</description>
+    </item>
+    
+    <item>
+      <title>On Azure Databricks</title>
+      <link>https://FISHWONGY.github.io/post/20231023_azuredatabricks/</link>
+      <pubDate>Mon, 23 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20231023_azuredatabricks/</guid>
+      <description>Recently, I explored Azure Databricks for a PoC project with a machine learning workload. Since Snowflake and GCP are our base, setting up Databricks with Azure proved to be a bit tricky.
+I know, I know, using Databricks on GCP would be way easier in this case. There are several reasons why I couldn&amp;rsquo;t do that. And, who likes it easy? (Me, actually&amp;hellip;)
+Anyway, it is what it is. Let&amp;rsquo;s begin with my learning journey.</description>
+    </item>
+    
+    <item>
+      <title>On Poetry</title>
+      <link>https://FISHWONGY.github.io/post/20230812_poetry/</link>
+      <pubDate>Sat, 12 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20230812_poetry/</guid>
+      <description>For a long time, when developing applications or data pipelines, I used a combination of requirements.txt and Dockerfile. However, since earlier this year, I changed my habit to use Poetry instead of a requirements.txt.
+ What is Poetry? 
+According to the Poetry Official website, &amp;ldquo;Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on, and it will manage (install/update) them for you.</description>
+    </item>
+    
+    <item>
+      <title>On Orchestration Tool</title>
+      <link>https://FISHWONGY.github.io/post/20230625_orchestrationtool/</link>
+      <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20230625_orchestrationtool/</guid>
+      <description>There is so many orchestrator these days for data team to choose, airflow, dagster, prefect, mage ai just to name a few &amp;hellip;
+This weekend, I decided to build a mini project to test out both tool.
+The project is similar to before, extract sports news from different news outlet and send them automatically to discord via webhook.
+Let&amp;rsquo;s jump right in.
+ Prerequisites 
+ Python3.8+   Dagster</description>
+    </item>
+    
+    <item>
+      <title>On RedPanda Kafka</title>
+      <link>https://FISHWONGY.github.io/post/20230315_redpandakafka/</link>
+      <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20230315_redpandakafka/</guid>
+      <description>Let&amp;rsquo;s talk about streaming data pipeline with RedPanda Kafka and Snowflake today.
+There&amp;rsquo;s a lot articles out there with the discussion around should we move all pipelines to streaming instead of batch, whether is streaming over-hyped, kafka vs RedPanda etc. While there&amp;rsquo;s a lot of talking points and Pros &amp;amp; Cons to consider for each of these topic, our article today focus on the set up of the RedPanda Kafka and the streaming architecture with Snowflake using Snowpipe</description>
+    </item>
+    
+    <item>
+      <title>On DBT&#39;s CI/CD Workflow</title>
+      <link>https://FISHWONGY.github.io/post/20221208_dbtworkflow/</link>
+      <pubDate>Thu, 08 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20221208_dbtworkflow/</guid>
+      <description>Last time we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.
+For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models &amp;amp; tests run.
+ What is github workflow? 
+According to the official github website, GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.</description>
+    </item>
+    
+    <item>
+      <title>On DBT</title>
+      <link>https://FISHWONGY.github.io/post/20221106_dbtsetup/</link>
+      <pubDate>Sun, 06 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20221106_dbtsetup/</guid>
+      <description>When it comes to data engineering, one of the phase engineers talk about the most is ETL (Extract Transform Load)/ ELT (Extract Load Transform). And today we will be focusing on the T, and the tool that is currently most used is DBT
+While this article will focus on its set up, I want to first brieflt talk about why I decided to integrate dbt into our team&amp;rsquo;s anlytics infrastruture.</description>
+    </item>
+    
     <item>
       <title>On Google Cloud Functions</title>
       <link>https://FISHWONGY.github.io/post/20220610_gcf/</link>
