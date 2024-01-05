@@ -148,7 +148,7 @@ The Webex Chatbot uses OpenAI&rsquo;s GPT-3.">
 
 <script src="/js/collapseAuthors.js"></script>
                     December 28, 2023
-                    • 3 min read
+                    • 6 min read
                 </div>
             </div>
         </header>
@@ -232,7 +232,7 @@ Features
 <hr>
 <p><u><b>
 <p style="font-size:20pt ">
-Final Thoughts
+Prompt Engineering
 </b></u></p>
 <p>Prompting is important when working with Gen AI, in fact, Open AI has published a <a href="https://platform.openai.com/docs/guides/prompt-engineering/strategy-write-clear-instructions">guide</a> for better prompt engineering.</p>
 <p>For the project this time, I have tried the below tactics.</p>
@@ -253,7 +253,7 @@ You have to answer as the below strcuture, &lt;<span style="color:#f92672">provi
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">Good job, we are getting there slowly. &lt;<span style="color:#f92672">part-of-the-gen-ai-response</span>&gt; is what I want, however ... &lt;<span style="color:#f92672">explicit-comment-on-desired-output</span>&gt;
 </code></pre></div><p>Here is an example of the prompting function that I have for the bot. I tested it many times with different inputs to observe its response, and then I adjusted the user-assistant prompt based on the answer.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">construct_prompt</span>(query: str) <span style="color:#f92672">-&gt;</span> list:
-    system_prompt <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;{prompt.YOUR_INITIAL_PROMPT}&#34;</span>
+    system_prompt <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;{prompt.INITIAL_PROMPT}&#34;</span>
     q <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;&#34;&#34;{query}&#34;&#34;&#34;</span>
     user_prompt <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;&#34;&#34;Good job, let&#39;s keep it going!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Remember the pattern is &lt;something&gt;.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Here is the next &lt;question&gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Please make sure you MUST answer in &lt;output-format&gt;&#39;&#34;&#34;&#34;</span>
 
@@ -276,6 +276,99 @@ You have to answer as the below strcuture, &lt;<span style="color:#f92672">provi
 <img alt = 'gif' src='/images/on_aiWebexBot/webex-bot-demo.gif'/>
 </p>
 <p><a href="https://github.com/FISHWONGY/webex-bot">Code</a> for the Webx Chat BOT in this blog post.</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Final Thoughts
+</b></u></p>
+<p>As I am closing off my post now, I just can&rsquo;t help but think about how far we have come with Gen AI.</p>
+<p>Let&rsquo;s take a look at the code I wrote in 2020 during lockdown to generate Shakespearean sonnet using TensorFlow.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Generating sonnet</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_model</span>(vocab_size, embedding_dim, rnn_units, batch_size):
+    model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+        tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Embedding(vocab_size, embedding_dim,
+                                  batch_input_shape<span style="color:#f92672">=</span>[batch_size, None]),
+        tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>GRU(rnn_units,
+                            return_sequences<span style="color:#f92672">=</span>True,
+                            stateful<span style="color:#f92672">=</span>True,
+                            recurrent_initializer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;glorot_uniform&#39;</span>),
+        tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(vocab_size)
+    ])
+    <span style="color:#66d9ef">return</span> model
+    
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_text</span>(model, start_string):
+  num_generate <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+
+  input_eval <span style="color:#f92672">=</span> [char2idx[s] <span style="color:#66d9ef">for</span> s <span style="color:#f92672">in</span> start_string]
+  input_eval <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>expand_dims(input_eval, <span style="color:#ae81ff">0</span>)
+
+  text_generated <span style="color:#f92672">=</span> []
+
+  temperature <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>
+
+  model<span style="color:#f92672">.</span>reset_states()
+  <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(num_generate):
+      predictions <span style="color:#f92672">=</span> model(input_eval)
+
+      predictions <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>squeeze(predictions, <span style="color:#ae81ff">0</span>)
+      predictions <span style="color:#f92672">=</span> predictions <span style="color:#f92672">/</span> temperature
+      predicted_id <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>categorical(predictions, num_samples<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>numpy()
+
+      input_eval <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>expand_dims([predicted_id], <span style="color:#ae81ff">0</span>)
+
+      text_generated<span style="color:#f92672">.</span>append(idx2char[predicted_id])
+
+  <span style="color:#66d9ef">return</span> (start_string <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(text_generated))
+</code></pre></div><p>Some of the sonnet output example -</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">Is my will comb and cold and said upon!
+Let my speech Lenry, coward like an oath:
+Prenicious tyrant, hark you with it on:
+And after hours with scarces seem&#39;d both,
+No, sir: yet you must deposed; scarcest what
+Though not, let them curtsy was seat of bright
+Not too keep for all one fair ladies, but
+That he shall have one softer laugh at light,
+Yet do too proud to most armoud, were shut;
+Live, thy life that breaks Bianca rather:
+Not too keep for all one fair ladies, but
+Nay, I am Colit before and brother
+Than to a mile before you fear? yes there?
+That, my daughter my bosoms seek is there?
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">I wis it to touch a se on thy fore--
+Sir, this is not the wisdom of thy part.
+Though not amazed the Lucentio&#39;s war,
+Shords that will make me swear upon my heart,
+Fear not the ladwers that contains use you
+The honourable father of a day.
+twenty-three armon&#39;s corse that e&#39;er man do
+The travel out of honour means to-day?
+Why, then &#39;tis but omit me it had been
+is full of something that afrailst with you,
+Do this fair entranction to do&#39;t for sin.
+Hail, their judges he should have &#39;em to
+That hidon complots in the regal throne.
+His golden rejembers sink in its own
+</code></pre></div><p>I have also tried to play with generating Shakespeare&rsquo;s play using tf, and below is one of the result.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">LORD WISTBROKEO:
+What if this request?
+
+KATHARIIA:
+He&#39;s gone.
+
+Shepherd:
+Pray now, I do that revenge!
+
+HENRY BOLINGBROKE:
+By this I only so.
+
+PROSPERO:
+Stay: I&#39;ll give formord of Gaulina!
+A party wrong, speak lose the stores of mine.
+Advanity, one Richard; then forget were r
+trust than mercy: what will you ather
+comes his as it is!
+</code></pre></div><p>Back then, I was already amazed at what TensorFlow could do. I could spend days playing with these AI sonnet generator for entertainment. I was so naive, haha.</p>
+<p>Can&rsquo;t wait to see what lies ahead in 2024.</p>
 <p>Thank you for reading and have a nice day!</p>
 
     </article>
