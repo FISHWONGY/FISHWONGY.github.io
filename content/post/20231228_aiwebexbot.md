@@ -170,7 +170,7 @@ And that's it, here is the final working BOT example.
 </p>
 
 
-[Code](https://github.com/FISHWONGY/webex-bot) for the Webx Chat BOT in this blog post.
+[Code](https://github.com/FISHWONGY/webex-gpt-bot) for the Webx Chat BOT in this blog post.
 
 
 <u><b>
@@ -281,7 +281,7 @@ trust than mercy: what will you ather
 comes his as it is!
 ```
 
-Back then, I was already amazed at what TensorFlow could do. I could spend days playing with these AI sonnet generator for entertainment. I was so naive, haha.
+Back then, I was already amazed at what TensorFlow could do. I could spend days playing with these AI sonnet generator for entertainment.
 
 Can't wait to see what lies ahead in 2024.
 
