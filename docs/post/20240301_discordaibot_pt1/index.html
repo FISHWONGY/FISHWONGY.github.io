@@ -239,8 +239,8 @@ GCP cli Setup
 </code></pre></div><p>9	- Run</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">gcloud container clusters get-credentials autopilot-cluster --region us-central1 --project gcp-prj-id-123
 </code></pre></div><p>10 - Check various info of GKE</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl get namespace
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl -n namespace get pods
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">k get namespace
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">k -n namespace get pods
 </code></pre></div><p>11	- If intersted in other componenets</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">gcloud components list --show-versions
 </code></pre></div><p>12	- Auth of aritfacts registry</p>
@@ -277,7 +277,7 @@ GCP Project Setup
 </code></pre></div><p>5 - Create a service account for the application with sufficient role and bind it to the namespace</p>
 <p>Create SVC account in k8s cluster</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create SVC account in k8s cluster</span>
-kubectl create serviceaccount discordbot-sa \
+k create serviceaccount discordbot-sa \
     --namespace automations
 </code></pre></div><p>Create GCP service account</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Create gcp service account</span>
@@ -297,7 +297,7 @@ gcloud projects add-iam-policy-binding gcp-proj-id-123 \
     --role <span style="color:#e6db74">&#34;roles/container.admin&#34;</span> \
     --role <span style="color:#e6db74">&#34;roles/secretmanager.admin&#34;</span> \
     --role <span style="color:#e6db74">&#34;roles/secretmanager.secretAccessor&#34;</span> \
-		--role <span style="color:#e6db74">&#34;roles/aiplatform.user&#34;</span>
+	--role <span style="color:#e6db74">&#34;roles/aiplatform.user&#34;</span>
 </code></pre></div><p>Binding</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Binding</span>
 gcloud iam service-accounts add-iam-policy-binding discordbot@gcp-proj-id-123.iam.gserviceaccount.com \

@@ -126,10 +126,10 @@ gcloud container clusters get-credentials autopilot-cluster --region us-central1
 
 10 - Check various info of GKE
 ```powershell
-kubectl get namespace
+k get namespace
 ```
 ```powershell
-kubectl -n namespace get pods
+k -n namespace get pods
 ```
 
 
@@ -201,7 +201,7 @@ k create ns automations
 Create SVC account in k8s cluster
 ```powershell
 # Create SVC account in k8s cluster
-kubectl create serviceaccount discordbot-sa \
+k create serviceaccount discordbot-sa \
     --namespace automations
 ```
 
@@ -227,7 +227,7 @@ gcloud projects add-iam-policy-binding gcp-proj-id-123 \
     --role "roles/container.admin" \
     --role "roles/secretmanager.admin" \
     --role "roles/secretmanager.secretAccessor" \
-		--role "roles/aiplatform.user"
+	--role "roles/aiplatform.user"
 ```
 
 Binding
