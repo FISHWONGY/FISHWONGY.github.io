@@ -6,7 +6,53 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 28 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Discord AI Chat Bot - Part 3</title>
+      <link>https://FISHWONGY.github.io/post/20240303_discordaibot_pt3/</link>
+      <pubDate>Sun, 03 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240303_discordaibot_pt3/</guid>
+      <description>After the previous blog post on setting up a Discord Bot and implementing Gemini to the bot, in this blog post, we will be focusing on the implementing of RAG to the bot.
+ RAG and LangChain 
+RAG (retrieval augmented generation), is a model that combines the best of both worlds of retrieval and generation models. It is a model that can be used for open-domain question answering. The RAG model retrieves information relevant to a user&amp;rsquo;s query from a large dataset and then generates a detailed response based on this information.</description>
+    </item>
+    
+    <item>
+      <title>On Discord AI Chat Bot - Part 2</title>
+      <link>https://FISHWONGY.github.io/post/20240302_discordaibot_pt2/</link>
+      <pubDate>Sat, 02 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240302_discordaibot_pt2/</guid>
+      <description>After the last blog post, we should now have a Discord Bot and a GCP project configured. In this blog post, we will be discussing the code implementation of building a AI Discord Chat Bot on using Google Cloud Platform&amp;rsquo;s(GCP) AI services, then deploy on the chat bot on GKE.
+So let&amp;rsquo;s jump right in!
+ Project Setup 
+1 - Create pyproject.toml file
+Note that we are using python 3.</description>
+    </item>
+    
+    <item>
+      <title>On Discord AI Chat Bot - Part 1</title>
+      <link>https://FISHWONGY.github.io/post/20240301_discordaibot_pt1/</link>
+      <pubDate>Fri, 01 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240301_discordaibot_pt1/</guid>
+      <description>In this blog post series, I will be discussing the steps of building a AI Chat Bot on Discord using Google Cloud Platform&amp;rsquo;s (GCP) AI services, then deploy on the chat bot on GKE.
+Part 1 focuses on the set up for the discord bot and GCP, part 2 will discuss the integration of Vertex AI with the discord bot inclucding code implementation and part 3 will focus on RAG implementation.</description>
+    </item>
+    
+    <item>
+      <title>On AI Image Generation</title>
+      <link>https://FISHWONGY.github.io/post/20240115_aiimggen/</link>
+      <pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240115_aiimggen/</guid>
+      <description>Recently, I have been experimenting with Google&amp;rsquo;s Vertex AI Imagen using the API and Dall-e-3 using Azure. I have been trying to generate images of my own, comparing the results across the both models with the same prompts. In this post, I will be focusing on my experience with the two models and the results I have obtained.
+ Code Implementation 
+Prerequisites
+pip install google-cloud-aiplatform pip install openai pillow Google Vertex AI Imagen</description>
+    </item>
+    
     <item>
       <title>On AI Webex Chat BOT</title>
       <link>https://FISHWONGY.github.io/post/20231228_aiwebexbot/</link>
