@@ -7,19 +7,18 @@ This website is built using [blogdown](https://github.com/rstudio/blogdown) with
 
 ## ✨ Example Blog Posts
 
-1. **[AIOPS Webex BOT](https://fishwongy.github.io/post/20231228_aiwebexbot/) - Building an AI Webex BOT with Azure OpenAI API**
+1. **[AI Discord BOT](https://fishwongy.github.io/post/20240301_discordaibot_pt1) - Building an AI Discord BOT with GCP Vertex AI**
 
-   ![](content/images/on_aiWebexBot/bot_workflow.png)
+   ![](content/images/on_discordAiBot/discord-ai-bot-demo.gif)
 
-   
+</br>   
    
 
 2. **[Exploring Orchestration Tool for Data Pipelines](https://fishwongy.github.io/post/20230625_orchestrationtool/) - Building a simple data pipeline with Dagster & Prefect**
 
    ![](content/images/on_orchestrationTool/dagster_prefect_workflow.png)
 
-  
-   
+</br>     
 
 3. **[Generative Art for Home Deco](https://fishwongy.github.io/post/20210305_generativeart/) - Creating Generative Art with R**
 

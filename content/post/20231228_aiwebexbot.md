@@ -170,9 +170,6 @@ And that's it, here is the final working BOT example.
 </p>
 
 
-[Code](https://github.com/FISHWONGY/webex-gpt-bot) for the Webx Chat BOT in this blog post.
-
-
 <u><b>
     <p style="font-size:20pt ">
       Final Thoughts
