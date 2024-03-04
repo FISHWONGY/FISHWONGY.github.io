@@ -245,6 +245,6 @@ gcloud iam service-accounts get-iam-policy discordbot@gcp-proj-id-123.iam.gservi
 ```
 
 
-And that's it! We now have a Discord Bot and a GCP project configured. In the [next blog post](https://fishwongy.github.io/post/20240303_discordaibot_pt3), I will be discussing the implementation of the AI services and the deployment of the bot on GKE.
+And that's it! We now have a Discord Bot and a GCP project configured. In the [next blog post](https://fishwongy.github.io/post/20240302_discordaibot_pt2), I will be discussing the implementation of the AI services and the deployment of the bot on GKE.
 
 Thank you for reading and have a nice day!
