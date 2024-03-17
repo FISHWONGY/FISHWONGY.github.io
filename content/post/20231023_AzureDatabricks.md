@@ -579,7 +579,10 @@ done
 
 ```powershell
 # Copy files over if don't want to rename directly on the current bucket
+# Using cp
 gsutil cp -r gs://bucket-name/folder1/folder_to_copy gs://bucket-name/folder1/new_folder
+
+# Using rsync - will be more expensive
 gsutil rsync -r gs://bucket-name/folder1/folder_to_copy gs://bucket-name/folder1/new_folder
 ```
 

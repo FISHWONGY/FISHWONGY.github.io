@@ -566,7 +566,10 @@ az storage blob list \
 done
 </code></pre></div><p>2 - Or we can leverage <code>gsutil</code> to rename the file on the GCS side then use azcopy to move the file back to Azure and load into Databricks</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Copy files over if don&#39;t want to rename directly on the current bucket</span>
+<span style="color:#75715e"># Using cp</span>
 gsutil cp -r gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/folder_to_copy gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/new_folder
+
+<span style="color:#75715e"># Using rsync - will be more expensive</span>
 gsutil rsync -r gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/folder_to_copy gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/new_folder
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Rename files</span>
 gsutil ls gs<span style="color:#960050;background-color:#1e0010">:</span>//&lt;bucket&gt;/&lt;folder_with_the_files_to_rename&gt;/ | \
