@@ -371,6 +371,20 @@ INTEGRATION <span style="color:#f92672">=</span> GCP_KAFKA_NTFY_PROD <span style
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">FROM</span> <span style="color:#f92672">@&lt;</span>stage_name<span style="color:#f92672">&gt;</span>_kafka_data <span style="color:#75715e">-- This need to be changed
 </span><span style="color:#75715e"></span>PATTERN<span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span><span style="color:#e6db74">&#39;pattern.*&#39;</span><span style="color:#f92672">&gt;</span> <span style="color:#75715e">-- This need to be changed
 </span><span style="color:#75715e"></span>FILE_FORMAT <span style="color:#f92672">=</span> (<span style="color:#66d9ef">type</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;JSON&#39;</span>);
+</code></pre></div><p>Note on some of the regex pattern -
+file name pattern - gs://gcs-bukcet/subfolder/sensor-location-metrics-20200101000000.json</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">OR</span> <span style="color:#66d9ef">REPLACE</span> stage <span style="color:#f92672">&lt;</span>stage_name<span style="color:#f92672">&gt;</span>
+url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gcs://gcs-bukcet/subfolder&#39;</span>
+storage_integration <span style="color:#f92672">=</span> GCP_KAFKA_NTFY_PROD
+directory <span style="color:#f92672">=</span> (enable<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>)
+file_format <span style="color:#f92672">=</span> (<span style="color:#66d9ef">type</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;JSON&#39;</span>);
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> pipe <span style="color:#f92672">&lt;</span>PIPE_NAME<span style="color:#f92672">&gt;</span>
+auto_ingest<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span> 
+integration<span style="color:#f92672">=</span>GCP_KAFKA_NTFY_PROD <span style="color:#66d9ef">as</span> 
+<span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">table</span><span style="color:#f92672">-</span>name<span style="color:#f92672">&gt;</span>
+<span style="color:#66d9ef">FROM</span> <span style="color:#f92672">@&lt;</span>stage_name<span style="color:#f92672">&gt;/</span> 
+PATTERN<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;.*sensor-[^.]*-metrics-[^.]*\.json&#39;</span>
+FILE_FORMAT <span style="color:#f92672">=</span> (<span style="color:#66d9ef">TYPE</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;JSON&#39;</span>);
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SHOW</span> PIPES
 </code></pre></div><p>And that&rsquo;s it! The data now stream from data source to cloud storage via RedPanda Kafka, and loaded into Snowflake using Snowpipe</p>
 <p>Thank you for reading and have a nice day!</p>

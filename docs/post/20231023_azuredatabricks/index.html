@@ -142,7 +142,7 @@ Anyway, it is what it is. Let&rsquo;s begin with my learning journey.">
 
 <script src="/js/collapseAuthors.js"></script>
                     October 23, 2023
-                    • 5 min read
+                    • 11 min read
                 </div>
             </div>
         </header>
@@ -213,6 +213,30 @@ File Cloning with AZCOPY
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">azcopy copy <span style="color:#e6db74">&#39;https://storage.cloud.google.com/&lt;bucket-name&gt;&#39;</span> <span style="color:#e6db74">&#39;https://&lt;storage-account&gt;.blob.core.windows.net/&lt;container-name&gt;&#39;</span> --recursive=true
 </code></pre></div><p>After data transferred, we can check the blob objects via -</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">az storage blob list --account-name &lt;storage-account&gt; --container-name &lt;container-name&gt; --output table
+</code></pre></div><p>To bulk delete files under a folder</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e">#!/bin/bash</span>
+RESOURCE_GROUP=<span style="color:#e6db74">&#34;grp-name&#34;</span>
+ACCOUNT_NAME=<span style="color:#e6db74">&#34;acc-name&#34;</span>
+PREFIX=<span style="color:#e6db74">&#34;file-prefix&#34;</span>
+CONTAINER=<span style="color:#e6db74">&#34;container-name&#34;</span>
+EXCLUDE_FOLDER=<span style="color:#e6db74">&#34;exclude-subfolder&#34;</span>
+
+<span style="color:#75715e"># Optionally as a first step</span>
+<span style="color:#75715e"># List all file inside container container-name/subfolder</span>
+az storage account keys list --resource-group $RESOURCE_GROUP --account-name $ACCOUNT_NAME --query <span style="color:#e6db74">&#39;[0].value&#39;</span> -o tsv | \
+xargs -I {} az storage blob list --account-name $ACCOUNT_NAME --account-key {} --container-name $CONTAINER --prefix subfolder- --query <span style="color:#e6db74">&#34;[?name][].name&#34;</span> -o tsv | grep -v <span style="color:#e6db74">&#39;/$EXCLUDE_FOLDER/&#39;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e">#!/bin/bash</span>
+RESOURCE_GROUP=<span style="color:#e6db74">&#34;grp-name&#34;</span>
+ACCOUNT_NAME=<span style="color:#e6db74">&#34;acc-name&#34;</span>
+PREFIX=<span style="color:#e6db74">&#34;file-prefix&#34;</span>
+CONTAINER=<span style="color:#e6db74">&#34;container-name&#34;</span>
+EXCLUDE_FOLDER=<span style="color:#e6db74">&#34;exclude-subfolder&#34;</span>
+
+<span style="color:#75715e"># delete all file with prefix file-prefix inside container container-name/subfolder</span>
+
+az storage account keys list --resource-group $RESOURCE_GROUP --account-name $ACCOUNT_NAME --query <span style="color:#e6db74">&#39;[0].value&#39;</span> -o tsv | \
+xargs -I {} az storage blob list --account-name $ACCOUNT_NAME --account-key {} --container-name $CONTAINER --prefix $PREFIX- --query <span style="color:#e6db74">&#34;[?name][].name&#34;</span> -o tsv | grep -v <span style="color:#e6db74">&#39;/$EXCLUDE_FOLDER/&#39;</span> | \
+xargs -I {} az storage blob delete --account-name $ACCOUNT_NAME --account-key $(az storage account keys list --resource-group $RESOURCE_GROUP --account-name $ACCOUNT_NAME --query <span style="color:#e6db74">&#39;[0].value&#39;</span> -o tsv) --container-name $CONTAINER --name {}
 </code></pre></div><p><u><b>
 <p style="font-size:20pt ">
 Working with Azure Databricks
@@ -230,7 +254,7 @@ az keyvault create --name contosoblobstorage5 --resource-group contosoResourceGr
 </code></pre></div><p>Using contosoKeyVault10 as example provided on the <a href="https://learn.microsoft.com/en-us/azure/key-vault/general/integrate-databricks-blob-storage">Azure documentation</a></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"> <span style="color:#75715e"># Create the secret</span>
 az keyvault secret set --vault-name contosoKeyVault10 --name storageKey --value <span style="color:#e6db74">&#34;value of your key1&#34;</span>
-</code></pre></div><p>2 - Create Scope on Databricks, go to the link, follow the steps and create scope. Note that this only need tobe created once, there can be multiple secrets under the scope</p>
+</code></pre></div><p>2 - Create Scope on Databricks backed by Azure, go to the link, follow the steps and create scope. Note that this only need tobe created once, there can be multiple secrets under the scope</p>
 <p>https://&lsquo;adb-instance&rsquo;#secrets/createScope</p>
 <p>To get the below info,</p>
 <p>Go to Azure Portal &gt; Home &gt; Subscription &gt; my sub = MS Enterprise &gt; Resources under Settings &gt;
@@ -246,7 +270,7 @@ find your keyvault under resources &gt; Properties under setting</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">databricks configure --token
 </code></pre></div><p>url = https://&lsquo;your-adb-instance&rsquo;.azuredatabricks.net/</p>
 <p>token = The token obtained above</p>
-<p>3 - Working with databricks cli</p>
+<p>4 - Working with databricks cli</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># check scope created</span>
 databricks secrets list-scopes
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># List secret in a given scope</span>
@@ -264,7 +288,25 @@ az storage account keys list -g contosoResourceGroup5 -n contosoblobstorage5
 
 az account set --subscription &lt;subscription-id&gt;
 az keyvault secret list --vault-name contosoKeyVault10
-</code></pre></div><p>4 - Accessing blob data in Azure Databricks</p>
+</code></pre></div><p>Create ADB Secrets Scope backed by Databricks</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">databricks secrets  create-scope --scope scope-name
+
+<span style="color:#75715e"># To verifiy has the scope created successfully</span>
+databricks secrets list-scopes
+
+<span style="color:#75715e"># Create secret in the scope</span>
+databricks secrets put --scope scope-name --key secrete-name
+<span style="color:#75715e"># Then it will pop up a .txt window, paste the secret value there and type `:wq` to save(write) and quit</span>
+
+<span style="color:#75715e"># Verify secrets has added successfully</span>
+databricks secrets list --scope scope-name 
+
+<span style="color:#75715e"># Verfiy my ACL access of the scope</span>
+databricks secrets get-acl --scope scope-name --principal email@email.com
+
+<span style="color:#75715e"># Give permission to other</span>
+databricks secrets put-acl --scope scope-name --principal email@email.com --permission READ     
+</code></pre></div><p>5 - Accessing blob data in Azure Databricks</p>
 <p>Finally, after all the set up, we can now try access our data from the storage.</p>
 <p>Reading the data into a Spark DF - execute the below in a databricks notebook cell</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">dbutils<span style="color:#f92672">.</span>fs<span style="color:#f92672">.</span>mount(
@@ -292,36 +334,81 @@ The permissions the SAS grants. Allowed values: (a)dd (c)reate (d)elete (e)xecut
 </code></pre></div><p>Then we can load the data to the destination table.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">SCHEMA</span> BRONZE_SCHEMA;
 <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> BRONZE_SCHEMA.TBL_NAME;
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
+</code></pre></div><p>Loading from json</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
 <span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;wasbs://&lt;container-name&gt;@&lt;storage-account&gt;.blob.core.windows.net/&lt;file-prefix&gt;-*&#39;</span> <span style="color:#66d9ef">WITH</span> (
   CREDENTIAL (AZURE_SAS_TOKEN <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>the<span style="color:#f92672">-</span>sas<span style="color:#f92672">-</span>token<span style="color:#f92672">-</span>obtain<span style="color:#f92672">-</span><span style="color:#66d9ef">from</span><span style="color:#f92672">-</span>above<span style="color:#f92672">&gt;</span>)
 FILEFORMAT <span style="color:#f92672">=</span> JSON
 COPY_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>)
+</code></pre></div><p>Loading from csv</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
+<span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;wasbs://&lt;container-name&gt;@&lt;storage-account&gt;.blob.core.windows.net/&lt;file-prefix&gt;-*&#39;</span> <span style="color:#66d9ef">WITH</span> (
+  CREDENTIAL (AZURE_SAS_TOKEN <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>the<span style="color:#f92672">-</span>sas<span style="color:#f92672">-</span>token<span style="color:#f92672">-</span>obtain<span style="color:#f92672">-</span><span style="color:#66d9ef">from</span><span style="color:#f92672">-</span>above<span style="color:#f92672">&gt;</span>)
+FILEFORMAT <span style="color:#f92672">=</span> CSV
+FORMAT_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>,
+                <span style="color:#e6db74">&#39;header&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;false&#39;</span>)
+COPY_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>)
+</code></pre></div><p>Depending on the above format options for headers, col. name might need to be adjusted</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> BRONZE_SCHEMA.TBL_NAME <span style="color:#66d9ef">SET</span> TBLPROPERTIES (
+   <span style="color:#e6db74">&#39;delta.columnMapping.mode&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;name&#39;</span>,
+   <span style="color:#e6db74">&#39;delta.minReaderVersion&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;2&#39;</span>,
+   <span style="color:#e6db74">&#39;delta.minWriterVersion&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;5&#39;</span>);
+
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> BRONZE_SCHEMA.TBL_NAME <span style="color:#66d9ef">RENAME</span> <span style="color:#66d9ef">COLUMN</span> _c0 <span style="color:#66d9ef">TO</span> COL_NAME1;
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> BRONZE_SCHEMA.TBL_NAME <span style="color:#66d9ef">RENAME</span> <span style="color:#66d9ef">COLUMN</span> _c1 <span style="color:#66d9ef">TO</span> COL_NAME2;
 </code></pre></div><p>5 - Configure spark cluster so that it can connect to GCS Bucket</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">spark.databricks.delta.preview.enabled true
 spark.hadoop.google.cloud.auth.service.account.enable true
-spark.master local[*, 4]
-spark.databricks.cluster.profile singleNode
 
 spark.hadoop.fs.gs.project.id &lt;gcp-project-id&gt;
 spark.hadoop.fs.gs.auth.service.account.private.key {{secrets/&lt;adb-scope&gt;/gsaPrivateKey}}
 spark.hadoop.fs.gs.auth.service.account.email &lt;svc-acc&gt;@&lt;gcp-project-id&gt;.iam.gserviceaccount.com
 spark.hadoop.fs.gs.auth.service.account.private.key.id {{secrets/&lt;adb-scope&gt;/gsaPrivateKeyId}}
-
+spark.hadoop.fs.azure.account.key.{account}.blob.core.windows.net {{secrets/blobStorageScope/storageKey}}
 
 PYSPARK_PYTHON=/databricks/python3/bin/python3
-</code></pre></div><p>Reading data from GCS bucket - execute the below in a databricks notebook cell</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df <span style="color:#f92672">=</span> spark<span style="color:#f92672">.</span>read<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;csv&#34;</span>)<span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;compression&#34;</span>, <span style="color:#e6db74">&#34;gzip&#34;</span>)<span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#34;gs://gcs-bucket/FILE_NAME_*.csv.gz&#34;</span>)
+</code></pre></div><p>Reading data from cloud storage (GCS bucket/ Azure Blob) - execute the below in a databricks notebook cell</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># GCS - csv</span>
+df <span style="color:#f92672">=</span> spark<span style="color:#f92672">.</span>read<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;csv&#34;</span>)<span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;compression&#34;</span>, <span style="color:#e6db74">&#34;gzip&#34;</span>)<span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#34;gs://gcs-bucket/FILE_NAME_*.csv.gz&#34;</span>)
+
+<span style="color:#75715e"># Config for reading zipped csv from unloading data from Snowflake</span>
+df <span style="color:#f92672">=</span> spark<span style="color:#f92672">.</span>read<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;csv&#34;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;compression&#34;</span>, <span style="color:#e6db74">&#34;gzip&#34;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;delimiter&#34;</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;inferSchema&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>) \
+    <span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#34;gs://gcs-bucket/FILE_NAME_*.csv.gz&#34;</span>)
+
+<span style="color:#75715e"># Azure</span>
+df <span style="color:#f92672">=</span> spark<span style="color:#f92672">.</span>read<span style="color:#f92672">.</span>json(<span style="color:#e6db74">&#34;/mnt/blobstorage/subfolder/dest-folder-name/*.json&#34;</span>)
+
+df<span style="color:#f92672">.</span>limit(<span style="color:#ae81ff">10</span>)<span style="color:#f92672">.</span>display()
 </code></pre></div><p>Saving Spark DF to GCS - execute the below in a databricks notebook cell</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">current_datetime <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>now()<span style="color:#f92672">.</span>strftime(<span style="color:#e6db74">&#34;%Y%m</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">%H%M%S&#34;</span>)
 TEMPORARY_TARGET<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;gs://gcs-bucket/spark-tmp/{current_datetime}&#34;</span>
 DESIRED_TARGET<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;gs://gcs-bucket/PRED_DATA-{current_datetime}.csv&#34;</span>
 
+<span style="color:#75715e"># This will save file in 1 json file</span>
 prediction_final_df<span style="color:#f92672">.</span>coalesce(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;header&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>)<span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#34;overwrite&#34;</span>)<span style="color:#f92672">.</span>csv(TEMPORARY_TARGET)
 
 temporary_csv <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(TEMPORARY_TARGET, dbutils<span style="color:#f92672">.</span>fs<span style="color:#f92672">.</span>ls(TEMPORARY_TARGET)[<span style="color:#ae81ff">3</span>][<span style="color:#ae81ff">1</span>])
 
 dbutils<span style="color:#f92672">.</span>fs<span style="color:#f92672">.</span>cp(temporary_csv, DESIRED_TARGET)
+</code></pre></div><p>Saving Spark DF to Azure Blob</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">dbutils<span style="color:#f92672">.</span>fs<span style="color:#f92672">.</span>mount(
+source <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;wasbs://{container-name}@{account-name}.blob.core.windows.net&#34;</span>,
+mount_point <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/mnt/blobstorage&#34;</span>,
+extra_configs <span style="color:#f92672">=</span> {f<span style="color:#e6db74">&#34;fs.azure.account.key.{account-name}.blob.core.windows.net&#34;</span>: dbutils<span style="color:#f92672">.</span>secrets<span style="color:#f92672">.</span>get(scope <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#39;{scopeName}&#39;</span>, key <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#39;{storage-key}&#39;</span>)
+                 })
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Write the DataFrame as a single JSON file to Azure Blob Storage</span>
+df<span style="color:#f92672">.</span>coalesce(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;json&#34;</span>)<span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#34;overwrite&#34;</span>)<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#34;/mnt/blobstorage/subfoler/dest-folder-name&#34;</span>)
+
+<span style="color:#75715e"># Write to a folder</span>
+df<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;json&#34;</span>)<span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#34;overwrite&#34;</span>)<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#34;/mnt/blobstorage/subfoler/dest-folder-name&#34;</span>)
+</code></pre></div><p>Save df as a delta table in databricks</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#39;delta&#39;</span>) \
+    <span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#39;overwrite&#39;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;mergeSchema&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>) \
+    <span style="color:#f92672">.</span>saveAsTable(<span style="color:#e6db74">&#39;BRONZE_LAYER.TBL_NAME&#39;</span>)
 </code></pre></div><p>6 - Inserting Data into Databricks using Python</p>
 <p>One of the good thing I like about Databricks' python connector is that it allows to bulk load as much data as I want, and snowflake&rsquo;s connector has a limit of 16384.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> databricks <span style="color:#f92672">import</span> sql
@@ -333,7 +420,7 @@ dbutils<span style="color:#f92672">.</span>fs<span style="color:#f92672">.</span
         <span style="color:#66d9ef">return</span> sql<span style="color:#f92672">.</span>connect(
             server_hostname<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;adb-subscription&gt;.azuredatabricks.net&#34;</span>,
             http_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/sql/1.0/warehouses/&lt;wh-id&gt;&#34;</span>,
-            access_token<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;access-to&gt;&#34;</span>,
+            access_token<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;access-token&gt;&#34;</span>,
         )
     <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
         <span style="color:#66d9ef">raise</span> DatabricksError(<span style="color:#e6db74">&#34;Could not connect to Azure Databricks&#34;</span>) <span style="color:#f92672">from</span> e
@@ -382,7 +469,165 @@ dbutils<span style="color:#f92672">.</span>fs<span style="color:#f92672">.</span
     <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
         conn<span style="color:#f92672">.</span>rollback()
         <span style="color:#66d9ef">raise</span> DatabricksError(<span style="color:#e6db74">&#34;Error inserting data, transaction rolled back&#34;</span>) <span style="color:#f92672">from</span> e
-</code></pre></div><p>That&rsquo;s it for now, hope you found this helpful.</p>
+</code></pre></div><p><u><b>
+<p style="font-size:20pt ">
+Applying the above knowledge and the lessons I&rsquo;ve learnt
+</p>
+</b></u></p>
+<p>Background:
+I have to migrate large amount of sensor data to Databricks.</p>
+<p>Initially, I plan to migrate the data as the below steps.</p>
+<ol>
+<li>Move data from GCS to Azure Container</li>
+<li>Execute the <code>COPY INTO</code> command in Azure Databricks to load the data into delta table</li>
+</ol>
+<p>So ideally, the steps is running the below in terminal</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">azcopy login
+
+azcopy copy <span style="color:#e6db74">&#39;https://storage.cloud.google.com/&lt;bucket-name&gt;&#39;</span> <span style="color:#e6db74">&#39;https://&lt;storage-account&gt;.blob.core.windows.net/&lt;container-name&gt;&#39;</span> --recursive=true
+</code></pre></div><p>Then in Azure Databricks Notebook, execute the below</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
+<span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;wasbs://&lt;container-name&gt;@&lt;storage-account&gt;.blob.core.windows.net/folder/subfolder/file-prefix-*&#39;</span> <span style="color:#66d9ef">WITH</span> (
+  CREDENTIAL (AZURE_SAS_TOKEN <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>the<span style="color:#f92672">-</span>sas<span style="color:#f92672">-</span>token<span style="color:#f92672">-</span>obtain<span style="color:#f92672">-</span><span style="color:#66d9ef">from</span><span style="color:#f92672">-</span>above<span style="color:#f92672">&gt;</span>)
+FILEFORMAT <span style="color:#f92672">=</span> JSON
+COPY_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>)
+</code></pre></div><p>However, when I executed the above in databricks, it returned the error messages</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">IllegalArgumentException: &#39;java.net.URISyntaxException: Relative path in 
+absolute URI: sensor-data-2024-01-01 00:00:00.000&#39;
+</code></pre></div><p>After some googling and the help from ChatGPT, I realised the issue is with naming of those json files, mainly due to the whitespaces.</p>
+<p>Then on stackoverflow, I found this <a href="https://stackoverflow.com/questions/73950317/handling-spaces-in-the-abfss-using-copy-into-with-azure-databricks">post</a>, so I tried something like this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
+<span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;wasbs://&lt;container-name&gt;@&lt;storage-account&gt;.blob.core.windows.net/folder/subfolder/&#39;</span> <span style="color:#66d9ef">WITH</span> (
+  CREDENTIAL (AZURE_SAS_TOKEN <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>the<span style="color:#f92672">-</span>sas<span style="color:#f92672">-</span>token<span style="color:#f92672">-</span>obtain<span style="color:#f92672">-</span><span style="color:#66d9ef">from</span><span style="color:#f92672">-</span>above<span style="color:#f92672">&gt;</span>)
+FILEFORMAT <span style="color:#f92672">=</span> JSON
+PATTERN<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;file-prefix-*&#39;</span>
+COPY_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>)
+</code></pre></div><p>But I am still getting the same error message. I finally realised that as long as I am trying to load my files using regex expression, it will failed because of the naming. That means, if I execute the below, the file will be copied successfully.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
+<span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;wasbs://&lt;container-name&gt;@&lt;storage-account&gt;.blob.core.windows.net/folder/subfolder/sensor-data-2024-01-01 00:00:00.000&#39;</span> <span style="color:#66d9ef">WITH</span> (
+  CREDENTIAL (AZURE_SAS_TOKEN <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>the<span style="color:#f92672">-</span>sas<span style="color:#f92672">-</span>token<span style="color:#f92672">-</span>obtain<span style="color:#f92672">-</span><span style="color:#66d9ef">from</span><span style="color:#f92672">-</span>above<span style="color:#f92672">&gt;</span>)
+FILEFORMAT <span style="color:#f92672">=</span> JSON
+COPY_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>)
+</code></pre></div><p>It is when I tried to bulk load everything using regular expression, the execution will fail.</p>
+<p>Some approaches we can take to tackle this is,</p>
+<p>1 - rename all of the file using az cli</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e">#!/bin/bash</span>
+
+ACCOUNT_NAME=<span style="color:#e6db74">&#34;acc-name&#34;</span>
+ACCOUNT_KEY=<span style="color:#e6db74">&#34;acc-key&#34;</span>  
+CONTAINER_NAME=<span style="color:#e6db74">&#34;container-name&#34;</span>
+SAS_TOKEN=<span style="color:#e6db74">&#34;token&#34;</span>
+
+<span style="color:#75715e"># Source and destination prefix</span>
+SOURCE_PREFIX=<span style="color:#e6db74">&#34;container/path/&#34;</span>
+DESTINATION_PREFIX=<span style="color:#e6db74">&#34;final-path/&#34;</span>
+
+az storage blob list \
+  --account-name $ACCOUNT_NAME \
+  --account-key $ACCOUNT_KEY \
+  --container-name $CONTAINER_NAME \
+  --prefix $SOURCE_PREFIX \
+  --sas-token $SAS_TOKEN \
+  --output tsv \
+  --query <span style="color:#e6db74">&#34;[?name][].name&#34;</span> | <span style="color:#66d9ef">while</span> IFS=$<span style="color:#e6db74">&#39;\t&#39;</span> read -r blobname; <span style="color:#66d9ef">do</span>
+
+    <span style="color:#75715e"># New blob name with spaces replaced by underscores</span>
+    NEW_BLOB_NAME=$(echo <span style="color:#e6db74">&#34;$blobname&#34;</span> | tr <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#e6db74">&#39;_&#39;</span>)
+
+    <span style="color:#75715e"># Copy blob to new name</span>
+    az storage blob copy start \
+      --account-name $ACCOUNT_NAME \
+      --account-key $ACCOUNT_KEY \
+      --destination-blob <span style="color:#e6db74">&#34;$NEW_BLOB_NAME&#34;</span> \
+      --destination-container $CONTAINER_NAME \
+      --source-uri <span style="color:#e6db74">&#34;https://${ACCOUNT_NAME}.blob.core.windows.net/${CONTAINER_NAME}/${blobname}?${SAS_TOKEN}&#34;</span> \
+
+    <span style="color:#75715e"># Monitor the status of the blob copy to wait for the operation to complete</span>
+    copy_status=<span style="color:#e6db74">&#34;pending&#34;</span>
+    <span style="color:#66d9ef">while</span> [ <span style="color:#e6db74">&#34;$copy_status&#34;</span> != <span style="color:#e6db74">&#34;success&#34;</span> ]; <span style="color:#66d9ef">do</span>
+        copy_status=$(az storage blob show \
+            --name <span style="color:#e6db74">&#34;$NEW_BLOB_NAME&#34;</span> \
+            --container-name $CONTAINER_NAME \
+            --account-name $ACCOUNT_NAME \
+            --sas-token $SAS_TOKEN \
+            --query <span style="color:#e6db74">&#34;properties.copy.status&#34;</span> --output tsv)
+        sleep 1
+    done
+
+    <span style="color:#75715e"># Delete the old blob after successful copy</span>
+    az storage blob delete \
+      --account-name $ACCOUNT_NAME \
+      --account-key $ACCOUNT_KEY \
+      --container-name $CONTAINER_NAME \
+      --name <span style="color:#e6db74">&#34;$blobname&#34;</span> \
+      --sas-token $SAS_TOKEN \
+
+    echo <span style="color:#e6db74">&#34;Renamed $blobname to $NEW_BLOB_NAME&#34;</span>
+done
+</code></pre></div><p>2 - Or we can leverage <code>gsutil</code> to rename the file on the GCS side then use azcopy to move the file back to Azure and load into Databricks</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Copy files over if don&#39;t want to rename directly on the current bucket</span>
+gsutil cp -r gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/folder_to_copy gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/new_folder
+gsutil rsync -r gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/folder_to_copy gs<span style="color:#960050;background-color:#1e0010">:</span>//bucket-name/folder1/new_folder
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#75715e"># Rename files</span>
+gsutil ls gs<span style="color:#960050;background-color:#1e0010">:</span>//&lt;bucket&gt;/&lt;folder_with_the_files_to_rename&gt;/ | \
+  <span style="color:#66d9ef">while</span> read f; <span style="color:#66d9ef">do</span>
+    gsutil -m mv <span style="color:#e6db74">&#34;$f&#34;</span> <span style="color:#e6db74">&#34;${f// /-}&#34;</span>;
+  done;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">azcopy copy <span style="color:#e6db74">&#39;https://storage.cloud.google.com/&lt;bucket-name&gt;&#39;</span> <span style="color:#e6db74">&#39;https://&lt;storage-account&gt;.blob.core.windows.net/&lt;container-name&gt;&#39;</span> --recursive=true
+</code></pre></div><p>And load the properly named files into Azure as a last step.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> BRONZE_SCHEMA.TBL_NAME
+<span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#39;wasbs://&lt;container-name&gt;@&lt;storage-account&gt;.blob.core.windows.net/folder/subfolder/file-prefix-*&#39;</span> <span style="color:#66d9ef">WITH</span> (
+  CREDENTIAL (AZURE_SAS_TOKEN <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>the<span style="color:#f92672">-</span>sas<span style="color:#f92672">-</span>token<span style="color:#f92672">-</span>obtain<span style="color:#f92672">-</span><span style="color:#66d9ef">from</span><span style="color:#f92672">-</span>above<span style="color:#f92672">&gt;</span>)
+FILEFORMAT <span style="color:#f92672">=</span> JSON
+COPY_OPTIONS (<span style="color:#e6db74">&#39;mergeSchema&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;true&#39;</span>)
+</code></pre></div><p>However, this is unnecessarily lengthy, as the data have to travel across multiple cloud and likely different regions, it will be costly. Also if the GCS storage is not hot sotrage, it will be even more costly to copy, rename and move acorss cloud.</p>
+<p>So, in this case, a more direct way to load these sensor data into databricks is by the below steps.</p>
+<p>1 - Unload data from Snowflake to GCS</p>
+<p>Execute the below in Snowflake</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- Clear stage if you prefer to do so
+</span><span style="color:#75715e"></span>REMOVE <span style="color:#f92672">@</span>ENV_DATA_TRANSFER;
+
+<span style="color:#66d9ef">COPY</span> <span style="color:#66d9ef">INTO</span> <span style="color:#e6db74">&#39;gcs://gcs-buscket-name/SENSOR_DATA_TBL&#39;</span>
+<span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">&#34;DATABASE&#34;</span>.<span style="color:#e6db74">&#34;SCHEMA&#34;</span>.<span style="color:#e6db74">&#34;SENSOR_DATA_TBL&#34;</span>
+STORAGE_INTEGRATION <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>gcp<span style="color:#f92672">-</span><span style="color:#66d9ef">storage</span><span style="color:#f92672">-</span>integration<span style="color:#f92672">&gt;</span>
+overwrite<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>;
+</code></pre></div><p>2 - Read data from GCS to Azure databricks directly</p>
+<p>Make sure cluster is configured properly</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">spark.databricks.delta.preview.enabled true
+spark.hadoop.google.cloud.auth.service.account.enable true
+
+spark.hadoop.fs.gs.project.id &lt;gcp-project-id&gt;
+spark.hadoop.fs.gs.auth.service.account.private.key {{secrets/&lt;adb-scope&gt;/gsaPrivateKey}}
+spark.hadoop.fs.gs.auth.service.account.email &lt;svc-acc&gt;@&lt;gcp-project-id&gt;.iam.gserviceaccount.com
+spark.hadoop.fs.gs.auth.service.account.private.key.id {{secrets/&lt;adb-scope&gt;/gsaPrivateKeyId}}
+spark.hadoop.fs.azure.account.key.{account}.blob.core.windows.net {{secrets/blobStorageScope/storageKey}}
+
+
+
+PYSPARK_PYTHON=/databricks/python3/bin/python3
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df <span style="color:#f92672">=</span> spark<span style="color:#f92672">.</span>read<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;csv&#34;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;compression&#34;</span>, <span style="color:#e6db74">&#34;gzip&#34;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;delimiter&#34;</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;inferSchema&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>) \
+    <span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#34;gs://gcs-buscket-name/SENSOR_DATA_TBL_*.csv.gz&#34;</span>)
+
+
+df<span style="color:#f92672">.</span>limit(<span style="color:#ae81ff">10</span>)<span style="color:#f92672">.</span>display()
+
+<span style="color:#75715e"># Write as delta table</span>
+df<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#39;delta&#39;</span>) \
+    <span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#39;overwrite&#39;</span>) \
+    <span style="color:#f92672">.</span>option(<span style="color:#e6db74">&#34;mergeSchema&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>) \
+    <span style="color:#f92672">.</span>saveAsTable(<span style="color:#e6db74">&#39;BRONZE_SCHEMA.SENSOR_DATA_TBL&#39;</span>)
+    
+<span style="color:#75715e"># Write to a folder if want to have the file to be stored in Azure Container</span>
+df<span style="color:#f92672">.</span>write<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;json&#34;</span>)<span style="color:#f92672">.</span>mode(<span style="color:#e6db74">&#34;overwrite&#34;</span>)<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#34;/mnt/blobstorage/folder/subfolder&#34;</span>)
+</code></pre></div><p>And finally, if we need to grat user access to external file system to avoid insufficient priviledges, the below commands are needed to be executed as admin.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">ANY</span> FILE <span style="color:#66d9ef">TO</span> <span style="color:#f92672">`</span><span style="color:#66d9ef">user</span><span style="color:#f92672">@</span>email.com<span style="color:#f92672">`</span>;
+
+<span style="color:#66d9ef">GRANT</span> <span style="color:#66d9ef">MODIFY</span> <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">ANY</span> FILE <span style="color:#66d9ef">TO</span> <span style="color:#f92672">`</span><span style="color:#66d9ef">user</span><span style="color:#f92672">@</span>email.com<span style="color:#f92672">`</span>;
+</code></pre></div><p><br />
+That&rsquo;s it for now, hope you found this helpful.</p>
 <p>Thank you for reading and have a nice day!</p>
 
     </article>

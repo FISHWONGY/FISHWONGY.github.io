@@ -308,6 +308,28 @@ PATTERN= <'pattern.*'> -- This need to be changed
 FILE_FORMAT = (type = 'JSON');
 ```
 
+Note on some of the regex pattern - 
+file name pattern - gs://gcs-bukcet/subfolder/sensor-location-metrics-20200101000000.json
+
+```sql
+CREATE OR REPLACE stage <stage_name>
+url = 'gcs://gcs-bukcet/subfolder'
+storage_integration = GCP_KAFKA_NTFY_PROD
+directory = (enable=true)
+file_format = (type = 'JSON');
+```
+
+
+```sql
+create or replace pipe <PIPE_NAME>
+auto_ingest=true 
+integration=GCP_KAFKA_NTFY_PROD as 
+COPY INTO <table-name>
+FROM @<stage_name>/ 
+PATTERN='.*sensor-[^.]*-metrics-[^.]*\.json'
+FILE_FORMAT = (TYPE = 'JSON');
+```
+
 
 ```sql
 SHOW PIPES
