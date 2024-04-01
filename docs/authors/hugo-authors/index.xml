@@ -6,7 +6,17 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 03 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Jira OAuth with GCP Cloud Run</title>
+      <link>https://FISHWONGY.github.io/post/20240401_jiraoauth/</link>
+      <pubDate>Mon, 01 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240401_jiraoauth/</guid>
+      <description>A while back, I have talked about some use case with Jira REST API using api token. To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
+ What is GCP Cloud Run</description>
+    </item>
+    
     <item>
       <title>On Discord AI Chat Bot - Part 3</title>
       <link>https://FISHWONGY.github.io/post/20240303_discordaibot_pt3/</link>
