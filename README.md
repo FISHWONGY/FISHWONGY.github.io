@@ -1,6 +1,6 @@
 # FISHWONGY.github.io
 
-Welcome to the repository for my personal website, where I share insights and articles about data engineering, data architecture, and data visualization. I am passionate about architecting data stacks and exploring the world of data.
+Welcome to the repository for my personal website, where I share insights and articles about data engineering, data architecture, and data visualisation! I am passionate about architecting data stacks and exploring the world of data.
 
 ## ✨ About the Website
 This website is built using [blogdown](https://github.com/rstudio/blogdown) with the [Novela](https://github.com/forestryio/hugo-theme-novela) theme. 
