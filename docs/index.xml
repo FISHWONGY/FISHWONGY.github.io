@@ -6,7 +6,19 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Microsoft Graph with GCP &amp; Azure</title>
+      <link>https://FISHWONGY.github.io/post/20240402_msgraph/</link>
+      <pubDate>Tue, 02 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240402_msgraph/</guid>
+      <description>What is Microsoft Graph API 
+Microsoft Graph exposes REST APIs and client libraries to access data on the following Microsoft cloud services:
+1 - Microsoft 365 core services: Bookings, Calendar, Delve, Excel, Microsoft 365 compliance eDiscovery, Microsoft Search, OneDrive, OneNote, Outlook/Exchange, People (Outlook contacts), Planner, SharePoint, Teams, To Do, Viva Insights
+2 - Enterprise Mobility + Security services: Advanced Threat Analytics, Advanced Threat Protection, Microsoft Entra ID, Identity Manager, and Intune</description>
+    </item>
+    
     <item>
       <title>On Jira OAuth with GCP Cloud Run</title>
       <link>https://FISHWONGY.github.io/post/20240401_jiraoauth/</link>
