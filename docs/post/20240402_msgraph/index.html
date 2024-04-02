@@ -461,7 +461,7 @@ The application URL will look something like <code>https://my-app.xxx.centralus.
 <p><br /></p>
 <p>If our azure container app needs to reference any secrets, one way to do it is to store them as secrets in the container app, and then reference them in the application as environment variable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">MY_SECRETS <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;SUPERSECRETS&#34;</span>)
-</code></pre></div><p>And we can run the below ommand in terminal to set the env var, this will only need to execute once.</p>
+</code></pre></div><p>And we can run the below command in terminal to set the env var, this will only need to execute once.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> az containerapp update --name my-app --resource-group myContainerRegistry --set-env-vars <span style="color:#e6db74">&#34;SUPERSECRETS=secretref:supersecrets&#34;</span>
 </code></pre></div><p><u><b>
 <p style="font-size:20pt ">
