@@ -145,7 +145,7 @@ Microsoft Graph exposes REST APIs and client libraries to access data on the fol
 
 <script src="/js/collapseAuthors.js"></script>
                     April 2, 2024
-                    • 7 min read
+                    • 8 min read
                 </div>
             </div>
         </header>
@@ -429,20 +429,17 @@ The python application will be very similar to the GCP setup. The only differenc
 <span style="color:#f92672">metadata</span>:
   <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-app</span>
 <span style="color:#f92672">build</span>:
+  <span style="color:#f92672">tagPolicy</span>:
+    <span style="color:#f92672">envTemplate</span>:
+      <span style="color:#f92672">template</span>: <span style="color:#e6db74">&#34;{{.IMAGE_NAME}}:lastest&#34;</span>
   <span style="color:#f92672">artifacts</span>:
   - <span style="color:#f92672">image</span>: <span style="color:#ae81ff">myContainerRegistry.azurecr.io/acr-image</span>
     <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
     <span style="color:#f92672">docker</span>:
       <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">Dockerfile</span>
-
-<span style="color:#f92672">profiles</span>:
-- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">production</span>
-  <span style="color:#f92672">build</span>:
-    <span style="color:#f92672">tagPolicy</span>:
-      <span style="color:#f92672">envTemplate</span>:
-        <span style="color:#f92672">template</span>: <span style="color:#e6db74">&#34;{{.IMAGE_NAME}}:prod-{{.DIGEST_HEX}}&#34;</span>
+      <span style="color:#f92672">noCache</span>: <span style="color:#66d9ef">true</span>
 </code></pre></div><p>To deploy our image to Azure Contain Registry</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">skaffold run -p production
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">skaffold run --cache-artifacts<span style="color:#f92672">=</span>false
 </code></pre></div><p><br /></p>
 <p>Finally, to deploy our app to Azure Container Apps, we can use the below command.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> az containerapp create <span style="color:#ae81ff">\
@@ -459,10 +456,45 @@ The python application will be very similar to the GCP setup. The only differenc
 </code></pre></div><p>If you application is successfully deployed, on the terminal where we executed the above command or on the Azure portal, we can find the URL of the application.
 The application URL will look something like <code>https://my-app.xxx.centralus.azurecontainerapps.io</code></p>
 <p><br /></p>
-<p>If our azure container app needs to reference any secrets, one way to do it is to store them as secrets in the container app, and then reference them in the application as environment variable.</p>
+<p>If our azure container app needs to reference any secrets, there is 2 ways to do so. One way to do it is to store them as secrets in the container app, and then reference them in the application as environment variable, and the other way is to use the Azure Key Vault.</p>
+<p>1 - Storing secrets in the container app and reference them in the application as environment variable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">MY_SECRETS <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>getenv(<span style="color:#e6db74">&#34;SUPERSECRETS&#34;</span>)
 </code></pre></div><p>And we can run the below command in terminal to set the env var, this will only need to execute once.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> az containerapp update --name my-app --resource-group myContainerRegistry --set-env-vars <span style="color:#e6db74">&#34;SUPERSECRETS=secretref:supersecrets&#34;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> az containerapp update --name my-app --resource-group myResourceGroup --set-env-vars <span style="color:#e6db74">&#34;SUPERSECRETS=secretref:supersecrets&#34;</span>
+</code></pre></div><p>2 - Azure Key Vault</p>
+<p>There are a few steps to set up on Azure to configure permission.</p>
+<p>a) We first need to enable Managed Identity for the container app. To do so, go to the &ldquo;Settings&rdquo; section of our container app on the Azure Portal and select &ldquo;Identity&rdquo;.</p>
+<p>In the &ldquo;System assigned&rdquo; tab, switch the &ldquo;Status&rdquo; to &ldquo;On&rdquo; to enable a system-assigned managed identity. Azure will create an identity associated with the Container App and manage its credentials.</p>
+<p>Click &ldquo;Save&rdquo; at the top of the panel to apply the changes and we will obtain an object/ principal ID for our system managed identity.</p>
+<p>b) Set apporiate permission on the Key Vault. Go to the &ldquo;Access policies&rdquo; section of the Key Vault and click on &ldquo;Add Access Policy&rdquo; or &ldquo;Create&rdquo;.</p>
+<p>Choose the secret permissions you want to grant to the Container App (at minimum, it needs &ldquo;Get&rdquo; permission).</p>
+<p>Click on &ldquo;Select principal&rdquo; and search for the system-assigned managed identity we created in the previous step. After reviewing the settings, click &ldquo;Add&rdquo; to apply the changes.</p>
+<p>c) Reference the secret in the application.</p>
+<p>Using the Azure SDK, we can retrieve the secret from the Key Vault.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> azure.identity <span style="color:#f92672">import</span> DefaultAzureCredential
+<span style="color:#f92672">from</span> azure.keyvault.secrets <span style="color:#f92672">import</span> SecretClient
+<span style="color:#f92672">from</span> os <span style="color:#f92672">import</span> getenv
+<span style="color:#f92672">import</span> logging
+
+
+logger <span style="color:#f92672">=</span> logging<span style="color:#f92672">.</span>getLogger(<span style="color:#e6db74">&#39;azure&#39;</span>)
+logger<span style="color:#f92672">.</span>setLevel(logging<span style="color:#f92672">.</span>INFO)
+
+RESOURCE_GRP <span style="color:#f92672">=</span> getenv(<span style="color:#e6db74">&#34;resourcegrp&#34;</span>)
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AzKeyVault</span>:
+    <span style="color:#66d9ef">def</span> __init__(self) <span style="color:#f92672">-&gt;</span> None:
+        self<span style="color:#f92672">.</span>credential <span style="color:#f92672">=</span> DefaultAzureCredential()
+        self<span style="color:#f92672">.</span>key_vault_url <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;https://{RESOURCE_GRP}.vault.azure.net/&#34;</span>
+        self<span style="color:#f92672">.</span>client <span style="color:#f92672">=</span> SecretClient(vault_url<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>key_vault_url, credential<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>credential, logging_enable<span style="color:#f92672">=</span>True)
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_secret</span>(self, secret):
+        secret_response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>client<span style="color:#f92672">.</span>get_secret(secret)
+        creds <span style="color:#f92672">=</span> secret_response<span style="color:#f92672">.</span>value
+        <span style="color:#66d9ef">return</span> creds
+</code></pre></div><p>To reference the secret in the application, we can do the below.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">secrets <span style="color:#f92672">=</span> AzKeyVault()
+MY_VAR <span style="color:#f92672">=</span> secrets<span style="color:#f92672">.</span>get_secret(<span style="color:#e6db74">&#34;MYSUPERSECRETS&#34;</span>)
 </code></pre></div><p><u><b>
 <p style="font-size:20pt ">
 Adding events endpoint to our app
