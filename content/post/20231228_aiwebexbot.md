@@ -39,30 +39,209 @@ The Webex Chatbot uses OpenAI's GPT-3.5 model to provide automated responses. It
 <img alt = 'png' src='/images/on_aiWebexBot/bot_workflow.png'/>
 </p>
 
+
 <u><b>
     <p style="font-size:20pt ">
-      Features
+      Building a Webex Bot
+    </p>
 </b></u>
 
-- SQL Debugging and Optimization: The chatbot can understand SQL queries and help with debugging and optimization.
-- Code Assistance: The chatbot can provide assistance with code-related issues.
-- Jira Story Creation: The chatbot can create Jira stories based on user input.
+First of all, lets set up our environment
 
+pyproject.toml
+```toml
+[tool.poetry]
+name = "webex-gpt-bot"
+version = "0.1.0"
+description = ""
+authors = [""]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9"
+webex-bot = "^0.4.1"
+webexteamssdk = "^1.6.1"
+websockets = "^10.2"
+emoji = "^2.9.0"
+
+openai = "^1.6.1"
+langchain = "0.1.4"
+langchain-openai= "^0.0.5"
+requests = "^2.31.0"
+
+[build-system]
+requires = ["poetry-core>=1.4.1"]
+build-backend = "poetry.core.masonry.api"
+```
+
+<u><b>
+Building webex commands
+</b></u>
+
+Let's start with building a bot command that uses the OpenAI API to reformat our SQL code.
+
+
+```python
+from webex_bot.models.command import Command
+
+class SqlFormatter(Command):
+    def __init__(self):
+        super().__init__(
+            command_keyword="!sqlformat",
+            help_message=f"Unrecognised command.\n"
+            f"Please type !sqlformat followed by your snowflake query",
+            card=None,
+        )
+
+    def pre_execute(self, message, attachment_actions, activity):
+        return "<blockquote class=info>\n\n**Command received.**\n\n\n**Working on SQL Reformatting...**\n\n</blockquote>"
+
+    def execute(self, message, attachment_actions, activity):
+        q_str = message.strip().lower()
+
+        if q_str == "":
+            response_message = (
+                "Invalid input format. \nPlease type !sqlformat followed by your snowflake query."
+                "\nExample: \n\n```\n!sqlformat SELECT col1, col2, col3 FROM tbl\n\n```"
+            )
+        else:
+            msg_hist = openaiapi.construct_formatter_prompt(query=q_str)
+            response_message = openaiapi.chat_response(msg_hist)
+
+        return response_message
+```
+
+Of course, we can also have a general programming assistant
+```python
+class CodeHelp(Command):
+    def __init__(self):
+        super().__init__(
+            command_keyword="!codeq",
+            help_message="Unrecognised command.\nPlease type !codeq followed by -l {lang} and -q {question}.",
+            card=None,
+        )
+
+    def execute(self, message, attachment_actions, activity):
+        try:
+            lang = extract_value(r"-l\s*([\w\s]+)", message)
+            question = extract_value(r"-q\s*(.+)", message)
+
+            if not lang or not question:
+                raise ValueError
+
+            msg_hist = openaiapi.construct_code_help_prompt(lang, question)
+            response_message = openaiapi.chat_response(msg_hist)
+        except ValueError:
+            response_message = (
+                "Invalid input format. \nPlease type !codeq followed by -l {lang} with the programming language you are enquiring and -q {question} with your question."
+                "\nExample: \n\n```\n!codeq -l python -q How can I print hello world?\n```"
+                "\nOr"
+                "\n```\n!codeq -q How can I print hello world? -l python\n```"
+            )
+
+        return response_message
+```
+
+
+Finally, as an optional, we can have a custom help command instead of the default ones from the webexbot library
+
+```python
+from webexteamssdk.models.cards import (
+    TextBlock,
+    Column,
+    AdaptiveCard,
+    ColumnSet,
+)
+from webexteamssdk.models.cards.actions import Submit, OpenUrl
+from webex_bot.models.command import Command
+from webex_bot.models.response import response_from_adaptive_card
+
+class HelpBase(Command):
+    def __init__(self):
+        super().__init__(
+            command_keyword="!customise",
+            card=None,
+        )
+
+    def execute(self, message, attachment_actions, activity):
+        message = message.strip().lower()
+        if message == "sqlformatet":
+            help_message = (
+                f"{'-' * 80}\n"
+                "**Command:** !sqlformat followed by &lt;SQL-query&gt;\n"
+                "**Usage:** Reformat SQL for better readability"
+                "\n\nExample: \n\n```\n!sqlformat SELECT col FROM tbl\n```"
+                f"\n{'-' * 80}\n"
+            )
+        elif message == "codeq":
+            help_message = (
+                f"{'-' * 80}\n"
+                "**Command:** !codeq followed by -l &lt;programming-language&gt; -q &lt;question&gt;\n"
+                "**Usage:** Programming Assistant for programming languages of your choice"
+                "\n\nExample: "
+                "\n\n```\n!codeq -l python -q How can I print hello world?\n```"
+                "\nOr"
+                "\n```\n!codeq -q How can I print hello world? -l python\n```"
+                f"\n{'-' * 80}\n"
+        else:
+            help_message = "Unrecognised command.\nPlease try again."
+
+        return help_message
+
+
+class HelpCommand(Command):
+    def __init__(self):
+        super().__init__(
+            command_keyword="!help",
+            help_message="!help - Shows help information",
+            card=None,
+        )
+
+    def execute(self, message, attachment_actions, activity):
+        actions = [
+            Submit(
+                title="!sqlformat - SQL Formatting\n!sqlformat <snowflake-query>",
+                data={"command_keyword": "!customise sqlformat"},
+            ),
+            Submit(
+                title="!codeq - Programming Assistant\n!codeq -l <lang> -q <question>",
+                data={"command_keyword": "!customise codeq"},
+            ),
+        ]
+
+        card = AdaptiveCard(
+            body=[
+                ColumnSet(
+                    columns=[
+                        Column(
+                            items=[
+                                TextBlock(
+                                    text=emoji.emojize(
+                                        ":computer_mouse: Click a command to get help"
+                                    ),
+                                    size="extraLarge",
+                                    weight="Bolder",
+                                )
+                            ]
+                        ),
+                    ]
+                ),
+                TextBlock(
+                    text=emoji.emojize(
+                        ":speaking_head: Questions? Reach out to [Me](mailto:email@email.com)",
+                    ),
+                    separator=True,
+                ),
+            ],
+            actions=actions,
+        )
+        return response_from_adaptive_card(card)
+```
 
 
 <u>Usage</u>
 
 To use the bot, send messages to it on Webex using the following command format:
-
-For SQL debugging: 
-```md 
-!sqldebug <your SQL query> #error <your error message>
-```
-
-For SQL optimization:
-```md 
-!sqlopt <your SQL query> #opt <your optimization related message>
-```
 
 For SQL formatting: 
 ```md 
@@ -72,21 +251,6 @@ For SQL formatting:
 For programming assistance: 
 ```md 
 !codeq -l <prog-lang> -q <your question or code>
-```
-
-To create a jira story: 
-```md 
-!jspost #{role} <story title>
-```
-
-Optional parameters: 
-```md 
-!jspost #{role} <story title> -u <user-id> -e <epic-id> -t <team-id> -sp <story-points> 
-```
-
-To get AI generated jira story content: 
-```md 
-!jsget #{role} <story title>
 ```
 
 

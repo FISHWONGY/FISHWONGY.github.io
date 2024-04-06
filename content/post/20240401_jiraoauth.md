@@ -153,6 +153,8 @@ python = "^3.9"
 httpx = "^0.27.0"
 fastapi = "^0.104.1"
 uvicorn = "^0.24.0.post1"
+starlette-session = "^0.4.3"
+itsdangerous = "^2.1.2"
 
 
 [build-system]

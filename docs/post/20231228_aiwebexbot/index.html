@@ -148,7 +148,7 @@ The Webex Chatbot uses OpenAI&rsquo;s GPT-3.">
 
 <script src="/js/collapseAuthors.js"></script>
                     December 28, 2023
-                    • 6 min read
+                    • 8 min read
                 </div>
             </div>
         </header>
@@ -199,29 +199,189 @@ Overview
 </p>
 <p><u><b>
 <p style="font-size:20pt ">
-Features
+Building a Webex Bot
+</p>
 </b></u></p>
-<ul>
-<li>SQL Debugging and Optimization: The chatbot can understand SQL queries and help with debugging and optimization.</li>
-<li>Code Assistance: The chatbot can provide assistance with code-related issues.</li>
-<li>Jira Story Creation: The chatbot can create Jira stories based on user input.</li>
-</ul>
-<p><u>Usage</u></p>
+<p>First of all, lets set up our environment</p>
+<p>pyproject.toml</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">tool</span>.<span style="color:#a6e22e">poetry</span>]
+<span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;webex-gpt-bot&#34;</span>
+<span style="color:#a6e22e">version</span> = <span style="color:#e6db74">&#34;0.1.0&#34;</span>
+<span style="color:#a6e22e">description</span> = <span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#a6e22e">authors</span> = [<span style="color:#e6db74">&#34;&#34;</span>]
+<span style="color:#a6e22e">readme</span> = <span style="color:#e6db74">&#34;README.md&#34;</span>
+
+[<span style="color:#a6e22e">tool</span>.<span style="color:#a6e22e">poetry</span>.<span style="color:#a6e22e">dependencies</span>]
+<span style="color:#a6e22e">python</span> = <span style="color:#e6db74">&#34;3.9&#34;</span>
+<span style="color:#a6e22e">webex</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">bot</span> = <span style="color:#e6db74">&#34;^0.4.1&#34;</span>
+<span style="color:#a6e22e">webexteamssdk</span> = <span style="color:#e6db74">&#34;^1.6.1&#34;</span>
+<span style="color:#a6e22e">websockets</span> = <span style="color:#e6db74">&#34;^10.2&#34;</span>
+<span style="color:#a6e22e">emoji</span> = <span style="color:#e6db74">&#34;^2.9.0&#34;</span>
+
+<span style="color:#a6e22e">openai</span> = <span style="color:#e6db74">&#34;^1.6.1&#34;</span>
+<span style="color:#a6e22e">langchain</span> = <span style="color:#e6db74">&#34;0.1.4&#34;</span>
+<span style="color:#a6e22e">langchain</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">openai</span>= <span style="color:#e6db74">&#34;^0.0.5&#34;</span>
+<span style="color:#a6e22e">requests</span> = <span style="color:#e6db74">&#34;^2.31.0&#34;</span>
+
+[<span style="color:#a6e22e">build</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">system</span>]
+<span style="color:#a6e22e">requires</span> = [<span style="color:#e6db74">&#34;poetry-core&gt;=1.4.1&#34;</span>]
+<span style="color:#a6e22e">build</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">backend</span> = <span style="color:#e6db74">&#34;poetry.core.masonry.api&#34;</span>
+</code></pre></div><p><u><b>
+Building webex commands
+</b></u></p>
+<p>Let&rsquo;s start with building a bot command that uses the OpenAI API to reformat our SQL code.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> webex_bot.models.command <span style="color:#f92672">import</span> Command
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SqlFormatter</span>(Command):
+    <span style="color:#66d9ef">def</span> __init__(self):
+        super()<span style="color:#f92672">.</span>__init__(
+            command_keyword<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!sqlformat&#34;</span>,
+            help_message<span style="color:#f92672">=</span>f<span style="color:#e6db74">&#34;Unrecognised command.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+            f<span style="color:#e6db74">&#34;Please type !sqlformat followed by your snowflake query&#34;</span>,
+            card<span style="color:#f92672">=</span>None,
+        )
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">pre_execute</span>(self, message, attachment_actions, activity):
+        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&lt;blockquote class=info&gt;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">**Command received.**</span><span style="color:#ae81ff">\n\n\n</span><span style="color:#e6db74">**Working on SQL Reformatting...**</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&lt;/blockquote&gt;&#34;</span>
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">execute</span>(self, message, attachment_actions, activity):
+        q_str <span style="color:#f92672">=</span> message<span style="color:#f92672">.</span>strip()<span style="color:#f92672">.</span>lower()
+
+        <span style="color:#66d9ef">if</span> q_str <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span>:
+            response_message <span style="color:#f92672">=</span> (
+                <span style="color:#e6db74">&#34;Invalid input format. </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Please type !sqlformat followed by your snowflake query.&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Example: </span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!sqlformat SELECT col1, col2, col3 FROM tbl</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">```&#34;</span>
+            )
+        <span style="color:#66d9ef">else</span>:
+            msg_hist <span style="color:#f92672">=</span> openaiapi<span style="color:#f92672">.</span>construct_formatter_prompt(query<span style="color:#f92672">=</span>q_str)
+            response_message <span style="color:#f92672">=</span> openaiapi<span style="color:#f92672">.</span>chat_response(msg_hist)
+
+        <span style="color:#66d9ef">return</span> response_message
+</code></pre></div><p>Of course, we can also have a general programming assistant</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CodeHelp</span>(Command):
+    <span style="color:#66d9ef">def</span> __init__(self):
+        super()<span style="color:#f92672">.</span>__init__(
+            command_keyword<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!codeq&#34;</span>,
+            help_message<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Unrecognised command.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Please type !codeq followed by -l {lang} and -q {question}.&#34;</span>,
+            card<span style="color:#f92672">=</span>None,
+        )
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">execute</span>(self, message, attachment_actions, activity):
+        <span style="color:#66d9ef">try</span>:
+            lang <span style="color:#f92672">=</span> extract_value(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;-l\s*([\w\s]+)&#34;</span>, message)
+            question <span style="color:#f92672">=</span> extract_value(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;-q\s*(.+)&#34;</span>, message)
+
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> lang <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> question:
+                <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>
+
+            msg_hist <span style="color:#f92672">=</span> openaiapi<span style="color:#f92672">.</span>construct_code_help_prompt(lang, question)
+            response_message <span style="color:#f92672">=</span> openaiapi<span style="color:#f92672">.</span>chat_response(msg_hist)
+        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">ValueError</span>:
+            response_message <span style="color:#f92672">=</span> (
+                <span style="color:#e6db74">&#34;Invalid input format. </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Please type !codeq followed by -l {lang} with the programming language you are enquiring and -q {question} with your question.&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Example: </span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!codeq -l python -q How can I print hello world?</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Or&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!codeq -q How can I print hello world? -l python</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```&#34;</span>
+            )
+
+        <span style="color:#66d9ef">return</span> response_message
+</code></pre></div><p>Finally, as an optional, we can have a custom help command instead of the default ones from the webexbot library</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> webexteamssdk.models.cards <span style="color:#f92672">import</span> (
+    TextBlock,
+    Column,
+    AdaptiveCard,
+    ColumnSet,
+)
+<span style="color:#f92672">from</span> webexteamssdk.models.cards.actions <span style="color:#f92672">import</span> Submit, OpenUrl
+<span style="color:#f92672">from</span> webex_bot.models.command <span style="color:#f92672">import</span> Command
+<span style="color:#f92672">from</span> webex_bot.models.response <span style="color:#f92672">import</span> response_from_adaptive_card
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelpBase</span>(Command):
+    <span style="color:#66d9ef">def</span> __init__(self):
+        super()<span style="color:#f92672">.</span>__init__(
+            command_keyword<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!customise&#34;</span>,
+            card<span style="color:#f92672">=</span>None,
+        )
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">execute</span>(self, message, attachment_actions, activity):
+        message <span style="color:#f92672">=</span> message<span style="color:#f92672">.</span>strip()<span style="color:#f92672">.</span>lower()
+        <span style="color:#66d9ef">if</span> message <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;sqlformatet&#34;</span>:
+            help_message <span style="color:#f92672">=</span> (
+                f<span style="color:#e6db74">&#34;{&#39;-&#39; * 80}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                <span style="color:#e6db74">&#34;**Command:** !sqlformat followed by &amp;lt;SQL-query&amp;gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                <span style="color:#e6db74">&#34;**Usage:** Reformat SQL for better readability&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">Example: </span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!sqlformat SELECT col FROM tbl</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```&#34;</span>
+                f<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{&#39;-&#39; * 80}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+            )
+        <span style="color:#66d9ef">elif</span> message <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;codeq&#34;</span>:
+            help_message <span style="color:#f92672">=</span> (
+                f<span style="color:#e6db74">&#34;{&#39;-&#39; * 80}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                <span style="color:#e6db74">&#34;**Command:** !codeq followed by -l &amp;lt;programming-language&amp;gt; -q &amp;lt;question&amp;gt;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                <span style="color:#e6db74">&#34;**Usage:** Programming Assistant for programming languages of your choice&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">Example: &#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!codeq -l python -q How can I print hello world?</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Or&#34;</span>
+                <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!codeq -q How can I print hello world? -l python</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">```&#34;</span>
+                f<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{&#39;-&#39; * 80}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+        <span style="color:#66d9ef">else</span>:
+            help_message <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Unrecognised command.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Please try again.&#34;</span>
+
+        <span style="color:#66d9ef">return</span> help_message
+
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelpCommand</span>(Command):
+    <span style="color:#66d9ef">def</span> __init__(self):
+        super()<span style="color:#f92672">.</span>__init__(
+            command_keyword<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!help&#34;</span>,
+            help_message<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!help - Shows help information&#34;</span>,
+            card<span style="color:#f92672">=</span>None,
+        )
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">execute</span>(self, message, attachment_actions, activity):
+        actions <span style="color:#f92672">=</span> [
+            Submit(
+                title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!sqlformat - SQL Formatting</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!sqlformat &lt;snowflake-query&gt;&#34;</span>,
+                data<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;command_keyword&#34;</span>: <span style="color:#e6db74">&#34;!customise sqlformat&#34;</span>},
+            ),
+            Submit(
+                title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!codeq - Programming Assistant</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">!codeq -l &lt;lang&gt; -q &lt;question&gt;&#34;</span>,
+                data<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;command_keyword&#34;</span>: <span style="color:#e6db74">&#34;!customise codeq&#34;</span>},
+            ),
+        ]
+
+        card <span style="color:#f92672">=</span> AdaptiveCard(
+            body<span style="color:#f92672">=</span>[
+                ColumnSet(
+                    columns<span style="color:#f92672">=</span>[
+                        Column(
+                            items<span style="color:#f92672">=</span>[
+                                TextBlock(
+                                    text<span style="color:#f92672">=</span>emoji<span style="color:#f92672">.</span>emojize(
+                                        <span style="color:#e6db74">&#34;:computer_mouse: Click a command to get help&#34;</span>
+                                    ),
+                                    size<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;extraLarge&#34;</span>,
+                                    weight<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Bolder&#34;</span>,
+                                )
+                            ]
+                        ),
+                    ]
+                ),
+                TextBlock(
+                    text<span style="color:#f92672">=</span>emoji<span style="color:#f92672">.</span>emojize(
+                        <span style="color:#e6db74">&#34;:speaking_head: Questions? Reach out to [Me](mailto:email@email.com)&#34;</span>,
+                    ),
+                    separator<span style="color:#f92672">=</span>True,
+                ),
+            ],
+            actions<span style="color:#f92672">=</span>actions,
+        )
+        <span style="color:#66d9ef">return</span> response_from_adaptive_card(card)
+</code></pre></div><p><u>Usage</u></p>
 <p>To use the bot, send messages to it on Webex using the following command format:</p>
-<p>For SQL debugging:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!sqldebug &lt;<span style="color:#f92672">your</span> <span style="color:#a6e22e">SQL</span> <span style="color:#a6e22e">query</span>&gt; #error &lt;<span style="color:#f92672">your</span> <span style="color:#a6e22e">error</span> <span style="color:#a6e22e">message</span>&gt;
-</code></pre></div><p>For SQL optimization:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!sqlopt &lt;<span style="color:#f92672">your</span> <span style="color:#a6e22e">SQL</span> <span style="color:#a6e22e">query</span>&gt; #opt &lt;<span style="color:#f92672">your</span> <span style="color:#a6e22e">optimization</span> <span style="color:#a6e22e">related</span> <span style="color:#a6e22e">message</span>&gt;
-</code></pre></div><p>For SQL formatting:</p>
+<p>For SQL formatting:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!sqlformat &lt;<span style="color:#f92672">your</span> <span style="color:#a6e22e">SQL</span> <span style="color:#a6e22e">query</span>&gt;
 </code></pre></div><p>For programming assistance:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!codeq -l &lt;<span style="color:#f92672">prog-lang</span>&gt; -q &lt;<span style="color:#f92672">your</span> <span style="color:#a6e22e">question</span> <span style="color:#a6e22e">or</span> <span style="color:#a6e22e">code</span>&gt;
-</code></pre></div><p>To create a jira story:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!jspost #{role} &lt;<span style="color:#f92672">story</span> <span style="color:#a6e22e">title</span>&gt;
-</code></pre></div><p>Optional parameters:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!jspost #{role} &lt;<span style="color:#f92672">story</span> <span style="color:#a6e22e">title</span>&gt; -u &lt;<span style="color:#f92672">user-id</span>&gt; -e &lt;<span style="color:#f92672">epic-id</span>&gt; -t &lt;<span style="color:#f92672">team-id</span>&gt; -sp &lt;<span style="color:#f92672">story-points</span>&gt; 
-</code></pre></div><p>To get AI generated jira story content:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">!jsget #{role} &lt;<span style="color:#f92672">story</span> <span style="color:#a6e22e">title</span>&gt;
 </code></pre></div><p><u>Design Explanations</u></p>
 <p>We can easily see that the commands for different functions are slightly different; while some commands use <code>-</code> for extra parameters, some use <code>#</code> for extra optional parameters.</p>
 <p>To be honest, I&rsquo;d prefer to use <code>-</code> for all optional params so that it is more similar to a proper CLI. However, when working with languages like SQL, the use of <code>-</code> is common inside the code.</p>
