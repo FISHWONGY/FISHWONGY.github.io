@@ -6,7 +6,18 @@
     <description>Recent content in Posts on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 23 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Building Chat Bots</title>
+      <link>https://FISHWONGY.github.io/post/20240423_chatbot/</link>
+      <pubDate>Tue, 23 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240423_chatbot/</guid>
+      <description>I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
+With the current popularity of LLM, one way to interact with the model is through chat bots.
+In this blog post, I will share with you the step by step guide to building a simple function chat bot on various platforms, and hopefully by the end of the post, you will be able to take away some ideas on how to build your own chat bot on your preferred platform and integrate with your own AI model!</description>
+    </item>
+    
     <item>
       <title>On Microsoft Graph with GCP &amp; Azure</title>
       <link>https://FISHWONGY.github.io/post/20240402_msgraph/</link>
@@ -36,8 +47,9 @@ Microsoft Graph exposes REST APIs and client libraries to access data on the fol
       
       <guid>https://FISHWONGY.github.io/post/20240303_discordaibot_pt3/</guid>
       <description>After the previous blog post on setting up a Discord Bot and implementing Gemini to the bot, in this blog post, we will be focusing on the implementing of RAG to the bot.
+To follow through the code here.
  RAG and LangChain 
-RAG (retrieval augmented generation), is a model that combines the best of both worlds of retrieval and generation models. It is a model that can be used for open-domain question answering. The RAG model retrieves information relevant to a user&amp;rsquo;s query from a large dataset and then generates a detailed response based on this information.</description>
+RAG (retrieval augmented generation), is a model that combines the best of both worlds of retrieval and generation models. It is a model that can be used for open-domain question answering.</description>
     </item>
     
     <item>
@@ -47,10 +59,10 @@ RAG (retrieval augmented generation), is a model that combines the best of both 
       
       <guid>https://FISHWONGY.github.io/post/20240302_discordaibot_pt2/</guid>
       <description>After the last blog post, we should now have a Discord Bot and a GCP project configured. In this blog post, we will be discussing the code implementation of building a AI Discord Chat Bot on using Google Cloud Platform&amp;rsquo;s(GCP) AI services, then deploy on the chat bot on GKE.
+To follow through the code here.
 So let&amp;rsquo;s jump right in!
  Project Setup 
-1 - Create pyproject.toml file
-Note that we are using python 3.</description>
+1 - Create pyproject.toml file</description>
     </item>
     
     <item>

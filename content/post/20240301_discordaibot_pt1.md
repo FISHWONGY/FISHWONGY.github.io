@@ -15,6 +15,8 @@ In this blog post series, I will be discussing the steps of building a AI Chat B
 
 [Part 1](https://fishwongy.github.io/post/20240301_discordaibot_pt1) focuses on the set up for the discord bot and GCP, [part 2](https://fishwongy.github.io/post/20240302_discordaibot_pt2) will discuss the integration of Vertex AI with the discord bot inclucding code implementation and [part 3](https://fishwongy.github.io/post/20240303_discordaibot_pt3) will focus on RAG implementation.
 
+To follow through the code [here](https://github.com/FISHWONGY/discord-gcpai-bot).
+
 <u><b>
     <p style="font-size:20pt ">
       Discord Bot Setup
