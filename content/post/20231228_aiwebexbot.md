@@ -327,7 +327,7 @@ def construct_prompt(query: str) -> list:
     ]
 ```
 
-And that's it, here is the final working BOT example.
+And that's it, here is the final working BOT example. and [here](https://github.com/FISHWONGY/webex-gpt-bot) is the code
 
 <p align="center">
 <img alt = 'gif' src='/images/on_aiWebexBot/webex-bot-demo.gif'/>

@@ -9,6 +9,8 @@ title: On Discord AI Chat Bot - Part 2
 
 After the [last blog post](https://fishwongy.github.io/post/20240301_discordaibot_pt1), we should now have a Discord Bot and a GCP project configured. In this blog post, we will be discussing the code implementation of building a AI Discord Chat Bot on using Google Cloud Platform's(GCP) AI services, then deploy on the chat bot on GKE.
 
+To follow through the code [here](https://github.com/FISHWONGY/discord-gcpai-bot).
+
 <p align="center">
 <img alt = 'gif' src='/images/on_discordAiBot/discord-ai-bot-demo.gif'/>
 </p>

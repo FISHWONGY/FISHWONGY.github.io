@@ -14,6 +14,9 @@ title: On Discord AI Chat Bot - Part 3
 
 After the [previous blog post](https://fishwongy.github.io/post/20240302_discordaibot_pt2) on setting up a Discord Bot and implementing Gemini to the bot, in this blog post, we will be focusing on the implementing of RAG to the bot. 
 
+To follow through the code [here](https://github.com/FISHWONGY/discord-gcpai-bot).
+
+
 <p align="center">
 <img alt = 'png' src='/images/on_discordAiBot/rag_flow.png'/>
 </p>
