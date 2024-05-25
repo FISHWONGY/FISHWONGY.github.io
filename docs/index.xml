@@ -6,7 +6,18 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 23 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Adaptive Cards</title>
+      <link>https://FISHWONGY.github.io/post/20240428_adaptivecards/</link>
+      <pubDate>Sun, 28 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240428_adaptivecards/</guid>
+      <description>During some of my previous posts, I talked about setting up different chat bots and integrating LLM with chat bot like Webex and Discord. In this post, I aim to discuss further on how to develop a more interactive chat bot with adaptive cards.
+ What is Adaptive Card 
+Adaptive Card is a platform-agnostic schema for card exchange. It is a simple way to create and share card content in a common and consistent way.</description>
+    </item>
+    
     <item>
       <title>On Building Chat Bots</title>
       <link>https://FISHWONGY.github.io/post/20240423_chatbot/</link>
