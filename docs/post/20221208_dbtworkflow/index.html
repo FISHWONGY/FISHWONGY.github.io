@@ -145,7 +145,7 @@ According to the official github website, GitHub Actions is a continuous integra
 
 <script src="/js/collapseAuthors.js"></script>
                     December 8, 2022
-                    • 2 min read
+                    • 3 min read
                 </div>
             </div>
         </header>
@@ -236,7 +236,8 @@ Alternatively, you can also directly click on Actions &gt; New actions, to impor
      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Test dbt models</span>
        <span style="color:#f92672">run</span>: <span style="color:#ae81ff">dbt test --project-dir gold_schema --select folder.subfolder.model_name</span>
 </code></pre></div><p>2 - Set up secrets/ env var for job</p>
-<p>Navigate to Settings &gt; Security &gt; Actions, add all your secrets and/ or env variables for the job.</p>
+<p>Navigate to Settings &gt; Security &gt; Actions, add all your secrets and/ or env variables for the job.
+In our case this time, we will be setting the repository&rsquo;s secret.</p>
 <p align="center">
 <img alt = 'png' src='/images/on_dbt_workflow/gh_actions_var.png'/>
 </p>
@@ -321,7 +322,7 @@ On the root of the dbt github repo, create a <code>profiles.yml</code></p>
                                 Working with Google Cloud Functions
                             </p>
                             <div class="article-metadata">
-                                June 10, 2022 · 3 min read
+                                June 10, 2022 · 4 min read
                             </div>
                         </div>
                     </div>
