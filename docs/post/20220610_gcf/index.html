@@ -148,7 +148,7 @@ When setting up the cloud function, you will need to have a runtime service acco
 
 <script src="/js/collapseAuthors.js"></script>
                     June 10, 2022
-                    • 3 min read
+                    • 4 min read
                 </div>
             </div>
         </header>
@@ -199,7 +199,18 @@ Cloud Function Setup
 ├── requirements.txt
 ├── utils.py
 ├── functions.py
+├── gcp_secrets.py
 └── main.py
+</code></pre></div><p>If we need to use any secrets or creds in our code, we can use GCP&rsquo;s Secret Manager and refernce the secret using the <code>google-cloud-secret-manager</code> library</p>
+<p align="center">
+<img alt = 'png' width='800' src='/images/on_gcf_20220610/gcf_secrets.png'/>
+</p>
+<p>And when referncing the creds, we can do something like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> gcp_secrets <span style="color:#f92672">import</span> GCPSecrets
+
+secrets <span style="color:#f92672">=</span> GCPSecrets()
+
+VAR <span style="color:#f92672">=</span> secrets<span style="color:#f92672">.</span>get_secret(<span style="color:#e6db74">&#34;your-var&#34;</span>)
 </code></pre></div><p>Note that on the cloud function, the entry point has to be the final function that runs in the <code>main.py</code>. And in that function, a parameter request has to be passed in order for the cloud function&rsquo;s HTTPS to be triggered.</p>
 <p>Also, if the function is returning a string at the end, it can&rsquo;t be anything other than <code>2XX</code>. I once saw a use case where a cloud function was used for some pipeline QA, and the function is programmed in a way that if the pipelines' QA checks didn&rsquo;t pass, it returns a <code>non-2XX</code> code. And because of this, the cloud function has been failing until that logic is removed.</p>
 <p align="center">
@@ -225,8 +236,58 @@ Please note we will need a service account here with sufficient trigger priviled
 <p align="center">
 <img alt = 'png' src='/images/on_gcf_20220610/gcf_dc_news.png'/>
 </p>
-<hr>
-<p>Some final thoughts&hellip;</p>
+<p><u><b>
+<p style="font-size:20pt;">
+Git Integration
+</p>
+</b></u></p>
+<p>One thing that I realised when I first used Cloud Functions is that there&rsquo;s no built-in version control, I saw some of my team members will just wirte their code locally and upload them to GCP.</p>
+<p>To better handle this, we can use Github Actions so that when there is code pushed or merged to the main branch, the Action will be triggered and update the cloud function.</p>
+<p>To do so we will first need the json creds of the service account and store the cred as a repo secret on github. We store it as <code>GCP_SA_DEPLOY_KEY</code> this time and refernce it later.</p>
+<p align="center">
+<img alt = 'png' src='/images/on_gcf_20220610/gh_actions_var.png'/>
+</p>
+<p>Then we can have a file at the location <code>.github/workflows/deploy-gcf.yml</code></p>
+<p>The <code>deploy-gcf.yml</code> can look something like this:
+Note that I have added the flag <code>--service-account</code> to indicate which service account I want to use for deployment, when it is not specified, it will by default use the App Engine Service Account. Just make sure the service account the deployment is using has all required priviledges granted.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Cloud Functions</span>
+
+<span style="color:#f92672">on</span>:
+  <span style="color:#f92672">push</span>:
+    <span style="color:#f92672">branches</span>:
+      - <span style="color:#ae81ff">main</span>
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#f92672">deploy</span>:
+    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+    <span style="color:#f92672">steps</span>:
+      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v3</span>
+      - <span style="color:#f92672">run</span>: <span style="color:#ae81ff">ls</span>
+      - <span style="color:#f92672">id</span>: <span style="color:#e6db74">&#39;auth&#39;</span>
+        <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Authenticate to Google Cloud&#39;</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#e6db74">&#39;google-github-actions/auth@v1&#39;</span>
+        <span style="color:#f92672">with</span>:
+          <span style="color:#f92672">credentials_json</span>: <span style="color:#e6db74">&#39;${{ secrets.GCP_SA_DEPLOY_KEY }}&#39;</span>
+      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Set up Cloud SDK&#39;</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#e6db74">&#39;google-github-actions/setup-gcloud@v1&#39;</span>
+        <span style="color:#f92672">with</span>:
+          <span style="color:#f92672">version</span>: <span style="color:#e6db74">&#39;&gt;= 363.0.0&#39;</span>
+      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Use gcloud CLI&#39;</span>
+        <span style="color:#f92672">run</span>: <span style="color:#e6db74">&#39;gcloud info&#39;</span>
+      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Deploy to gen2 cloud function&#39;</span>
+        <span style="color:#f92672">run</span>:  |<span style="color:#e6db74">
+</span><span style="color:#e6db74">          gcloud functions deploy &lt;cloud-function-name&gt; \
+</span><span style="color:#e6db74">          --gen2 \
+</span><span style="color:#e6db74">          --region=us-central1 \
+</span><span style="color:#e6db74">          --runtime=python310 \
+</span><span style="color:#e6db74">          --source=&lt;source-folder-in-repo&gt; \
+</span><span style="color:#e6db74">          --entry-point=&lt;function-in-main-file&gt; \
+</span><span style="color:#e6db74">          --trigger-http \
+</span><span style="color:#e6db74">          --service-account=svc@gcp-prj-123.iam.gserviceaccount.com</span>          
+</code></pre></div><p>And after the Action finished successfully, the function on GCP will be updated as well.</p>
+<p align="center">
+<img alt = 'png' src='/images/on_gcf_20220610/gcf_ghactions.png'/>
+</p>
+<p><u><b>Some final thoughts&hellip;</b></u></p>
 <ol>
 <li>
 <p>Scheduler is just one of the methods to trigger a Cloud Function. Apart from that, we can also use Pub/Sub to trigger a function. For example, when a new file lands in a GCP bucket, a Cloud Function will be triggered to run.</p>

@@ -6,7 +6,28 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Airflow - Part 2</title>
+      <link>https://FISHWONGY.github.io/post/20240610_airflow_pt2/</link>
+      <pubDate>Mon, 10 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240610_airflow_pt2/</guid>
+      <description>After our last blog post on setting up Airflow, in this blog post, we will be focusing on the implementation of our DAGs.
+So here are the two DAGs we will be implementing:
+ DAG 1: This DAG will be responsible for scraping the news data from the different website and storing it in the GCS bucket then send the new news to a Discord channel via webhook. DAG 2: This DAG will be responsible for scraping the standing data from the Formula 1 website and storing it in the GCS bucket then send the new standing to Google BigQuery.</description>
+    </item>
+    
+    <item>
+      <title>On Airflow - Part 1</title>
+      <link>https://FISHWONGY.github.io/post/20240609_airflow_pt1/</link>
+      <pubDate>Sun, 09 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240609_airflow_pt1/</guid>
+      <description>Airflow is a powerful orchestration tool for scheduling and orchestrating workflows. It is a great tool for data engineers to manage data pipelines. There are a lot of explanations in the internet about the benefit of using Apache Airflow, this link is an example.
+In this article I will focus on discussing the process of deploy Apache Airflow to Kubernetes cluster by using Helm. We then will configure it to have all of the logs stored in Google Cloud Storage.</description>
+    </item>
+    
     <item>
       <title>On MongoDB</title>
       <link>https://FISHWONGY.github.io/post/20240528_mongodb/</link>

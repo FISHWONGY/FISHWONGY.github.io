@@ -84,6 +84,7 @@ jobs:
 2 - Set up secrets/ env var for job
 
 Navigate to Settings > Security > Actions, add all your secrets and/ or env variables for the job.
+In our case this time, we will be setting the repository's secret.
 
 <p align="center">
 <img alt = 'png' src='/images/on_dbt_workflow/gh_actions_var.png'/>
