@@ -151,10 +151,9 @@ pip install google-cloud-aiplatform pip install openai pillow Google Vertex AI I
       
       <guid>https://FISHWONGY.github.io/post/20231228_aiwebexbot/</guid>
       <description>I like to build chatbots, because it is fun.
-In the past, I have built chatbots with application like line, and discord
+In the past, I have built chatbots with application like line, and some other different platforms as well
 With Generative AI (Gen AI) being the hot topic this year, I have always wanted to build something I am interested in with it. During this Christmas break, I finally have the time to sit down and build it 🤓.
- Overview 
-The Webex Chatbot uses OpenAI&amp;rsquo;s GPT-3.</description>
+ Overview</description>
     </item>
     
     <item>
@@ -210,9 +209,8 @@ There are many articles discussing whether we should migrate all pipelines to st
       
       <guid>https://FISHWONGY.github.io/post/20221208_dbtworkflow/</guid>
       <description>Last time we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.
-For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models &amp;amp; tests run.
- What is github workflow? 
-According to the official github website, GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.</description>
+For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate dbt models &amp;amp; tests run, also for hosting the documentation page.
+In this post, we will look at automating the models build and testing process by GitHub Actions, also using the github pages action to host the dbt documentation page on github.</description>
     </item>
     
     <item>

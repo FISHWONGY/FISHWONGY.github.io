@@ -26,15 +26,13 @@
 
 <title>On DBT&#39;s CI/CD Workflow | Yu Wong</title>
 <meta name="description" content="Last time we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.
-For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models &amp; tests run.
- What is github workflow? 
-According to the official github website, GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.">
+For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate dbt models &amp; tests run, also for hosting the documentation page.
+In this post, we will look at automating the models build and testing process by GitHub Actions, also using the github pages action to host the dbt documentation page on github.">
 <meta property="og:title" content="On DBT&#39;s CI/CD Workflow | Yu Wong">
 <meta property="og:site_name" content="Yu Wong">
 <meta property="og:description" content="Last time we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.
-For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models &amp; tests run.
- What is github workflow? 
-According to the official github website, GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.">
+For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate dbt models &amp; tests run, also for hosting the documentation page.
+In this post, we will look at automating the models build and testing process by GitHub Actions, also using the github pages action to host the dbt documentation page on github.">
 <meta property="og:url" content="https://FISHWONGY.github.io/post/20221208_dbtworkflow/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -48,9 +46,8 @@ According to the official github website, GitHub Actions is a continuous integra
 	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
 
 	<meta name="twitter:description" content="Last time we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.
-For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models &amp; tests run.
- What is github workflow? 
-According to the official github website, GitHub Actions is a continuous integration and continuous delivery (CI/CD) platform that allows you to automate your build, test, and deployment pipeline.">
+For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate dbt models &amp; tests run, also for hosting the documentation page.
+In this post, we will look at automating the models build and testing process by GitHub Actions, also using the github pages action to host the dbt documentation page on github.">
 <meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_dbt_workflow/gh_actions.png">
 <meta property="article:published_time" content="2022-12-08T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2022-12-08T00:00:00&#43;00:00">
@@ -145,7 +142,7 @@ According to the official github website, GitHub Actions is a continuous integra
 
 <script src="/js/collapseAuthors.js"></script>
                     December 8, 2022
-                    • 3 min read
+                    • 7 min read
                 </div>
             </div>
         </header>
@@ -177,7 +174,8 @@ According to the official github website, GitHub Actions is a continuous integra
     <article  id="articleContent" class="post-content" style="position:relative;">
         <div style="text-align: justify">
 <p><a href="https://fishwongy.github.io/post/20221106_dbtsetup/">Last time</a> we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.</p>
-<p>For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models &amp; tests run.</p>
+<p>For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate dbt models &amp; tests run, also for hosting the documentation page.</p>
+<p>In this post, we will look at automating the models build and testing process by GitHub Actions, also using the github pages action to host the dbt documentation page on github.</p>
 <p><u><b>
 <p style="font-size:20pt ">
 What is github workflow?
@@ -189,13 +187,53 @@ What is github workflow?
 Set up dbt with github workflow
 </p>
 </b></u></p>
+<p>Assuming our repo looks something like this, a snowflake dev warehouse with bronze, silver and gold schema.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">├── README.md
+├── bronze_schema
+│   ├── analyses
+│   ├── dbt_packages
+│   ├── dbt_project.yml
+│   ├── logs
+│   ├── macros
+│   ├── models
+│   ├── packages.yml
+│   ├── seeds
+│   ├── snapshots
+│   ├── target
+│   └── tests
+├── silver_schema
+│   ├── analyses
+│   ├── dbt_packages
+│   ├── dbt_project.yml
+│   ├── logs
+│   ├── macros
+│   ├── models
+│   ├── packages.yml
+│   ├── seeds
+│   ├── snapshots
+│   ├── target
+│   └── tests
+└── gold_schema
+    ├── analyses
+    ├── dbt_packages
+    ├── dbt_project.yml
+    ├── logs
+    ├── macros
+    ├── models
+    ├── packages.yml
+    ├── seeds
+    ├── snapshots
+    ├── target
+    └── tests
+</code></pre></div><p><u><b>Job Automation</b></u></p>
 <p>1 - Set up workflow yml file</p>
-<p>On you github dbt project repo, create a new folder <code>.github/workflows/dbt_job.yml</code>.
+<p>On you github dbt project repo, create a new folder <code>.github/workflows/job-automation.yml</code>.
 Alternatively, you can also directly click on Actions &gt; New actions, to import the workflow yml.</p>
-<p>Under <code>dbt_job.yml</code>, we will have to add below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">schedule_dbt_job</span>
+<p>Under <code>job-automation.yml</code>, we will have to add below, the workflow is now set to run either on-demand manual trigger or daily at 7 am.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">job-automation</span>
 
 <span style="color:#f92672">on</span>:
+  <span style="color:#f92672">workflow_dispatch</span>:
   <span style="color:#f92672">schedule</span>:
      - <span style="color:#f92672">cron</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">7</span> * * *
 <span style="color:#f92672">env</span>:
@@ -207,11 +245,13 @@ Alternatively, you can also directly click on Actions &gt; New actions, to impor
   <span style="color:#f92672">DBT_SNOWFLAKE_ROLE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_ROLE }}</span>
   <span style="color:#f92672">DBT_SNOWFLAKE_DATABASE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_DATABASE }}</span>
   <span style="color:#f92672">DBT_SNOWFLAKE_WAREHOUSE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}</span>
-  <span style="color:#f92672">DBT_SNOWFLAKE_SCHEMA</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_SCHEMA }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_BRONZE_SCHEMA</span>: <span style="color:#ae81ff">bronze_schema</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_SILVER_SCHEMA</span>: <span style="color:#ae81ff">silver_schema</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_GOLD_SCHEMA</span>: <span style="color:#ae81ff">gold_schema</span>
 
 
 <span style="color:#f92672">jobs</span>:
-  <span style="color:#f92672">schedule_dbt_job</span>:
+  <span style="color:#f92672">job-automation</span>:
    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">self-hosted</span>
    <span style="color:#f92672">steps</span>:
      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Check out</span>
@@ -227,7 +267,9 @@ Alternatively, you can also directly click on Actions &gt; New actions, to impor
        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
 </span><span style="color:#e6db74">         pip install dbt-core==1.3.1
 </span><span style="color:#e6db74">         pip install dbt-snowflake==1.3.0
-</span><span style="color:#e6db74">         dbt deps</span>         
+</span><span style="color:#e6db74">         dbt deps --project-dir bronze_schema
+</span><span style="color:#e6db74">         dbt deps --project-dir silver_schema
+</span><span style="color:#e6db74">         dbt deps --project-dir gold_schema</span>         
 
    <span style="color:#75715e"># dbt related commands - </span>
      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Run dbt models</span>
@@ -247,17 +289,289 @@ On the root of the dbt github repo, create a <code>profiles.yml</code></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">bronze_schema</span>:
   <span style="color:#f92672">outputs</span>:
     <span style="color:#f92672">dev</span>:
-    <span style="color:#f92672">threads</span>: <span style="color:#ae81ff">1</span>
-    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">snowflake</span>
-    <span style="color:#f92672">account</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ACCOUNT&#39;) }}&#34;</span>
-    <span style="color:#f92672">user</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_USERNAME&#39;) }}&#34;</span>
-    <span style="color:#f92672">role</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ROLE&#39;) }}&#34;</span>
-    <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_PW&#39;) }}&#34;</span>
-    <span style="color:#f92672">database</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_DATABASE&#39;) }}&#34;</span>
-    <span style="color:#f92672">warehouse</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_WAREHOUSE&#39;) }}&#34;</span>
-    <span style="color:#f92672">schema</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_SCHEMA_BRONZE&#39;) }}&#34;</span>
-    <span style="color:#f92672">client_session_keep_alive</span>: <span style="color:#66d9ef">False</span>
-</code></pre></div><p>And that&rsquo;s it, you will have a CI/CD dbt workflow deployed with github actions.</p>
+      <span style="color:#f92672">account</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ACCOUNT&#39;) }}&#34;</span>
+      <span style="color:#f92672">database</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_DATABASE&#39;) }}&#34;</span>
+      <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_PW&#39;) }}&#34;</span>
+      <span style="color:#f92672">role</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ROLE&#39;) }}&#34;</span>
+      <span style="color:#f92672">schema</span>: <span style="color:#ae81ff">BRONZE_SCHEMA</span>
+      <span style="color:#f92672">threads</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#f92672">type</span>: <span style="color:#ae81ff">snowflake</span>
+      <span style="color:#f92672">user</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_USERNAME&#39;) }}&#34;</span>
+      <span style="color:#f92672">warehouse</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_WAREHOUSE&#39;) }}&#34;</span>
+  <span style="color:#f92672">target</span>: <span style="color:#ae81ff">dev</span>
+<span style="color:#f92672">silver_schema</span>:
+  <span style="color:#f92672">outputs</span>:
+    <span style="color:#f92672">dev</span>:
+      <span style="color:#f92672">account</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ACCOUNT&#39;) }}&#34;</span>
+      <span style="color:#f92672">database</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_DATABASE&#39;) }}&#34;</span>
+      <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_PW&#39;) }}&#34;</span>
+      <span style="color:#f92672">role</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ROLE&#39;) }}&#34;</span>
+      <span style="color:#f92672">schema</span>: <span style="color:#ae81ff">SILVER_SCHEMA</span>
+      <span style="color:#f92672">threads</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#f92672">type</span>: <span style="color:#ae81ff">snowflake</span>
+      <span style="color:#f92672">user</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_USERNAME&#39;) }}&#34;</span>
+      <span style="color:#f92672">warehouse</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_WAREHOUSE&#39;) }}&#34;</span>
+  <span style="color:#f92672">target</span>: <span style="color:#ae81ff">dev</span>
+<span style="color:#f92672">gold_schema</span>:
+  <span style="color:#f92672">outputs</span>:
+    <span style="color:#f92672">dev</span>:
+      <span style="color:#f92672">account</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ACCOUNT&#39;) }}&#34;</span>
+      <span style="color:#f92672">database</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_DATABASE&#39;) }}&#34;</span>
+      <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_PW&#39;) }}&#34;</span>
+      <span style="color:#f92672">role</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_ROLE&#39;) }}&#34;</span>
+      <span style="color:#f92672">schema</span>: <span style="color:#ae81ff">GOLD_SCHEMA</span>
+      <span style="color:#f92672">threads</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#f92672">type</span>: <span style="color:#ae81ff">snowflake</span>
+      <span style="color:#f92672">user</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_USERNAME&#39;) }}&#34;</span>
+      <span style="color:#f92672">warehouse</span>: <span style="color:#e6db74">&#34;{{ env_var(&#39;DBT_SNOWFLAKE_WAREHOUSE&#39;) }}&#34;</span>
+  <span style="color:#f92672">target</span>: <span style="color:#ae81ff">dev</span>
+</code></pre></div><p>And with the above set up, we now are able to automate our dbt models.</p>
+<p>As an extra, we can also configure the workflow so that if there are any models failed, the workflow also send a notification message to a channel like emails, slack, telegram, webex etc.</p>
+<p>The example below shows a task that send a notification message to a webex space when there are failed dbt model during the build process.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">job-automation</span>
+
+<span style="color:#f92672">on</span>:
+  <span style="color:#f92672">workflow_dispatch</span>:
+  <span style="color:#f92672">schedule</span>:
+     - <span style="color:#f92672">cron</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">7</span> * * *
+<span style="color:#f92672">env</span>:
+  <span style="color:#f92672">DBT_PROFILES_DIR</span>: <span style="color:#ae81ff">./</span>
+  
+  <span style="color:#f92672">DBT_SNOWFLAKE_ACCOUNT</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_ACCOUNT }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_USERNAME</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_USERNAME }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_PW</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_PW }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_ROLE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_ROLE }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_DATABASE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_DATABASE }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_WAREHOUSE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_BRONZE_SCHEMA</span>: <span style="color:#ae81ff">bronze_schema</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_SILVER_SCHEMA</span>: <span style="color:#ae81ff">silver_schema</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_GOLD_SCHEMA</span>: <span style="color:#ae81ff">gold_schema</span>
+
+
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#f92672">job-automation</span>:
+   <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">self-hosted</span>
+   <span style="color:#f92672">steps</span>:
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Check out</span>
+       <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v3</span>
+
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Set up Python</span>
+       <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/setup-python@v4</span>
+       <span style="color:#f92672">with</span>:
+         <span style="color:#f92672">python-version</span>: <span style="color:#e6db74">&#34;3.10&#34;</span>
+         
+  <span style="color:#75715e"># pip install dbt</span>
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install dependencies</span>
+       <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">         pip install dbt-core==1.3.1
+</span><span style="color:#e6db74">         pip install dbt-snowflake==1.3.0
+</span><span style="color:#e6db74">         dbt deps --project-dir bronze_schema
+</span><span style="color:#e6db74">         dbt deps --project-dir silver_schema
+</span><span style="color:#e6db74">         dbt deps --project-dir gold_schema</span>         
+
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build dbt models and check for failures</span>
+        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">dbt_run</span>
+        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">          declare -A SCHEMA_MODELS
+</span><span style="color:#e6db74">          SCHEMA_MODELS[bronze_schema]=&#34;project.model project.model2 project.model3&#34;
+</span><span style="color:#e6db74">          SCHEMA_MODELS[silver_schema]=&#34;project.model project.model2&#34;
+</span><span style="color:#e6db74">          SCHEMA_MODELS[gold_schema]=&#34;project.model&#34;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">          FAILED_MODELS=&#34;&#34;
+</span><span style="color:#e6db74">          for PROJECT_DIR in &#34;${!SCHEMA_MODELS[@]}&#34;; do
+</span><span style="color:#e6db74">            MODELS=(${SCHEMA_MODELS[$PROJECT_DIR]})
+</span><span style="color:#e6db74">            for MODEL in &#34;${MODELS[@]}&#34;; do
+</span><span style="color:#e6db74">              if ! dbt run --project-dir $PROJECT_DIR --models $MODEL; then
+</span><span style="color:#e6db74">                FAILED_MODELS+=&#34;$PROJECT_DIR.$MODEL &#34;
+</span><span style="color:#e6db74">              fi
+</span><span style="color:#e6db74">            done
+</span><span style="color:#e6db74">          done
+</span><span style="color:#e6db74">          if [ -n &#34;$FAILED_MODELS&#34; ]; then
+</span><span style="color:#e6db74">            echo &#34;FAILED_MODELS=$FAILED_MODELS&#34; &gt;&gt; $GITHUB_ENV
+</span><span style="color:#e6db74">          fi</span>          
+        <span style="color:#f92672">continue-on-error</span>: <span style="color:#66d9ef">true</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Notify Webex with dbt build result</span>
+        <span style="color:#f92672">if</span>: <span style="color:#ae81ff">env.FAILED_MODELS != &#39;&#39;</span>
+        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">          curl --request POST \
+</span><span style="color:#e6db74">          --url &#39;https://webexapis.com/v1/messages&#39; \
+</span><span style="color:#e6db74">          --header &#39;Authorization: Bearer ${{ secrets.WEBEX_BOT_TOKEN }}&#39; \
+</span><span style="color:#e6db74">          --header &#39;Content-Type: application/json&#39; \
+</span><span style="color:#e6db74">          --data &#34;{
+</span><span style="color:#e6db74">            \&#34;roomId\&#34;: \&#34;${{ secrets.WEBEX_NOTI_ROOM_ID }}\&#34;,
+</span><span style="color:#e6db74">            \&#34;markdown\&#34;: \&#34;The GitHub Actions DBT build workflow failed with the following DBT model(s):\\n\\n$FAILED_MODELS\&#34;
+</span><span style="color:#e6db74">          }&#34;</span>          
+
+</code></pre></div><p><u><b>Hosting Documentaion Page on GitHub</b></u></p>
+<p>Next, let&rsquo;s work on building a workflow that build a gituhb page to host the dbt documentation for all bronze, silver and gold schemas.</p>
+<p>Firstly, we will have to set the pages setting of the repo under <code>settings</code> &gt; <code>pages</code></p>
+<p align="center">
+<img alt = 'png' src='/images/on_dbt_workflow/gh-pages-settings.png'/>
+</p>
+<p>After that, under the folder <code>.github/workflows</code> dir, we can open a new yml workflow file looks like below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">docs</span>
+
+<span style="color:#f92672">on</span>:
+  <span style="color:#f92672">workflow_dispatch</span>:
+  <span style="color:#f92672">push</span>:
+    <span style="color:#f92672">branches</span>:
+      - <span style="color:#ae81ff">main</span>
+
+<span style="color:#f92672">env</span>:
+  <span style="color:#f92672">DBT_PROFILES_DIR</span>: <span style="color:#ae81ff">./</span>
+  
+  <span style="color:#f92672">DBT_SNOWFLAKE_ACCOUNT</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_ACCOUNT }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_USERNAME</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_USERNAME }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_PW</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_PW }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_ROLE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_ROLE }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_DATABASE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_DATABASE }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_WAREHOUSE</span>: <span style="color:#ae81ff">${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_BRONZE_SCHEMA</span>: <span style="color:#ae81ff">bronze_schema</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_SILVER_SCHEMA</span>: <span style="color:#ae81ff">silver_schema</span>
+  <span style="color:#f92672">DBT_SNOWFLAKE_GOLD_SCHEMA</span>: <span style="color:#ae81ff">gold_schema</span>
+
+
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#f92672">docs</span>:
+   <span style="color:#f92672">name</span>: <span style="color:#ae81ff">docs</span>
+   <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">self-hosted</span>
+   <span style="color:#f92672">steps</span>:
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Check out</span>
+       <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v3</span>
+
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Set up Python</span>
+       <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/setup-python@v4</span>
+       <span style="color:#f92672">with</span>:
+         <span style="color:#f92672">python-version</span>: <span style="color:#e6db74">&#34;3.10&#34;</span>
+         
+  <span style="color:#75715e"># pip install dbt</span>
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install dependencies</span>
+       <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">         pip install dbt-core==1.3.1
+</span><span style="color:#e6db74">         pip install dbt-snowflake==1.3.0
+</span><span style="color:#e6db74">         dbt deps --project-dir bronze_schema
+</span><span style="color:#e6db74">         dbt deps --project-dir silver_schema
+</span><span style="color:#e6db74">         dbt deps --project-dir gold_schema</span>         
+    
+     - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">build single html</span>
+        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">          dbt docs generate --project-dir bronze_schema
+</span><span style="color:#e6db74">          dbt docs generate --project-dir silver_schema
+</span><span style="color:#e6db74">          dbt docs generate --project-dir gold_schema
+</span><span style="color:#e6db74">          python dbt-docs.py</span>          
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy to GitHub Pages</span>
+        <span style="color:#f92672">if</span>: <span style="color:#ae81ff">success()</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">crazy-max/ghaction-github-pages@v3</span>
+        <span style="color:#f92672">with</span>:
+          <span style="color:#f92672">target_branch</span>: <span style="color:#ae81ff">gh-pages</span>
+          <span style="color:#f92672">build_dir</span>: <span style="color:#ae81ff">target</span>
+        <span style="color:#f92672">env</span>:
+          <span style="color:#f92672">GITHUB_TOKEN</span>: <span style="color:#ae81ff">${{ secrets.GH_TOKEN }}</span>
+</code></pre></div><p>Then under the root dir <code>./</code> we need to have a python file called <code>dbt-docs.py</code>
+What this scirpt essentially doing is to merge the front end manifests of each schema to a consolidated file so that the page can be rendered properly.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> json
+<span style="color:#f92672">import</span> os
+<span style="color:#f92672">import</span> shutil
+<span style="color:#f92672">from</span> pathlib <span style="color:#f92672">import</span> Path
+<span style="color:#f92672">from</span> functools <span style="color:#f92672">import</span> reduce
+
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SchemaMerger</span>:
+    <span style="color:#66d9ef">def</span> __init__(self, schemas):
+        self<span style="color:#f92672">.</span>schemas <span style="color:#f92672">=</span> schemas
+        self<span style="color:#f92672">.</span>base_dir <span style="color:#f92672">=</span> Path(os<span style="color:#f92672">.</span>getcwd())
+        self<span style="color:#f92672">.</span>new_target_dir <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>base_dir <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;target&#34;</span>
+        self<span style="color:#f92672">.</span>search_str <span style="color:#f92672">=</span> (
+            <span style="color:#e6db74">&#39;o=[i(&#34;manifest&#34;,&#34;manifest.json&#34;+t),i(&#34;catalog&#34;,&#34;catalog.json&#34;+t)]&#39;</span>
+        )
+        self<span style="color:#f92672">.</span>combined_manifest <span style="color:#f92672">=</span> {
+            <span style="color:#e6db74">&#34;nodes&#34;</span>: {},
+            <span style="color:#e6db74">&#34;sources&#34;</span>: {},
+            <span style="color:#e6db74">&#34;exposures&#34;</span>: {},
+            <span style="color:#e6db74">&#34;metrics&#34;</span>: {},
+            <span style="color:#e6db74">&#34;selectors&#34;</span>: {},
+            <span style="color:#e6db74">&#34;tests&#34;</span>: {},
+            <span style="color:#e6db74">&#34;child_map&#34;</span>: {},
+            <span style="color:#e6db74">&#34;docs&#34;</span>: {},
+            <span style="color:#e6db74">&#34;disabled&#34;</span>: {},
+        }
+        self<span style="color:#f92672">.</span>combined_catalog <span style="color:#f92672">=</span> {
+            <span style="color:#e6db74">&#34;nodes&#34;</span>: {},
+            <span style="color:#e6db74">&#34;sources&#34;</span>: {},
+            <span style="color:#e6db74">&#34;exposures&#34;</span>: {},
+            <span style="color:#e6db74">&#34;metrics&#34;</span>: {},
+        }
+
+    <span style="color:#a6e22e">@staticmethod</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_dicts</span>(a, b):
+        <span style="color:#66d9ef">for</span> key, value <span style="color:#f92672">in</span> b<span style="color:#f92672">.</span>items():
+            <span style="color:#66d9ef">if</span> isinstance(value, dict):
+                <span style="color:#66d9ef">if</span> key <span style="color:#f92672">in</span> a <span style="color:#f92672">and</span> isinstance(a[key], dict):
+                    SchemaMerger<span style="color:#f92672">.</span>merge_dicts(a[key], value)
+                <span style="color:#66d9ef">else</span>:
+                    a[key] <span style="color:#f92672">=</span> value
+            <span style="color:#66d9ef">else</span>:
+                a[key] <span style="color:#f92672">=</span> value
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_and_merge_json</span>(self, file_path, combined):
+        <span style="color:#66d9ef">with</span> open(file_path, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> f:
+            data <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>load(f)
+            self<span style="color:#f92672">.</span>merge_dicts(combined, data)
+        <span style="color:#66d9ef">return</span> combined
+
+    <span style="color:#a6e22e">@staticmethod</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">replace_content_in_file</span>(file_path, search_str, new_str):
+        <span style="color:#66d9ef">with</span> open(file_path, <span style="color:#e6db74">&#34;r&#34;</span>) <span style="color:#66d9ef">as</span> f:
+            content <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
+        new_content <span style="color:#f92672">=</span> content<span style="color:#f92672">.</span>replace(search_str, new_str)
+        <span style="color:#66d9ef">with</span> open(file_path, <span style="color:#e6db74">&#34;w&#34;</span>) <span style="color:#66d9ef">as</span> f:
+            f<span style="color:#f92672">.</span>write(new_content)
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>(self):
+        self<span style="color:#f92672">.</span>new_target_dir<span style="color:#f92672">.</span>mkdir(exist_ok<span style="color:#f92672">=</span>True)
+        shutil<span style="color:#f92672">.</span>copy(
+            self<span style="color:#f92672">.</span>base_dir <span style="color:#f92672">/</span> self<span style="color:#f92672">.</span>schemas[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;target&#34;</span> <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;index.html&#34;</span>,
+            self<span style="color:#f92672">.</span>new_target_dir <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;index.html&#34;</span>,
+        )
+
+        self<span style="color:#f92672">.</span>combined_manifest <span style="color:#f92672">=</span> reduce(
+            <span style="color:#66d9ef">lambda</span> combined, schema: self<span style="color:#f92672">.</span>load_and_merge_json(
+                self<span style="color:#f92672">.</span>base_dir <span style="color:#f92672">/</span> schema <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;target&#34;</span> <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;manifest.json&#34;</span>, combined
+            ),
+            self<span style="color:#f92672">.</span>schemas,
+            self<span style="color:#f92672">.</span>combined_manifest,
+        )
+        self<span style="color:#f92672">.</span>combined_catalog <span style="color:#f92672">=</span> reduce(
+            <span style="color:#66d9ef">lambda</span> combined, schema: self<span style="color:#f92672">.</span>load_and_merge_json(
+                self<span style="color:#f92672">.</span>base_dir <span style="color:#f92672">/</span> schema <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;target&#34;</span> <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;catalog.json&#34;</span>, combined
+            ),
+            self<span style="color:#f92672">.</span>schemas,
+            self<span style="color:#f92672">.</span>combined_catalog,
+        )
+
+        <span style="color:#66d9ef">with</span> open(self<span style="color:#f92672">.</span>new_target_dir <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;manifest.json&#34;</span>, <span style="color:#e6db74">&#34;w&#34;</span>) <span style="color:#66d9ef">as</span> f:
+            json<span style="color:#f92672">.</span>dump(self<span style="color:#f92672">.</span>combined_manifest, f)
+        <span style="color:#66d9ef">with</span> open(self<span style="color:#f92672">.</span>new_target_dir <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;catalog.json&#34;</span>, <span style="color:#e6db74">&#34;w&#34;</span>) <span style="color:#66d9ef">as</span> f:
+            json<span style="color:#f92672">.</span>dump(self<span style="color:#f92672">.</span>combined_catalog, f)
+
+        new_str <span style="color:#f92672">=</span> (
+            <span style="color:#e6db74">&#34;o=[{label: &#39;manifest&#39;, data: &#34;</span>
+            <span style="color:#f92672">+</span> json<span style="color:#f92672">.</span>dumps(self<span style="color:#f92672">.</span>combined_manifest)
+            <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;},{label: &#39;catalog&#39;, data: &#34;</span>
+            <span style="color:#f92672">+</span> json<span style="color:#f92672">.</span>dumps(self<span style="color:#f92672">.</span>combined_catalog)
+            <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;}]&#34;</span>
+        )
+        self<span style="color:#f92672">.</span>replace_content_in_file(
+            self<span style="color:#f92672">.</span>new_target_dir <span style="color:#f92672">/</span> <span style="color:#e6db74">&#34;index.html&#34;</span>, self<span style="color:#f92672">.</span>search_str, new_str
+        )
+
+
+sf_schemas <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;bronze_schema&#34;</span>, <span style="color:#e6db74">&#34;silver_schema&#34;</span>, <span style="color:#e6db74">&#34;gold_schema&#34;</span>]
+merger <span style="color:#f92672">=</span> SchemaMerger(sf_schemas)
+merger<span style="color:#f92672">.</span>run()
+</code></pre></div><p>And that&rsquo;s it, when we now merge code to the main branch, the dbt documetation page will re-build and deploy automatically.</p>
 <hr>
 <p>Some final thoughts&hellip;</p>
 <p>This is just one use case; there&rsquo;s so much more GitHub Actions can do, such as ensuring code quality and security on branches based on git push, automating deployment on merging branches, etc.</p>

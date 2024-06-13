@@ -11,7 +11,9 @@ title: On DBT's CI/CD Workflow
 
 [Last time](https://fishwongy.github.io/post/20221106_dbtsetup/) we talk about some of the basic dbt functionalities, in this blog post, I want to talk about how we can use github workflows to automate dbt.
 
-For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate our models & tests run.
+For a lot of dbt-core users who are not using the dbt cloud version, integrating dbt with github workflows is an alternative to automate dbt models & tests run, also for hosting the documentation page.
+
+In this post, we will look at automating the models build and testing process by GitHub Actions, also using the github pages action to host the dbt documentation page on github.
 
 <u><b>
     <p style="font-size:20pt ">
@@ -28,17 +30,62 @@ According to the official [github website](https://docs.github.com/en/actions/le
     </p>
 </b></u>
 
+Assuming our repo looks something like this, a snowflake dev warehouse with bronze, silver and gold schema.
+
+```md
+├── README.md
+├── bronze_schema
+│   ├── analyses
+│   ├── dbt_packages
+│   ├── dbt_project.yml
+│   ├── logs
+│   ├── macros
+│   ├── models
+│   ├── packages.yml
+│   ├── seeds
+│   ├── snapshots
+│   ├── target
+│   └── tests
+├── silver_schema
+│   ├── analyses
+│   ├── dbt_packages
+│   ├── dbt_project.yml
+│   ├── logs
+│   ├── macros
+│   ├── models
+│   ├── packages.yml
+│   ├── seeds
+│   ├── snapshots
+│   ├── target
+│   └── tests
+└── gold_schema
+    ├── analyses
+    ├── dbt_packages
+    ├── dbt_project.yml
+    ├── logs
+    ├── macros
+    ├── models
+    ├── packages.yml
+    ├── seeds
+    ├── snapshots
+    ├── target
+    └── tests
+```
+
+<u><b>Job Automation</b></u>
+
 1 - Set up workflow yml file
 
-On you github dbt project repo, create a new folder `.github/workflows/dbt_job.yml`.
+On you github dbt project repo, create a new folder `.github/workflows/job-automation.yml`.
 Alternatively, you can also directly click on Actions > New actions, to import the workflow yml.
 
-Under `dbt_job.yml`, we will have to add below.
+Under `job-automation.yml`, we will have to add below, the workflow is now set to run either on-demand manual trigger or daily at 7 am.
 
 ```yml
-name: schedule_dbt_job
+name: job-automation
 
 on:
+  workflow_dispatch:
   schedule:
      - cron: 0 7 * * *
 env:
@@ -50,11 +97,13 @@ env:
   DBT_SNOWFLAKE_ROLE: ${{ secrets.DBT_SNOWFLAKE_ROLE }}
   DBT_SNOWFLAKE_DATABASE: ${{ secrets.DBT_SNOWFLAKE_DATABASE }}
   DBT_SNOWFLAKE_WAREHOUSE: ${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}
-  DBT_SNOWFLAKE_SCHEMA: ${{ secrets.DBT_SNOWFLAKE_SCHEMA }}
+  DBT_SNOWFLAKE_BRONZE_SCHEMA: bronze_schema
+  DBT_SNOWFLAKE_SILVER_SCHEMA: silver_schema
+  DBT_SNOWFLAKE_GOLD_SCHEMA: gold_schema
 
 
 jobs:
-  schedule_dbt_job:
+  job-automation:
    runs-on: self-hosted
    steps:
      - name: Check out
@@ -70,7 +119,9 @@ jobs:
        run: |
          pip install dbt-core==1.3.1
          pip install dbt-snowflake==1.3.0
-         dbt deps
+         dbt deps --project-dir bronze_schema
+         dbt deps --project-dir silver_schema
+         dbt deps --project-dir gold_schema
 
    # dbt related commands - 
      - name: Run dbt models
@@ -100,20 +151,312 @@ It will look somthing like this
 bronze_schema:
   outputs:
     dev:
-    threads: 1
-    type: snowflake
-    account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
-    user: "{{ env_var('DBT_SNOWFLAKE_USERNAME') }}"
-    role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
-    password: "{{ env_var('DBT_SNOWFLAKE_PW') }}"
-    database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
-    warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
-    schema: "{{ env_var('DBT_SNOWFLAKE_SCHEMA_BRONZE') }}"
-    client_session_keep_alive: False
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PW') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
+      schema: BRONZE_SCHEMA
+      threads: 1
+      type: snowflake
+      user: "{{ env_var('DBT_SNOWFLAKE_USERNAME') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+  target: dev
+silver_schema:
+  outputs:
+    dev:
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PW') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
+      schema: SILVER_SCHEMA
+      threads: 1
+      type: snowflake
+      user: "{{ env_var('DBT_SNOWFLAKE_USERNAME') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+  target: dev
+gold_schema:
+  outputs:
+    dev:
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PW') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
+      schema: GOLD_SCHEMA
+      threads: 1
+      type: snowflake
+      user: "{{ env_var('DBT_SNOWFLAKE_USERNAME') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+  target: dev
+```
+
+And with the above set up, we now are able to automate our dbt models.
+
+
+As an extra, we can also configure the workflow so that if there are any models failed, the workflow also send a notification message to a channel like emails, slack, telegram, webex etc.
+
+The example below shows a task that send a notification message to a webex space when there are failed dbt model during the build process.
+
+```yml
+name: job-automation
+
+on:
+  workflow_dispatch:
+  schedule:
+     - cron: 0 7 * * *
+env:
+  DBT_PROFILES_DIR: ./
+  
+  DBT_SNOWFLAKE_ACCOUNT: ${{ secrets.DBT_SNOWFLAKE_ACCOUNT }}
+  DBT_SNOWFLAKE_USERNAME: ${{ secrets.DBT_SNOWFLAKE_USERNAME }}
+  DBT_SNOWFLAKE_PW: ${{ secrets.DBT_SNOWFLAKE_PW }}
+  DBT_SNOWFLAKE_ROLE: ${{ secrets.DBT_SNOWFLAKE_ROLE }}
+  DBT_SNOWFLAKE_DATABASE: ${{ secrets.DBT_SNOWFLAKE_DATABASE }}
+  DBT_SNOWFLAKE_WAREHOUSE: ${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}
+  DBT_SNOWFLAKE_BRONZE_SCHEMA: bronze_schema
+  DBT_SNOWFLAKE_SILVER_SCHEMA: silver_schema
+  DBT_SNOWFLAKE_GOLD_SCHEMA: gold_schema
+
+
+jobs:
+  job-automation:
+   runs-on: self-hosted
+   steps:
+     - name: Check out
+       uses: actions/checkout@v3
+
+     - name: Set up Python
+       uses: actions/setup-python@v4
+       with:
+         python-version: "3.10"
+         
+  # pip install dbt
+     - name: Install dependencies
+       run: |
+         pip install dbt-core==1.3.1
+         pip install dbt-snowflake==1.3.0
+         dbt deps --project-dir bronze_schema
+         dbt deps --project-dir silver_schema
+         dbt deps --project-dir gold_schema
+
+     - name: Build dbt models and check for failures
+        id: dbt_run
+        run: |
+          declare -A SCHEMA_MODELS
+          SCHEMA_MODELS[bronze_schema]="project.model project.model2 project.model3"
+          SCHEMA_MODELS[silver_schema]="project.model project.model2"
+          SCHEMA_MODELS[gold_schema]="project.model"
+
+          FAILED_MODELS=""
+          for PROJECT_DIR in "${!SCHEMA_MODELS[@]}"; do
+            MODELS=(${SCHEMA_MODELS[$PROJECT_DIR]})
+            for MODEL in "${MODELS[@]}"; do
+              if ! dbt run --project-dir $PROJECT_DIR --models $MODEL; then
+                FAILED_MODELS+="$PROJECT_DIR.$MODEL "
+              fi
+            done
+          done
+          if [ -n "$FAILED_MODELS" ]; then
+            echo "FAILED_MODELS=$FAILED_MODELS" >> $GITHUB_ENV
+          fi
+        continue-on-error: true
+
+      - name: Notify Webex with dbt build result
+        if: env.FAILED_MODELS != ''
+        run: |
+          curl --request POST \
+          --url 'https://webexapis.com/v1/messages' \
+          --header 'Authorization: Bearer ${{ secrets.WEBEX_BOT_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --data "{
+            \"roomId\": \"${{ secrets.WEBEX_NOTI_ROOM_ID }}\",
+            \"markdown\": \"The GitHub Actions DBT build workflow failed with the following DBT model(s):\\n\\n$FAILED_MODELS\"
+          }"
+
+```
+
+<u><b>Hosting Documentaion Page on GitHub</b></u>
+
+Next, let's work on building a workflow that build a gituhb page to host the dbt documentation for all bronze, silver and gold schemas.
+
+
+Firstly, we will have to set the pages setting of the repo under `settings` > `pages`
+
+<p align="center">
+<img alt = 'png' src='/images/on_dbt_workflow/gh-pages-settings.png'/>
+</p>
+
+After that, under the folder `.github/workflows` dir, we can open a new yml workflow file looks like below:
+
+```yml
+name: docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  DBT_PROFILES_DIR: ./
+  
+  DBT_SNOWFLAKE_ACCOUNT: ${{ secrets.DBT_SNOWFLAKE_ACCOUNT }}
+  DBT_SNOWFLAKE_USERNAME: ${{ secrets.DBT_SNOWFLAKE_USERNAME }}
+  DBT_SNOWFLAKE_PW: ${{ secrets.DBT_SNOWFLAKE_PW }}
+  DBT_SNOWFLAKE_ROLE: ${{ secrets.DBT_SNOWFLAKE_ROLE }}
+  DBT_SNOWFLAKE_DATABASE: ${{ secrets.DBT_SNOWFLAKE_DATABASE }}
+  DBT_SNOWFLAKE_WAREHOUSE: ${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}
+  DBT_SNOWFLAKE_BRONZE_SCHEMA: bronze_schema
+  DBT_SNOWFLAKE_SILVER_SCHEMA: silver_schema
+  DBT_SNOWFLAKE_GOLD_SCHEMA: gold_schema
+
+
+jobs:
+  docs:
+   name: docs
+   runs-on: self-hosted
+   steps:
+     - name: Check out
+       uses: actions/checkout@v3
+
+     - name: Set up Python
+       uses: actions/setup-python@v4
+       with:
+         python-version: "3.10"
+         
+  # pip install dbt
+     - name: Install dependencies
+       run: |
+         pip install dbt-core==1.3.1
+         pip install dbt-snowflake==1.3.0
+         dbt deps --project-dir bronze_schema
+         dbt deps --project-dir silver_schema
+         dbt deps --project-dir gold_schema
+    
+     - name: build single html
+        run: |
+          dbt docs generate --project-dir bronze_schema
+          dbt docs generate --project-dir silver_schema
+          dbt docs generate --project-dir gold_schema
+          python dbt-docs.py
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: gh-pages
+          build_dir: target
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 ```
 
 
-And that's it, you will have a CI/CD dbt workflow deployed with github actions.
+Then under the root dir `./` we need to have a python file called `dbt-docs.py`
+What this scirpt essentially doing is to merge the front end manifests of each schema to a consolidated file so that the page can be rendered properly.
+
+```python
+import json
+import os
+import shutil
+from pathlib import Path
+from functools import reduce
+
+
+class SchemaMerger:
+    def __init__(self, schemas):
+        self.schemas = schemas
+        self.base_dir = Path(os.getcwd())
+        self.new_target_dir = self.base_dir / "target"
+        self.search_str = (
+            'o=[i("manifest","manifest.json"+t),i("catalog","catalog.json"+t)]'
+        )
+        self.combined_manifest = {
+            "nodes": {},
+            "sources": {},
+            "exposures": {},
+            "metrics": {},
+            "selectors": {},
+            "tests": {},
+            "child_map": {},
+            "docs": {},
+            "disabled": {},
+        }
+        self.combined_catalog = {
+            "nodes": {},
+            "sources": {},
+            "exposures": {},
+            "metrics": {},
+        }
+
+    @staticmethod
+    def merge_dicts(a, b):
+        for key, value in b.items():
+            if isinstance(value, dict):
+                if key in a and isinstance(a[key], dict):
+                    SchemaMerger.merge_dicts(a[key], value)
+                else:
+                    a[key] = value
+            else:
+                a[key] = value
+
+    def load_and_merge_json(self, file_path, combined):
+        with open(file_path, "r") as f:
+            data = json.load(f)
+            self.merge_dicts(combined, data)
+        return combined
+
+    @staticmethod
+    def replace_content_in_file(file_path, search_str, new_str):
+        with open(file_path, "r") as f:
+            content = f.read()
+        new_content = content.replace(search_str, new_str)
+        with open(file_path, "w") as f:
+            f.write(new_content)
+
+    def run(self):
+        self.new_target_dir.mkdir(exist_ok=True)
+        shutil.copy(
+            self.base_dir / self.schemas[0] / "target" / "index.html",
+            self.new_target_dir / "index.html",
+        )
+
+        self.combined_manifest = reduce(
+            lambda combined, schema: self.load_and_merge_json(
+                self.base_dir / schema / "target" / "manifest.json", combined
+            ),
+            self.schemas,
+            self.combined_manifest,
+        )
+        self.combined_catalog = reduce(
+            lambda combined, schema: self.load_and_merge_json(
+                self.base_dir / schema / "target" / "catalog.json", combined
+            ),
+            self.schemas,
+            self.combined_catalog,
+        )
+
+        with open(self.new_target_dir / "manifest.json", "w") as f:
+            json.dump(self.combined_manifest, f)
+        with open(self.new_target_dir / "catalog.json", "w") as f:
+            json.dump(self.combined_catalog, f)
+
+        new_str = (
+            "o=[{label: 'manifest', data: "
+            + json.dumps(self.combined_manifest)
+            + "},{label: 'catalog', data: "
+            + json.dumps(self.combined_catalog)
+            + "}]"
+        )
+        self.replace_content_in_file(
+            self.new_target_dir / "index.html", self.search_str, new_str
+        )
+
+
+sf_schemas = ["bronze_schema", "silver_schema", "gold_schema"]
+merger = SchemaMerger(sf_schemas)
+merger.run()
+```
+
+And that's it, when we now merge code to the main branch, the dbt documetation page will re-build and deploy automatically.
 
 ---
 Some final thoughts...
