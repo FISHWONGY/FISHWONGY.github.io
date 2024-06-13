@@ -15,7 +15,7 @@ title: On AI Webex Chat BOT
 
 I like to build chatbots, because it is fun. 
 
-In the past, I have built chatbots with application like [line](https://github.com/FISHWONGY/line-bot), and [discord](https://github.com/FISHWONGY/discord-bot) 
+In the past, I have built chatbots with application like [line](https://github.com/FISHWONGY/line-bot), and [some other different platforms as well](https://github.com/FISHWONGY/chatbot-collections) 
 
 With Generative AI (Gen AI) being the hot topic this year, I have always wanted to build something I am interested in with it. During this Christmas break, I finally have the time to sit down and build it 🤓.
 
@@ -30,14 +30,7 @@ With Generative AI (Gen AI) being the hot topic this year, I have always wanted 
 </p>
 
 
-The Webex Chatbot uses OpenAI's GPT-3.5 model to provide automated responses. It was developed in Python and uses the Azure OpenAI API, Webex API and Jira API for chat operations and its core functionalities.
-
-
-<u>Architecture</u>
-
-<p align="center">
-<img alt = 'png' src='/images/on_aiWebexBot/bot_workflow.png'/>
-</p>
+The Webex Chatbot uses OpenAI's GPT model to provide automated responses. It was developed in Python and uses the Azure OpenAI API and Webex API for chat operations and its core functionalities.
 
 
 <u><b>
@@ -78,41 +71,79 @@ build-backend = "poetry.core.masonry.api"
 Building webex commands
 </b></u>
 
-Let's start with building a bot command that uses the OpenAI API to reformat our SQL code.
+Let's start with setting up Azure Open AI.
+
+For Authentication
+```python
+class OpenAIClient:
+    client = None
+    lock = threading.Lock()
+
+    @staticmethod
+    def refresh_token():
+        while True:
+            with OpenAIClient.lock:
+                url = "url/oauth2/default/v1/token"
+                payload = "grant_type=client_credentials"
+                value = base64.b64encode(
+                    f"{OPENAI_CLIENT_ID}:{OPENAI_CLIENT_SECRET}".encode("utf-8")
+                ).decode("utf-8")
+                headers = {
+                    "Accept": "*/*",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": f"Basic {value}",
+                }
+
+                token_response = requests.request(
+                    "POST", url, headers=headers, data=payload
+                )
+
+                OpenAIClient.client = AzureOpenAI(
+                    azure_endpoint="https://azure-endpoint.com",
+                    api_key=token_response.json()["access_token"],
+                    api_version="2023-08-01-preview",
+                )
+
+                logging.info("All OpenAI Clients refreshed.")
+            time.sleep(3500)
+```
+
+To receive ans extract the Gen AI repsonse:
+
+```python
+class OpenAI:
+    @staticmethod
+    def construct_formatter_prompt(query: str) -> list:
+        system_prompt = f"{MY_PROMPT}"
+
+        return [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": query},
+        ]
+    
+    @staticmethod
+    def chat_response(msg_list: list) -> str:
+        with OpenAIClient.lock:
+            client = OpenAIClient.client
+
+        response = client.chat.completions.create(
+            model="gpt-35-turbo",
+            messages=msg_list,
+            user=f'{{"appkey": "{OPENAI_API_KEY}"}}',
+        )
+
+        output = response.choices[0].message.content
+
+        return f"<blockquote class=info>{output}\n\n---END---</blockquote>"
+```
+
+
+Then we can start building a bot command. In this example, we will use the OpenAI API to build a  general coding assistant.
 
 
 ```python
 from webex_bot.models.command import Command
 
-class SqlFormatter(Command):
-    def __init__(self):
-        super().__init__(
-            command_keyword="!sqlformat",
-            help_message=f"Unrecognised command.\n"
-            f"Please type !sqlformat followed by your snowflake query",
-            card=None,
-        )
-
-    def pre_execute(self, message, attachment_actions, activity):
-        return "<blockquote class=info>\n\n**Command received.**\n\n\n**Working on SQL Reformatting...**\n\n</blockquote>"
-
-    def execute(self, message, attachment_actions, activity):
-        q_str = message.strip().lower()
-
-        if q_str == "":
-            response_message = (
-                "Invalid input format. \nPlease type !sqlformat followed by your snowflake query."
-                "\nExample: \n\n```\n!sqlformat SELECT col1, col2, col3 FROM tbl\n\n```"
-            )
-        else:
-            msg_hist = openaiapi.construct_formatter_prompt(query=q_str)
-            response_message = openaiapi.chat_response(msg_hist)
-
-        return response_message
-```
-
-Of course, we can also have a general programming assistant
-```python
 class CodeHelp(Command):
     def __init__(self):
         super().__init__(
@@ -165,15 +196,7 @@ class HelpBase(Command):
 
     def execute(self, message, attachment_actions, activity):
         message = message.strip().lower()
-        if message == "sqlformatet":
-            help_message = (
-                f"{'-' * 80}\n"
-                "**Command:** !sqlformat followed by &lt;SQL-query&gt;\n"
-                "**Usage:** Reformat SQL for better readability"
-                "\n\nExample: \n\n```\n!sqlformat SELECT col FROM tbl\n```"
-                f"\n{'-' * 80}\n"
-            )
-        elif message == "codeq":
+        if  message == "codeq":
             help_message = (
                 f"{'-' * 80}\n"
                 "**Command:** !codeq followed by -l &lt;programming-language&gt; -q &lt;question&gt;\n"
@@ -199,10 +222,6 @@ class HelpCommand(Command):
 
     def execute(self, message, attachment_actions, activity):
         actions = [
-            Submit(
-                title="!sqlformat - SQL Formatting\n!sqlformat <snowflake-query>",
-                data={"command_keyword": "!customise sqlformat"},
-            ),
             Submit(
                 title="!codeq - Programming Assistant\n!codeq -l <lang> -q <question>",
                 data={"command_keyword": "!customise codeq"},
@@ -243,32 +262,12 @@ class HelpCommand(Command):
 
 To use the bot, send messages to it on Webex using the following command format:
 
-For SQL formatting: 
-```md 
-!sqlformat <your SQL query>
-```
 
 For programming assistance: 
 ```md 
 !codeq -l <prog-lang> -q <your question or code>
 ```
 
-
-<u>Design Explanations</u>
-
-
-We can easily see that the commands for different functions are slightly different; while some commands use `-` for extra parameters, some use `#` for extra optional parameters.
-
-To be honest, I'd prefer to use `-` for all optional params so that it is more similar to a proper CLI. However, when working with languages like SQL, the use of `-` is common inside the code.
-
-
-```sql
--- For example when we are commenting
-SELECT *
-FROM tbl
-```
-
-I may be able to get away with it if I go down to the route of using explicit [regex](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) , however considering how often  ` -- something` is used in SQL syntax, I decided to just use `#` to resolve the issue once and for all this time.
 
 ---
 
@@ -327,7 +326,7 @@ def construct_prompt(query: str) -> list:
     ]
 ```
 
-And that's it, here is the final working BOT example. and [here](https://github.com/FISHWONGY/webex-gpt-bot) is the code
+And that's it, here is the final working BOT example.
 
 <p align="center">
 <img alt = 'gif' src='/images/on_aiWebexBot/webex-bot-demo.gif'/>
