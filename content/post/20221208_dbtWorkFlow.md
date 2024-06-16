@@ -251,7 +251,7 @@ jobs:
             MODELS=(${SCHEMA_MODELS[$PROJECT_DIR]})
             for MODEL in "${MODELS[@]}"; do
               if ! dbt run --project-dir $PROJECT_DIR --models $MODEL; then
-                FAILED_MODELS+="$PROJECT_DIR.$MODEL "
+                FAILED_MODELS+="${PROJECT_DIR^^}.${MODEL^^} \\n"
               fi
             done
           done
@@ -270,6 +270,40 @@ jobs:
           --data "{
             \"roomId\": \"${{ secrets.WEBEX_NOTI_ROOM_ID }}\",
             \"markdown\": \"The GitHub Actions DBT build workflow failed with the following DBT model(s):\\n\\n$FAILED_MODELS\"
+          }"
+      
+      - name: Run dbt tests and check for failures
+        id: dbt_test
+        run: |
+          declare -A SCHEMA_TESTS
+          SCHEMA_MODELS[bronze_schema]="project.model project.model2 project.model3"
+          SCHEMA_MODELS[silver_schema]="project.model project.model2"
+          SCHEMA_MODELS[gold_schema]="project.model"
+
+          FAILED_TESTS=""
+          for PROJECT_DIR in "${!SCHEMA_TESTS[@]}"; do
+            TESTS=(${SCHEMA_TESTS[$PROJECT_DIR]})
+            for TEST in "${TESTS[@]}"; do
+              if ! dbt test --project-dir $PROJECT_DIR --select $TEST; then
+                FAILED_TESTS+="${PROJECT_DIR^^}.${TEST^^} \\n"
+              fi
+            done
+          done
+          if [ -n "$FAILED_TESTS" ]; then
+            echo "FAILED_TESTS=$FAILED_TESTS" >> $GITHUB_ENV
+          fi
+        continue-on-error: true
+
+      - name: Notify Webex with dbt test result
+        if: env.FAILED_TESTS != ''
+        run: |
+          curl --request POST \
+          --url 'https://webexapis.com/v1/messages' \
+          --header 'Authorization: Bearer ${{ secrets.WEBEX_BOT_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --data "{
+            \"roomId\": \"${{ secrets.WEBEX_NOTI_ROOM_ID }}\",
+            \"markdown\": \"The dbt test step has failed in the GitHub Actions workflow with the following DBT test(s):\\n\\n$FAILED_TESTS\"
           }"
 
 ```

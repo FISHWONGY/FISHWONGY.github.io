@@ -142,7 +142,7 @@ In this post, we will look at automating the models build and testing process by
 
 <script src="/js/collapseAuthors.js"></script>
                     December 8, 2022
-                    • 7 min read
+                    • 8 min read
                 </div>
             </div>
         </header>
@@ -382,7 +382,7 @@ On the root of the dbt github repo, create a <code>profiles.yml</code></p>
 </span><span style="color:#e6db74">            MODELS=(${SCHEMA_MODELS[$PROJECT_DIR]})
 </span><span style="color:#e6db74">            for MODEL in &#34;${MODELS[@]}&#34;; do
 </span><span style="color:#e6db74">              if ! dbt run --project-dir $PROJECT_DIR --models $MODEL; then
-</span><span style="color:#e6db74">                FAILED_MODELS+=&#34;$PROJECT_DIR.$MODEL &#34;
+</span><span style="color:#e6db74">                FAILED_MODELS+=&#34;${PROJECT_DIR^^}.${MODEL^^} \\n&#34;
 </span><span style="color:#e6db74">              fi
 </span><span style="color:#e6db74">            done
 </span><span style="color:#e6db74">          done
@@ -401,6 +401,40 @@ On the root of the dbt github repo, create a <code>profiles.yml</code></p>
 </span><span style="color:#e6db74">          --data &#34;{
 </span><span style="color:#e6db74">            \&#34;roomId\&#34;: \&#34;${{ secrets.WEBEX_NOTI_ROOM_ID }}\&#34;,
 </span><span style="color:#e6db74">            \&#34;markdown\&#34;: \&#34;The GitHub Actions DBT build workflow failed with the following DBT model(s):\\n\\n$FAILED_MODELS\&#34;
+</span><span style="color:#e6db74">          }&#34;</span>          
+      
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Run dbt tests and check for failures</span>
+        <span style="color:#f92672">id</span>: <span style="color:#ae81ff">dbt_test</span>
+        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">          declare -A SCHEMA_TESTS
+</span><span style="color:#e6db74">          SCHEMA_MODELS[bronze_schema]=&#34;project.model project.model2 project.model3&#34;
+</span><span style="color:#e6db74">          SCHEMA_MODELS[silver_schema]=&#34;project.model project.model2&#34;
+</span><span style="color:#e6db74">          SCHEMA_MODELS[gold_schema]=&#34;project.model&#34;
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">          FAILED_TESTS=&#34;&#34;
+</span><span style="color:#e6db74">          for PROJECT_DIR in &#34;${!SCHEMA_TESTS[@]}&#34;; do
+</span><span style="color:#e6db74">            TESTS=(${SCHEMA_TESTS[$PROJECT_DIR]})
+</span><span style="color:#e6db74">            for TEST in &#34;${TESTS[@]}&#34;; do
+</span><span style="color:#e6db74">              if ! dbt test --project-dir $PROJECT_DIR --select $TEST; then
+</span><span style="color:#e6db74">                FAILED_TESTS+=&#34;${PROJECT_DIR^^}.${TEST^^} \\n&#34;
+</span><span style="color:#e6db74">              fi
+</span><span style="color:#e6db74">            done
+</span><span style="color:#e6db74">          done
+</span><span style="color:#e6db74">          if [ -n &#34;$FAILED_TESTS&#34; ]; then
+</span><span style="color:#e6db74">            echo &#34;FAILED_TESTS=$FAILED_TESTS&#34; &gt;&gt; $GITHUB_ENV
+</span><span style="color:#e6db74">          fi</span>          
+        <span style="color:#f92672">continue-on-error</span>: <span style="color:#66d9ef">true</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Notify Webex with dbt test result</span>
+        <span style="color:#f92672">if</span>: <span style="color:#ae81ff">env.FAILED_TESTS != &#39;&#39;</span>
+        <span style="color:#f92672">run</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">          curl --request POST \
+</span><span style="color:#e6db74">          --url &#39;https://webexapis.com/v1/messages&#39; \
+</span><span style="color:#e6db74">          --header &#39;Authorization: Bearer ${{ secrets.WEBEX_BOT_TOKEN }}&#39; \
+</span><span style="color:#e6db74">          --header &#39;Content-Type: application/json&#39; \
+</span><span style="color:#e6db74">          --data &#34;{
+</span><span style="color:#e6db74">            \&#34;roomId\&#34;: \&#34;${{ secrets.WEBEX_NOTI_ROOM_ID }}\&#34;,
+</span><span style="color:#e6db74">            \&#34;markdown\&#34;: \&#34;The dbt test step has failed in the GitHub Actions workflow with the following DBT test(s):\\n\\n$FAILED_TESTS\&#34;
 </span><span style="color:#e6db74">          }&#34;</span>          
 
 </code></pre></div><p><u><b>Hosting Documentaion Page on GitHub</b></u></p>

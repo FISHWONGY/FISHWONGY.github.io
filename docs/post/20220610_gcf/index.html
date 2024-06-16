@@ -253,27 +253,30 @@ Note that I have added the flag <code>--service-account</code> to indicate which
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Cloud Functions</span>
 
 <span style="color:#f92672">on</span>:
-  <span style="color:#f92672">push</span>:
+  <span style="color:#f92672">pusll_request</span>:
+    <span style="color:#f92672">types</span>: [<span style="color:#ae81ff">closed]</span>
     <span style="color:#f92672">branches</span>:
       - <span style="color:#ae81ff">main</span>
+
 <span style="color:#f92672">jobs</span>:
   <span style="color:#f92672">deploy</span>:
     <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
     <span style="color:#f92672">steps</span>:
-      - <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v3</span>
-      - <span style="color:#f92672">run</span>: <span style="color:#ae81ff">ls</span>
-      - <span style="color:#f92672">id</span>: <span style="color:#e6db74">&#39;auth&#39;</span>
-        <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Authenticate to Google Cloud&#39;</span>
-        <span style="color:#f92672">uses</span>: <span style="color:#e6db74">&#39;google-github-actions/auth@v1&#39;</span>
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout code</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v3</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Authenticate to Google Cloud</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">google-github-actions/auth@v1</span>
         <span style="color:#f92672">with</span>:
           <span style="color:#f92672">credentials_json</span>: <span style="color:#e6db74">&#39;${{ secrets.GCP_SA_DEPLOY_KEY }}&#39;</span>
-      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Set up Cloud SDK&#39;</span>
-        <span style="color:#f92672">uses</span>: <span style="color:#e6db74">&#39;google-github-actions/setup-gcloud@v1&#39;</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Set up Cloud SDK</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">google-github-actions/setup-gcloud@v1</span>
         <span style="color:#f92672">with</span>:
           <span style="color:#f92672">version</span>: <span style="color:#e6db74">&#39;&gt;= 363.0.0&#39;</span>
-      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Use gcloud CLI&#39;</span>
-        <span style="color:#f92672">run</span>: <span style="color:#e6db74">&#39;gcloud info&#39;</span>
-      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#39;Deploy to gen2 cloud function&#39;</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Use gcloud CLI</span>
+        <span style="color:#f92672">run: gcloud info       - name</span>: <span style="color:#e6db74">&#39;Deploy to gen2 cloud function&#39;</span>
         <span style="color:#f92672">run</span>:  |<span style="color:#e6db74">
 </span><span style="color:#e6db74">          gcloud functions deploy &lt;cloud-function-name&gt; \
 </span><span style="color:#e6db74">          --gen2 \

@@ -24,33 +24,36 @@
 
 
 
-<title>On Taiwan | Yu Wong</title>
-<meta name="description" content="Around 12 hours prior to the Taiwan general election, I scrapped around 300,000 tweets on Twitter for some data analysis and visualisation.
-Unsurprisingly, the number of tweets that mentioned Taiwan surged on the day before the election.
-Before I cleaned the data for analysis, I was expecting the most popular hashtags would all related to Taiwan and its election. Then when I saw #HongKong is the 5th most popular hashtag that relates to Taiwan&rsquo;s tweets, I thought, oh interesting.">
-<meta property="og:title" content="On Taiwan | Yu Wong">
+<title>On AKS | Yu Wong</title>
+<meta name="description" content="In the past, I have wrote blog posts on how to setup Google Kubernetes Engine (GKE) and deploy an application, and how to deploy a python endpoint using Azure Container Apps. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.
+ Prerequisites 
+1 - Install Helm if you haven&rsquo;t already.
+Helm is a package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications.">
+<meta property="og:title" content="On AKS | Yu Wong">
 <meta property="og:site_name" content="Yu Wong">
-<meta property="og:description" content="Around 12 hours prior to the Taiwan general election, I scrapped around 300,000 tweets on Twitter for some data analysis and visualisation.
-Unsurprisingly, the number of tweets that mentioned Taiwan surged on the day before the election.
-Before I cleaned the data for analysis, I was expecting the most popular hashtags would all related to Taiwan and its election. Then when I saw #HongKong is the 5th most popular hashtag that relates to Taiwan&rsquo;s tweets, I thought, oh interesting.">
-<meta property="og:url" content="https://FISHWONGY.github.io/post/20200119_taiwan/">
+<meta property="og:description" content="In the past, I have wrote blog posts on how to setup Google Kubernetes Engine (GKE) and deploy an application, and how to deploy a python endpoint using Azure Container Apps. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.
+ Prerequisites 
+1 - Install Helm if you haven&rsquo;t already.
+Helm is a package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications.">
+<meta property="og:url" content="https://FISHWONGY.github.io/post/20240628_aks/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content='https://FISHWONGY.github.io/images/on_taiwan/featured.png'><meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="On Taiwan | Yu Wong">
+<meta property="og:image" content='https://FISHWONGY.github.io/images/on_aks/cover-photo.png'><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="On AKS | Yu Wong">
 
-	<link rel="canonical" href="https://FISHWONGY.github.io/post/20200119_taiwan/">
+	<link rel="canonical" href="https://FISHWONGY.github.io/post/20240628_aks/">
 
 
 	<meta name="twitter:site" content="@https://twitter.com/fishwongxd">
 	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
 
-	<meta name="twitter:description" content="Around 12 hours prior to the Taiwan general election, I scrapped around 300,000 tweets on Twitter for some data analysis and visualisation.
-Unsurprisingly, the number of tweets that mentioned Taiwan surged on the day before the election.
-Before I cleaned the data for analysis, I was expecting the most popular hashtags would all related to Taiwan and its election. Then when I saw #HongKong is the 5th most popular hashtag that relates to Taiwan&rsquo;s tweets, I thought, oh interesting.">
-<meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_taiwan/featured.png">
-<meta property="article:published_time" content="2020-01-19T00:00:00&#43;00:00">
-	<meta property="article:updated_time" content="2020-01-19T00:00:00&#43;00:00">
+	<meta name="twitter:description" content="In the past, I have wrote blog posts on how to setup Google Kubernetes Engine (GKE) and deploy an application, and how to deploy a python endpoint using Azure Container Apps. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.
+ Prerequisites 
+1 - Install Helm if you haven&rsquo;t already.
+Helm is a package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications.">
+<meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_aks/cover-photo.png">
+<meta property="article:published_time" content="2024-06-16T00:00:00&#43;00:00">
+	<meta property="article:updated_time" content="2024-06-16T00:00:00&#43;00:00">
 
 
 
@@ -118,7 +121,7 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
     <section id="articleHero" class="section narrow">
     <div class="article-hero">
         <header class="article-header">
-            <h1 class="article-hero-heading">On Taiwan</h1>
+            <h1 class="article-hero-heading">On AKS</h1>
             <div class="article-hero-subtitle">
                 <div class="article-meta">
                     
@@ -141,14 +144,14 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
 
 
 <script src="/js/collapseAuthors.js"></script>
-                    January 19, 2020
-                    • 3 min read
+                    June 16, 2024
+                    • 5 min read
                 </div>
             </div>
         </header>
         
         <div class="article-hero-image" id="ArticleImage__Hero">
-            <img src="/images/on_taiwan/featured.png">
+            <img src="/images/on_aks/cover-photo.png">
         </div>
         
     </div>
@@ -172,33 +175,244 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
 
 
     <article  id="articleContent" class="post-content" style="position:relative;">
-        <p><br />
-<br />
-<br />
-<br /></p>
-<div style="text-align: justify">
-<p>Around 12 hours prior to the Taiwan general election, I scrapped around <strong>300,000</strong> tweets on Twitter for some data analysis and visualisation.</p>
+        <p>In the past, I have wrote blog posts on <a href="https://fishwongy.github.io/post/20240301_discordaibot_pt1/">how to setup Google Kubernetes Engine (GKE) and deploy an application</a>, and <a href="https://fishwongy.github.io/post/20240402_msgraph/">how to deploy a python endpoint using Azure Container Apps</a>. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Prerequisites
+</b></u></p>
+<p>1 - Install Helm if you haven&rsquo;t already.</p>
+<p>Helm is a package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications. You can install Helm by running the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">brew install helm
+</code></pre></div><p>2 - Install Azure CLI if you haven&rsquo;t already.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">brew install azure-cli
+az login
+</code></pre></div><p><u><b>
+<p style="font-size:20pt ">
+Setup Required Resources
+</b></u></p>
+<p>1 - Follow the step from the <a href="https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli">official documentation</a> to create a resource group and AKS cluster.</p>
+<p>2 - Set up a Key Vault</p>
+<p>Under the resource group where the AKS cluster is created, create a Key Vault.</p>
+<p>Under Settings &gt; Access Configuration, select <code>Vault access policy</code> for permissions model.</p>
+<p>Then under Objects &gt; Secrets, create the secrets that will be used in the application.</p>
 <p align="center">
-<img alt = 'png' width='800' src='/images/on_taiwan/tw_trend.png'/>
+<img alt = 'png' src='/images/on_aks/key-valut-setting.png'/>
 </p>
-<p>Unsurprisingly, the number of tweets that mentioned Taiwan surged on the day before the election.</p>
+<p>3 - Set up a Container Registry</p>
+<p>Under the resource group where the AKS cluster is created, create a Container Registry.</p>
+<p>After the container registry is created, make sure you have your docker running locally and authenticate to the container registry by running the following command:</p>
 <p align="center">
-<img alt = 'png' width='800' src='/images/on_taiwan/tw_hashtag.png'/>
+<img alt = 'png' src='/images/on_aks/container-registry.png'/>
 </p>
-<p>Before I cleaned the data for analysis, I was expecting the most popular hashtags would all related to Taiwan and its election. Then when I saw #HongKong is the 5th most popular hashtag that relates to Taiwan&rsquo;s tweets, I thought, oh interesting. But after giving it a second thought it in actuality makes perfect sense, as many people agree that the Taiwan 2020 election in tightly connected to Hong Kong. <a href="https://www.economist.com/asia/2020/01/16/what-next-for-taiwan-after-tsai-ing-wens-emphatic-victory"><em><strong>The Economist</strong></em></a> even went on to claim Ms Tsai&rsquo;s victory is &ldquo;thanks to Mr Xi and his minion in Hong Kong, Carrie Lam.&rdquo;</p>
-<p align="center">
-<img alt = 'png' width='800' src='/images/on_taiwan/country.png'/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">az acr login --name myaksapp
+
+az acr update --name myaksapp --admin-enabled true
+
+az acr credential show --name myaksapp
+
+docker login myaksapp.azurecr.io --username myaksapp --password &lt;password2-from-prev-step&gt;
+</code></pre></div><p>Create an image pull secret</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl create secret docker-registry acr-secret \        
+  --docker-server=myaksapp.azurecr.io \
+  --docker-username=myaksapp \
+  --docker-password=&lt;password2-from-prev-step&gt; \
+  --docker-email=&lt;your-email&gt; \
+  --namespace=automations
+
+</code></pre></div><p><u><b>
+<p style="font-size:20pt ">
+Configure AKS
+</b></u></p>
+<p>1 - Connect to the AKS cluster by running the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">az aks get-credentials --resource-group myAKSResourceGroup --name myAKSCluster
+</code></pre></div><p>2 - Verify the connection</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl get nodes
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_aks/k-get-nodes.png'/>
 </p>
-<p>After it is announced that Ms Tsai has secured her second four-year term as the Taiwan president, leaders and politicians from various countries sent their congratulation messages one after another. With nearly 70 countries' congrats messages, most of them are from America and Europe. As a Hongkongese, this is extremely encouraging for me to see the nearly all red America area.</p>
-<hr>
-<p><strong>&ldquo;Today&rsquo;s Hong Kong, Tomorrow&rsquo;s Taiwan&rdquo;, is a common way of saying among some of the youngsters in both Hong Kong and Taiwan.</strong></p>
-<p>A bit more than a week ago on 11 January, was the general election in Taiwan. Tsai Ing-Wen who represented the Democratic Progressive Party (DPP) was running against Han Kuo-Yu from the KMT. Tsai, the then President was re-elected as Taiwan President by earning over 57 per cent of the votes, around 8 million votes.</p>
-<p>Days before the election, people believed that it would be a tight fight between Tsai and Han due to the rally prior to the election of both campaigns were equally huge. The general election this time was so critical that aroused tremendous attention was because of the democratic implications lying underneath.</p>
-<p>I was talking with my friend from Taiwan after the election about there are voices about Taiwan is going towards independence. When I was about to shrug it off since I&rsquo;ve always believed that Taiwan is an independent country of her own, my friend told me that it is still a debate within Taiwan until today.</p>
-<p>Opinions within Taiwan are already divided. While part of the population identifies themselves as &ldquo;Taiwanese&rdquo; and don&rsquo;t want to associate themselves with the KMT, the others see themselves as the citizen of the Republic of China (ROC). The majority of this portion of people support the KMT and are afraid of losing the Republic of China as part of their identity.</p>
-<p>The ROC government in Taiwan was established after the loss of mainland China to the communist party in the 1949 Chinese civil war. Before their arrival, there were already local Taiwanese people in the Taiwan territory. Various reasons contributed to the diverse view on the KMT today. Upon their arrival, the KMT prohibited the local Taiwanese to speak Minnanese (the initial official language in Taiwan), the 228 incident in 1947 that followed by a nearly four decades of martial law.</p>
-<p>In some sense, the supporters of the KMT today are mostly people who followed the government to fled to Taiwan back in 1949 and their descendant. Intuitively, while this group of people have some sort of psychological connection with ROC and China, they also had a hard time to understand why the KMT lost in the election yet again.</p>
-<p>Alas, local Taiwanese will never feel the same as they do.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl config get-contexts
+kubectl config current-context
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_aks/k-current-context.png'/>
+</p>
+<p>3 - Create a new namespace for the application (optional)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">k create ns automations
+</code></pre></div><p>4 - Install CSI driver for Azure</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">helm repo add csi-secrets-store-provider-azure https<span style="color:#960050;background-color:#1e0010">:</span>//azure.github.io/secrets-store-csi-driver-provider-azure/charts
+helm install csi csi-secrets-store-provider-azure/csi-secrets-store-provider-azure --namespace kube-system
+</code></pre></div><p>To verify the installation</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl --namespace=kube-system get pods -l <span style="color:#e6db74">&#34;app=secrets-store-csi-driver&#34;</span>
+kubectl get crd
+</code></pre></div><p>5 - Enable Azure Key Vault Provider on AKS</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">az aks enable-addons --addons azure-keyvault-secrets-provider --name myAKSCluster --resource-group myAKSResourceGroup
+</code></pre></div><p>To verify the installation</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">az aks show --resource-group &lt;resource-group&gt; --name &lt;cluster-name&gt; --query addonProfiles.azureKeyvaultSecretsProvider.identity.objectId -o tsv
+az aks show --resource-group &lt;resource-group&gt; --name &lt;cluster-name&gt; --query addonProfiles.azureKeyvaultSecretsProvider.identity.clientId -o tsv
+</code></pre></div><p>So for example, in our case, it would be:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">az aks show --resource-group myAKSResourceGroup --name myAKSCluster --query addonProfiles.azureKeyvaultSecretsProvider.identity.objectId -o tsv
+
+az aks show --resource-group myAKSResourceGroup --name myAKSCluster --query addonProfiles.azureKeyvaultSecretsProvider.identity.clientId -o tsv
+
+</code></pre></div><p>The object id from the first output will be used to set as the managed identity for the Key Vault access policy.</p>
+<p>The client id from the second output will be used in later steps when creating a <code>SecretProviderClass</code>.</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Ready to Deploy
+</b></u></p>
+<p>Let&rsquo;s first have a look at the folder structure of the application.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">.
+├── Dockerfile
+├── README.md
+├── app
+│   ├── helpers
+│   │   └── azure_kv.py
+│   ├── main.py
+│   └── settings.py
+├── deploy
+│   ├── common
+│   │   ├── deployment.yaml
+│   │   ├── kustomization.yaml
+│   │   └── secretproviderclass.yaml
+│   └── production
+│       └── kustomization.yaml
+├── poetry.lock
+├── pyproject.toml
+└── skaffold.yaml
+</code></pre></div><p>The <code>app</code> folder contains the python application. The <code>deploy</code> folder contains the deployment files. The <code>skaffold.yaml</code> file is used to deploy the application. The <code>Dockerfile</code> is used to build the docker image of the application.</p>
+<p>The <code>azure_kv.py</code> file contains the code to access the secrets from the Key Vault, it looks like below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> azure.identity <span style="color:#f92672">import</span> ManagedIdentityCredential
+<span style="color:#f92672">from</span> azure.keyvault.secrets <span style="color:#f92672">import</span> SecretClient
+<span style="color:#f92672">import</span> logging
+
+
+logger <span style="color:#f92672">=</span> logging<span style="color:#f92672">.</span>getLogger(__name__)
+
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AzKeyVault</span>:
+    <span style="color:#66d9ef">def</span> __init__(self) <span style="color:#f92672">-&gt;</span> None:
+        self<span style="color:#f92672">.</span>credential <span style="color:#f92672">=</span> ManagedIdentityCredential(
+            client_id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;client-id&#34;</span>
+        )
+        self<span style="color:#f92672">.</span>key_vault_url <span style="color:#f92672">=</span> f<span style="color:#e6db74">&#34;https://my-aks-app-kv.vault.azure.net/&#34;</span>
+        self<span style="color:#f92672">.</span>client <span style="color:#f92672">=</span> SecretClient(
+            vault_url<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>key_vault_url,
+            credential<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>credential,
+            logging_enable<span style="color:#f92672">=</span>True,
+        )
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_secret</span>(self, secret):
+        secret_response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>client<span style="color:#f92672">.</span>get_secret(secret)
+        creds <span style="color:#f92672">=</span> secret_response<span style="color:#f92672">.</span>value
+        <span style="color:#66d9ef">return</span> creds
+
+
+</code></pre></div><p>Now for the deployment manifest files.</p>
+<p>Starting with the SecretProviderClass, in this case, we can create a secretproviderclass.yaml file under the deploy/common directory.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">secrets-store.csi.x-k8s.io/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">SecretProviderClass</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">azure-kvname</span>
+  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">automations</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">provider</span>: <span style="color:#ae81ff">azure</span>
+  <span style="color:#f92672">parameters</span>:
+    <span style="color:#f92672">usePodIdentity</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+    <span style="color:#f92672">useVMManagedIdentity</span>: <span style="color:#e6db74">&#34;true&#34;</span>
+    <span style="color:#f92672">userAssignedIdentityID</span>: <span style="color:#e6db74">&#34;clientid-from-above&#34;</span>
+    <span style="color:#f92672">keyvaultName</span>: <span style="color:#e6db74">&#34;my-aks-app-kv&#34;</span>
+    <span style="color:#f92672">objects</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">      array:
+</span><span style="color:#e6db74">        - |
+</span><span style="color:#e6db74">          objectName: secret1
+</span><span style="color:#e6db74">          objectType: secret
+</span><span style="color:#e6db74">        - |
+</span><span style="color:#e6db74">          objectName: secret2
+</span><span style="color:#e6db74">          objectType: secret</span>      
+    <span style="color:#f92672">tenantId</span>: <span style="color:#e6db74">&#34;tenent-id&#34;</span>
+
+</code></pre></div><p>For the deployment.yaml file, we can create a deployment.yaml file under the deploy/common directory. Note that the <code>imagePullSecrets</code> is used to authenticate to the container registry, and it is created from the early step by <code>kubectl create secret docker-registry acr-secret</code>.</p>
+<p>The file can look like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-aks-app</span>
+  <span style="color:#f92672">labels</span>:
+    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">my-aks-app</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">my-aks-app</span>
+  <span style="color:#f92672">template</span>:
+    <span style="color:#f92672">metadata</span>:
+      <span style="color:#f92672">labels</span>:
+        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">my-aks-app</span>
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">containers</span>:
+        - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-aks-app</span>
+          <span style="color:#f92672">image</span>: <span style="color:#ae81ff">myaksapp.azurecr.io/my-aks-app:latest</span>
+          <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">Always</span>
+          <span style="color:#f92672">resources</span>:
+            <span style="color:#f92672">limits</span>:
+              <span style="color:#f92672">memory</span>: <span style="color:#ae81ff">512Mi</span>
+              <span style="color:#f92672">cpu</span>: <span style="color:#ae81ff">500m</span>
+            <span style="color:#f92672">requests</span>:
+              <span style="color:#f92672">memory</span>: <span style="color:#ae81ff">512Mi</span>
+              <span style="color:#f92672">cpu</span>: <span style="color:#ae81ff">500m</span>
+          <span style="color:#f92672">volumeMounts</span>:
+            - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">secrets-store-inline</span>
+              <span style="color:#f92672">mountPath</span>: <span style="color:#e6db74">&#34;/mnt/secrets-store&#34;</span>
+              <span style="color:#f92672">readOnly</span>: <span style="color:#66d9ef">true</span>
+      <span style="color:#f92672">volumes</span>:
+        - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">secrets-store-inline</span>
+          <span style="color:#f92672">csi</span>:
+            <span style="color:#f92672">driver</span>: <span style="color:#ae81ff">secrets-store.csi.k8s.io</span>
+            <span style="color:#f92672">readOnly</span>: <span style="color:#66d9ef">true</span>
+            <span style="color:#f92672">volumeAttributes</span>:
+              <span style="color:#f92672">secretProviderClass</span>: <span style="color:#e6db74">&#34;azure-kvname&#34;</span>
+      <span style="color:#f92672">imagePullSecrets</span>:
+        - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">acr-secret</span>
+
+</code></pre></div><p>Apply SecretProviderClass to the namespace where the pod will be running</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl apply <span style="color:#f92672">-f</span> deploy/common/secretproviderclass.yaml -n automations  
+</code></pre></div><p>Verification for SecretProviderClass</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl get secretproviderclass azure-kvname -n automations -o json
+</code></pre></div><p>For the actual deployment, we will be using skaflold. Our skaffold.yaml can look like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">skaffold/v2beta28</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Config</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-aks-app</span>
+<span style="color:#f92672">build</span>:
+  <span style="color:#f92672">tagPolicy</span>:
+    <span style="color:#f92672">envTemplate</span>:
+      <span style="color:#f92672">template</span>: <span style="color:#e6db74">&#34;{{.IMAGE_NAME}}:lastest&#34;</span>
+  <span style="color:#f92672">artifacts</span>:
+  - <span style="color:#f92672">image</span>: <span style="color:#ae81ff">myaksapp.azurecr.io/my-aks-app</span>
+    <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
+    <span style="color:#f92672">docker</span>:
+      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">Dockerfile</span>
+      <span style="color:#f92672">noCache</span>: <span style="color:#66d9ef">true</span>
+<span style="color:#f92672">deploy</span>:
+  <span style="color:#f92672">kubeContext</span>: <span style="color:#ae81ff">myAKSCluster</span>
+  <span style="color:#f92672">kustomize</span>:
+    <span style="color:#f92672">paths</span>:
+    - <span style="color:#ae81ff">deploy/common</span>
+<span style="color:#f92672">profiles</span>:
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">production</span>
+  <span style="color:#f92672">deploy</span>:
+    <span style="color:#f92672">kustomize</span>:
+      <span style="color:#f92672">paths</span>:
+      - <span style="color:#ae81ff">deploy/production</span>
+</code></pre></div><p>And to deploy the application, we can run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl config use-context myAKSCluster
+skaffold run -p production -v info
+</code></pre></div><p>To verify the deployment</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">kubectl get pods -n automations  
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_aks/k-get-pods.png'/>
+</p>
+<p>And that&rsquo;s it! You have successfully deployed a python application on Azure Kubernetes Service (AKS).</p>
+<p>Thank you for reading and have a nice day!</p>
 
     </article>
 
@@ -209,12 +423,14 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
 
 
 
-
-
-
     
     
     
+        
+    
+
+
+
 
 <section id="articleNext" class="section nartrow">
     <h3 class="footer-next-heading">More articles from Yu Wong</h3>
@@ -222,28 +438,8 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
     <div class="next-articles-grid" numberOfArticles={numberOfArticles}>
         <div class="post-row">
             
-                <a href="/post/20240628_aks/" class="article-link"
-                 id="article-link-bigger">
-                    <div>
-                        <div class="image-container">
-                            <img src="/images/on_aks/cover-photo.png" class="article-image" />
-                        </div>
-                        <div>
-                            <h2 class="article-title">
-                                On AKS
-                            </h2>
-                            <p class="article-excerpt">
-                                Step by step guide to setup Azure Kubernetes Service (AKS) and deploy application
-                            </p>
-                            <div class="article-metadata">
-                                June 16, 2024 · 5 min read
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            
                 <a href="/post/20240610_airflow_pt2/" class="article-link"
-                >
+                 id="article-link-bigger">
                     <div>
                         <div class="image-container">
                             <img src="/images/on_airflow/cover-photo.png" class="article-image" />
@@ -257,6 +453,26 @@ Before I cleaned the data for analysis, I was expecting the most popular hashtag
                             </p>
                             <div class="article-metadata">
                                 June 10, 2024 · 5 min read
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            
+                <a href="/post/20240609_airflow_pt1/" class="article-link"
+                >
+                    <div>
+                        <div class="image-container">
+                            <img src="/images/on_airflow/cover-photo.png" class="article-image" />
+                        </div>
+                        <div>
+                            <h2 class="article-title">
+                                On Airflow - Part 1
+                            </h2>
+                            <p class="article-excerpt">
+                                Step by step guide to setup Apache Airflow
+                            </p>
+                            <div class="article-metadata">
+                                June 9, 2024 · 8 min read
                             </div>
                         </div>
                     </div>
