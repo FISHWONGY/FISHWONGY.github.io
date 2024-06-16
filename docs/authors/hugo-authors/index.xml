@@ -9,10 +9,10 @@
     <lastBuildDate>Sun, 16 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>On AKS</title>
-      <link>https://FISHWONGY.github.io/post/20240628_aks/</link>
+      <link>https://FISHWONGY.github.io/post/20240616_aks/</link>
       <pubDate>Sun, 16 Jun 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://FISHWONGY.github.io/post/20240628_aks/</guid>
+      <guid>https://FISHWONGY.github.io/post/20240616_aks/</guid>
       <description>In the past, I have wrote blog posts on how to setup Google Kubernetes Engine (GKE) and deploy an application, and how to deploy a python endpoint using Azure Container Apps. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.
  Prerequisites 
 1 - Install Helm if you haven&amp;rsquo;t already.
