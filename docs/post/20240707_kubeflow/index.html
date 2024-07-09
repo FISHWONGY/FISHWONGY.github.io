@@ -1,0 +1,1080 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="/images/favicon.svg">
+    
+    <link rel="stylesheet" href="/scss/global.min.febf67ca94390198daa11693993dfeaabba2e6affbd40f291ab5081feac1bddd.css">
+    
+    <link rel="stylesheet" href="/css/prism.css" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather&display=swap" rel="stylesheet">
+    
+
+ 
+
+
+
+
+
+
+	
+
+
+
+
+<title>On Kubeflow | Yu Wong</title>
+<meta name="description" content="After discussing on MLFlow in the last post, in today&rsquo;s post, let&rsquo;s have a look at Kubeflow
+Architecture
+Here is an overview of the MLOPS workflow with Kubeflow.
+And in today&rsquo;s post, we will focus on this part.
+ What is Kubeflow? 
+Kubeflow is an open-source machine learning (ML) toolkit for Kubernetes. It is dedicated to making deployments of machine learning workflows on Kubernetes simple, portable, and scalable. Kubeflow can facilitate the orchestration of Kubernetes ML workloads and to empower users to deploy best-in-class open-source tools on any Cloud infrastructure.">
+<meta property="og:title" content="On Kubeflow | Yu Wong">
+<meta property="og:site_name" content="Yu Wong">
+<meta property="og:description" content="After discussing on MLFlow in the last post, in today&rsquo;s post, let&rsquo;s have a look at Kubeflow
+Architecture
+Here is an overview of the MLOPS workflow with Kubeflow.
+And in today&rsquo;s post, we will focus on this part.
+ What is Kubeflow? 
+Kubeflow is an open-source machine learning (ML) toolkit for Kubernetes. It is dedicated to making deployments of machine learning workflows on Kubernetes simple, portable, and scalable. Kubeflow can facilitate the orchestration of Kubernetes ML workloads and to empower users to deploy best-in-class open-source tools on any Cloud infrastructure.">
+<meta property="og:url" content="https://FISHWONGY.github.io/post/20240707_kubeflow/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content='https://FISHWONGY.github.io/images/on_kubeflow/cover-img.png'><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="On Kubeflow | Yu Wong">
+
+	<link rel="canonical" href="https://FISHWONGY.github.io/post/20240707_kubeflow/">
+
+
+	<meta name="twitter:site" content="@https://twitter.com/fishwongxd">
+	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
+
+	<meta name="twitter:description" content="After discussing on MLFlow in the last post, in today&rsquo;s post, let&rsquo;s have a look at Kubeflow
+Architecture
+Here is an overview of the MLOPS workflow with Kubeflow.
+And in today&rsquo;s post, we will focus on this part.
+ What is Kubeflow? 
+Kubeflow is an open-source machine learning (ML) toolkit for Kubernetes. It is dedicated to making deployments of machine learning workflows on Kubernetes simple, portable, and scalable. Kubeflow can facilitate the orchestration of Kubernetes ML workloads and to empower users to deploy best-in-class open-source tools on any Cloud infrastructure.">
+<meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_kubeflow/cover-img.png">
+<meta property="article:published_time" content="2024-07-07T00:00:00&#43;00:00">
+	<meta property="article:updated_time" content="2024-07-07T00:00:00&#43;00:00">
+
+
+
+    </head>
+
+
+<body class="line-numbers">
+
+    
+    <script src="/js/initColors.js"></script>
+
+    <div class="layout-styled">
+
+        <Section class="section">
+  <div class="nav-container">
+    <a class="logo-link" href="/">
+      <svg width="368.56" height="60" viewBox="0 0 368.56 60" xmlns="http://www.w3.org/2000/svg"><g id="svgGroup" stroke-linecap="round" fill-rule="evenodd" font-size="9pt" stroke="#898989" stroke-width="0.25mm" fill="#898989" style="stroke:#898989;stroke-width:0.25mm;fill:#898989"><path d="M 177.36 1.2 L 189.28 1.2 Q 190.181 1.2 190.787 1.439 A 2.005 2.005 0 0 1 191.48 1.88 A 2.021 2.021 0 0 1 191.933 2.603 Q 192.054 2.921 192.11 3.318 A 5.414 5.414 0 0 1 192.16 4.08 L 192.16 35.12 Q 192.16 37.68 191.96 39.88 Q 191.808 41.554 191.17 43.667 A 32.44 32.44 0 0 1 190.72 45.04 L 186.72 55.92 A 6.092 6.092 0 0 1 186.118 57.218 A 5.19 5.19 0 0 1 185.56 57.96 A 2.509 2.509 0 0 1 183.945 58.775 A 3.527 3.527 0 0 1 183.52 58.8 L 172.88 58.8 A 5.05 5.05 0 0 1 171.339 58.57 A 4.554 4.554 0 0 1 170.56 58.24 A 2.632 2.632 0 0 1 169.311 56.764 A 3.661 3.661 0 0 1 169.2 56.4 L 165.52 43.36 A 4.204 4.204 0 0 0 165.384 42.972 Q 165.184 42.486 164.92 42.28 A 1.326 1.326 0 0 0 164.095 42 A 1.635 1.635 0 0 0 164.08 42 L 163.36 42 A 1.384 1.384 0 0 0 162.821 42.103 A 1.314 1.314 0 0 0 162.52 42.28 A 1.131 1.131 0 0 0 162.297 42.52 Q 162.081 42.823 161.92 43.36 L 158.16 56.4 A 3.645 3.645 0 0 1 157.808 57.276 A 2.761 2.761 0 0 1 156.96 58.2 Q 156.08 58.8 154.8 58.8 L 144.24 58.8 A 3.413 3.413 0 0 1 142.931 58.554 A 3.212 3.212 0 0 1 142.04 58 A 4.323 4.323 0 0 1 140.865 56.327 A 5.332 5.332 0 0 1 140.72 55.92 L 136.72 44.88 Q 135.68 41.92 135.48 39.72 Q 135.28 37.52 135.28 34.96 L 135.28 4.08 Q 135.28 3.179 135.519 2.573 A 2.005 2.005 0 0 1 135.96 1.88 A 2.021 2.021 0 0 1 136.683 1.427 Q 137.001 1.307 137.398 1.25 A 5.414 5.414 0 0 1 138.16 1.2 L 150.48 1.2 Q 151.381 1.2 151.987 1.439 A 2.005 2.005 0 0 1 152.68 1.88 A 2.021 2.021 0 0 1 153.133 2.603 Q 153.254 2.921 153.31 3.318 A 5.414 5.414 0 0 1 153.36 4.08 L 153.36 33.52 L 158 23.44 Q 158.565 22.24 159.442 21.662 A 3.145 3.145 0 0 1 159.68 21.52 A 4.453 4.453 0 0 1 160.88 21.092 Q 161.406 20.981 162.013 20.963 A 7.962 7.962 0 0 1 162.24 20.96 L 165.6 20.96 A 6.846 6.846 0 0 1 166.746 21.051 Q 167.389 21.16 167.92 21.401 A 3.968 3.968 0 0 1 168.16 21.52 A 3.43 3.43 0 0 1 169.204 22.403 Q 169.516 22.79 169.769 23.294 A 6.241 6.241 0 0 1 169.84 23.44 L 174.48 33.52 L 174.48 4.08 Q 174.48 3.179 174.719 2.573 A 2.005 2.005 0 0 1 175.16 1.88 A 2.021 2.021 0 0 1 175.883 1.427 Q 176.201 1.307 176.598 1.25 A 5.414 5.414 0 0 1 177.36 1.2 Z M 276.32 58.8 L 264.32 58.8 Q 263.419 58.8 262.813 58.561 A 2.005 2.005 0 0 1 262.12 58.12 A 2.021 2.021 0 0 1 261.667 57.397 Q 261.547 57.079 261.49 56.682 A 5.414 5.414 0 0 1 261.44 55.92 L 261.44 4.08 Q 261.44 3.179 261.679 2.573 A 2.005 2.005 0 0 1 262.12 1.88 A 2.021 2.021 0 0 1 262.843 1.427 Q 263.161 1.307 263.558 1.25 A 5.414 5.414 0 0 1 264.32 1.2 L 272.64 1.2 A 8.086 8.086 0 0 1 273.802 1.279 Q 274.443 1.373 274.984 1.575 A 4.672 4.672 0 0 1 275.24 1.68 Q 276.32 2.16 277.36 3.36 L 292.88 21.12 L 292.88 4.08 Q 292.88 3.179 293.119 2.573 A 2.005 2.005 0 0 1 293.56 1.88 A 2.021 2.021 0 0 1 294.283 1.427 Q 294.601 1.307 294.998 1.25 A 5.414 5.414 0 0 1 295.76 1.2 L 307.76 1.2 Q 308.661 1.2 309.267 1.439 A 2.005 2.005 0 0 1 309.96 1.88 A 2.021 2.021 0 0 1 310.413 2.603 Q 310.534 2.921 310.59 3.318 A 5.414 5.414 0 0 1 310.64 4.08 L 310.64 55.92 Q 310.64 56.821 310.401 57.427 A 2.005 2.005 0 0 1 309.96 58.12 A 2.021 2.021 0 0 1 309.237 58.573 Q 308.919 58.694 308.522 58.75 A 5.414 5.414 0 0 1 307.76 58.8 L 295.76 58.8 Q 294.859 58.8 294.253 58.561 A 2.005 2.005 0 0 1 293.56 58.12 A 2.021 2.021 0 0 1 293.107 57.397 Q 292.987 57.079 292.93 56.682 A 5.414 5.414 0 0 1 292.88 55.92 L 292.88 46.08 L 279.2 29.52 L 279.2 55.92 Q 279.2 56.821 278.961 57.427 A 2.005 2.005 0 0 1 278.52 58.12 A 2.021 2.021 0 0 1 277.797 58.573 Q 277.479 58.694 277.082 58.75 A 5.414 5.414 0 0 1 276.32 58.8 Z M 107.36 4.08 L 107.36 43.68 A 21.686 21.686 0 0 1 107.028 47.553 A 17.483 17.483 0 0 1 106.28 50.36 A 10.921 10.921 0 0 1 103.183 54.866 A 13.434 13.434 0 0 1 102.44 55.48 A 14.98 14.98 0 0 1 99.861 57.051 Q 97.73 58.088 94.88 58.8 A 34.841 34.841 0 0 1 90.954 59.526 Q 88.909 59.792 86.534 59.909 A 79.42 79.42 0 0 1 82.64 60 A 76.425 76.425 0 0 1 77.837 59.858 Q 75.493 59.71 73.488 59.408 A 33.183 33.183 0 0 1 70.4 58.8 Q 65.6 57.6 62.84 55.48 A 11.957 11.957 0 0 1 60.238 52.776 A 10.566 10.566 0 0 1 59 50.36 A 18.189 18.189 0 0 1 58.051 46.157 A 22.845 22.845 0 0 1 57.92 43.68 L 57.92 4.08 Q 57.92 3.179 58.159 2.573 A 2.005 2.005 0 0 1 58.6 1.88 A 2.021 2.021 0 0 1 59.323 1.427 Q 59.641 1.307 60.038 1.25 A 5.414 5.414 0 0 1 60.8 1.2 L 73.36 1.2 Q 74.261 1.2 74.867 1.439 A 2.005 2.005 0 0 1 75.56 1.88 A 2.021 2.021 0 0 1 76.013 2.603 Q 76.134 2.921 76.19 3.318 A 5.414 5.414 0 0 1 76.24 4.08 L 76.24 40.56 A 3.441 3.441 0 0 0 77.295 43.103 A 4.25 4.25 0 0 0 77.44 43.24 Q 78.578 44.264 82.375 44.317 A 30.299 30.299 0 0 0 82.8 44.32 A 26.054 26.054 0 0 0 84.51 44.268 Q 87.303 44.084 88.24 43.24 A 3.577 3.577 0 0 0 89.185 41.925 A 3.589 3.589 0 0 0 89.44 40.56 L 89.44 4.08 Q 89.44 3.179 89.679 2.573 A 2.005 2.005 0 0 1 90.12 1.88 A 2.021 2.021 0 0 1 90.843 1.427 Q 91.161 1.307 91.558 1.25 A 5.414 5.414 0 0 1 92.32 1.2 L 104.48 1.2 Q 105.381 1.2 105.987 1.439 A 2.005 2.005 0 0 1 106.68 1.88 A 2.021 2.021 0 0 1 107.133 2.603 Q 107.254 2.921 107.31 3.318 A 5.414 5.414 0 0 1 107.36 4.08 Z M 365.68 58.8 L 340.48 58.8 A 40.094 40.094 0 0 1 335.263 58.484 Q 329.119 57.675 325.64 54.8 Q 321.23 51.156 320.838 43.925 A 26.699 26.699 0 0 1 320.8 42.48 L 320.8 17.52 A 22.613 22.613 0 0 1 321.261 12.797 Q 321.872 9.938 323.294 7.802 A 11.943 11.943 0 0 1 325.64 5.2 Q 330.48 1.2 340.48 1.2 L 360.48 1.2 Q 361.381 1.2 361.987 1.439 A 2.005 2.005 0 0 1 362.68 1.88 A 2.021 2.021 0 0 1 363.133 2.603 Q 363.254 2.921 363.31 3.318 A 5.414 5.414 0 0 1 363.36 4.08 L 363.36 13.76 Q 363.36 14.661 363.121 15.267 A 2.005 2.005 0 0 1 362.68 15.96 A 2.021 2.021 0 0 1 361.957 16.413 Q 361.639 16.534 361.242 16.59 A 5.414 5.414 0 0 1 360.48 16.64 L 343.84 16.64 Q 341.36 16.64 340.16 17.64 Q 339.015 18.595 338.963 20.461 A 6.444 6.444 0 0 0 338.96 20.64 L 338.96 39.76 Q 338.96 41.011 339.32 41.855 A 2.852 2.852 0 0 0 339.88 42.72 Q 340.664 43.538 342.117 43.659 A 6.316 6.316 0 0 0 342.64 43.68 L 350.4 43.68 L 350.4 31.2 Q 350.4 30.299 350.639 29.693 A 2.005 2.005 0 0 1 351.08 29 A 2.021 2.021 0 0 1 351.803 28.547 Q 352.121 28.427 352.518 28.37 A 5.414 5.414 0 0 1 353.28 28.32 L 365.68 28.32 Q 366.581 28.32 367.187 28.559 A 2.005 2.005 0 0 1 367.88 29 A 2.021 2.021 0 0 1 368.333 29.723 Q 368.454 30.041 368.51 30.438 A 5.414 5.414 0 0 1 368.56 31.2 L 368.56 55.92 Q 368.56 56.821 368.321 57.427 A 2.005 2.005 0 0 1 367.88 58.12 A 2.021 2.021 0 0 1 367.157 58.573 Q 366.839 58.694 366.442 58.75 A 5.414 5.414 0 0 1 365.68 58.8 Z M 31.12 58.8 L 18.16 58.8 Q 17.259 58.8 16.653 58.561 A 2.005 2.005 0 0 1 15.96 58.12 A 2.021 2.021 0 0 1 15.507 57.397 Q 15.387 57.079 15.33 56.682 A 5.414 5.414 0 0 1 15.28 55.92 L 15.28 45.68 L 3.04 29.28 A 25.522 25.522 0 0 1 2.011 27.793 Q 1.017 26.231 0.603 24.97 A 7.662 7.662 0 0 1 0.6 24.96 A 9.289 9.289 0 0 1 0.297 23.705 Q 0.066 22.401 0.015 20.547 A 40.042 40.042 0 0 1 0 19.44 L 0 4.08 Q 0 3.179 0.239 2.573 A 2.005 2.005 0 0 1 0.68 1.88 A 2.021 2.021 0 0 1 1.403 1.427 Q 1.721 1.307 2.118 1.25 A 5.414 5.414 0 0 1 2.88 1.2 L 15.2 1.2 Q 16.101 1.2 16.707 1.439 A 2.005 2.005 0 0 1 17.4 1.88 A 2.021 2.021 0 0 1 17.853 2.603 Q 17.974 2.921 18.03 3.318 A 5.414 5.414 0 0 1 18.08 4.08 L 18.08 17.2 A 17.861 17.861 0 0 0 18.123 18.418 A 20.731 20.731 0 0 0 18.16 18.88 A 3.338 3.338 0 0 0 18.607 20.257 A 4.099 4.099 0 0 0 18.8 20.56 L 22.48 26.32 A 4.841 4.841 0 0 0 22.747 26.75 Q 23.024 27.145 23.32 27.36 A 1.65 1.65 0 0 0 24.02 27.649 A 2.228 2.228 0 0 0 24.4 27.68 L 25.2 27.68 A 2.123 2.123 0 0 0 25.717 27.62 A 1.614 1.614 0 0 0 26.28 27.36 A 2.131 2.131 0 0 0 26.604 27.064 Q 26.753 26.899 26.897 26.685 A 5.005 5.005 0 0 0 27.12 26.32 L 30.8 20.56 Q 31.36 19.76 31.44 18.88 A 19.38 19.38 0 0 0 31.514 17.656 A 16.69 16.69 0 0 0 31.52 17.2 L 31.52 4.08 Q 31.52 3.179 31.759 2.573 A 2.005 2.005 0 0 1 32.2 1.88 A 2.021 2.021 0 0 1 32.923 1.427 Q 33.241 1.307 33.638 1.25 A 5.414 5.414 0 0 1 34.4 1.2 L 46.32 1.2 Q 47.221 1.2 47.827 1.439 A 2.005 2.005 0 0 1 48.52 1.88 A 2.021 2.021 0 0 1 48.973 2.603 Q 49.094 2.921 49.15 3.318 A 5.414 5.414 0 0 1 49.2 4.08 L 49.2 19.44 Q 49.2 22.552 48.742 24.348 A 7.509 7.509 0 0 1 48.56 24.96 A 11.537 11.537 0 0 1 47.988 26.301 Q 47.651 26.977 47.194 27.722 A 28.03 28.03 0 0 1 46.16 29.28 L 34 45.76 L 34 55.92 Q 34 56.821 33.761 57.427 A 2.005 2.005 0 0 1 33.32 58.12 A 2.021 2.021 0 0 1 32.597 58.573 Q 32.279 58.694 31.882 58.75 A 5.414 5.414 0 0 1 31.12 58.8 Z M 251.28 16.4 L 251.28 43.68 A 21.686 21.686 0 0 1 250.948 47.553 A 17.483 17.483 0 0 1 250.2 50.36 A 10.921 10.921 0 0 1 247.103 54.866 A 13.434 13.434 0 0 1 246.36 55.48 A 14.88 14.88 0 0 1 243.774 57.051 Q 242.437 57.699 240.812 58.22 A 31.607 31.607 0 0 1 238.76 58.8 A 35.559 35.559 0 0 1 234.764 59.531 Q 231.13 60 226.48 60 A 76.23 76.23 0 0 1 221.463 59.845 Q 219.114 59.69 217.097 59.379 A 34.086 34.086 0 0 1 214.16 58.8 Q 209.28 57.6 206.52 55.48 A 11.957 11.957 0 0 1 203.918 52.776 A 10.566 10.566 0 0 1 202.68 50.36 A 18.189 18.189 0 0 1 201.731 46.157 A 22.845 22.845 0 0 1 201.6 43.68 L 201.6 16.4 A 21.686 21.686 0 0 1 201.932 12.527 A 17.483 17.483 0 0 1 202.68 9.72 Q 203.76 6.72 206.52 4.56 A 14.579 14.579 0 0 1 209.112 2.964 Q 210.456 2.307 212.092 1.782 A 31.062 31.062 0 0 1 214.16 1.2 A 36.194 36.194 0 0 1 218.18 0.469 Q 220.233 0.205 222.603 0.09 A 79.867 79.867 0 0 1 226.48 0 A 76.654 76.654 0 0 1 231.288 0.142 Q 233.671 0.292 235.709 0.601 A 33.704 33.704 0 0 1 238.76 1.2 A 28.557 28.557 0 0 1 241.97 2.187 Q 243.527 2.774 244.783 3.501 A 13.633 13.633 0 0 1 246.36 4.56 A 12.302 12.302 0 0 1 248.919 7.235 A 10.723 10.723 0 0 1 250.2 9.72 A 18.189 18.189 0 0 1 251.15 13.924 A 22.845 22.845 0 0 1 251.28 16.4 Z M 219.76 19.28 L 219.76 40.8 A 3.441 3.441 0 0 0 220.815 43.343 A 4.25 4.25 0 0 0 220.96 43.48 A 2.793 2.793 0 0 0 221.818 43.978 Q 223.164 44.504 225.882 44.555 A 31.967 31.967 0 0 0 226.48 44.56 A 26.994 26.994 0 0 0 228.221 44.508 Q 230.759 44.344 231.778 43.653 A 2.053 2.053 0 0 0 232 43.48 A 3.577 3.577 0 0 0 232.945 42.165 A 3.589 3.589 0 0 0 233.2 40.8 L 233.2 19.28 A 3.34 3.34 0 0 0 232.145 16.817 A 4.459 4.459 0 0 0 232 16.68 A 2.793 2.793 0 0 0 231.142 16.183 Q 229.797 15.656 227.078 15.606 A 31.967 31.967 0 0 0 226.48 15.6 A 26.994 26.994 0 0 0 224.739 15.652 Q 222.201 15.817 221.182 16.508 A 2.053 2.053 0 0 0 220.96 16.68 A 3.757 3.757 0 0 0 220.14 17.709 A 3.3 3.3 0 0 0 219.76 19.28 Z" vector-effect="non-scaling-stroke"/></g></svg>
+      <span class="header-hidden">Navigate back to the homepage</span>
+    </a>
+    <div class="nav-controls">
+      <button id="copyButton" class="icon-wrapper">
+        <svg
+    class="icon-image"
+    width="24"
+    height="20"
+    viewBox="0 0 24 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M2 5C2 3.34328 3.34328 2 5 2H14C15.6567 2 17 3.34328 17 5V9C17 10.6567 15.6567 12 14 12H10C9.44771 12 9 12.4477 9 13C9 13.5523 9.44771 14 10 14H14C16.7613 14 19 11.7613 19 9V5C19 2.23872 16.7613 0 14 0H5C2.23872 0 0 2.23872 0 5V9C0 10.4938 0.656313 11.8361 1.6935 12.7509C2.10768 13.1163 2.73961 13.0767 3.10494 12.6625C3.47028 12.2483 3.43068 11.6164 3.0165 11.2511C2.39169 10.6999 2 9.89621 2 9V5ZM7 11C7 9.34328 8.34328 8 10 8H14C14.5523 8 15 7.55228 15 7C15 6.44772 14.5523 6 14 6H10C7.23872 6 5 8.23872 5 11V15C5 17.7613 7.23872 20 10 20H19C21.7613 20 24 17.7613 24 15V11C24 9.50621 23.3437 8.16393 22.3065 7.24906C21.8923 6.88372 21.2604 6.92332 20.8951 7.3375C20.5297 7.75168 20.5693 8.38361 20.9835 8.74894C21.6083 9.30007 22 10.1038 22 11V15C22 16.6567 20.6567 18 19 18H10C8.34328 18 7 16.6567 7 15V11Z"
+      fill="#000"
+    />
+</svg>
+        <div id="toolTip" class="tool-tip " >
+            copied
+        </div>
+        <input id="copyText" style="opacity: 0;" type="text" class="tool-tip " />
+      </button>
+
+      <button id="themeColorButton" class="icon-wrapper"> 
+        <div id="sunRays" class="sun-rays"></div>
+        <div id="moonOrSun" class="moon-or-sun"></div>
+        <div id="moonMask" class="moon-mask"></div>
+      </button>
+    </div>
+</div>
+</Section>
+
+
+<script src="/js/toggleLogos.js"></script>
+
+
+<script src="/js/toggleColors.js"></script>
+
+
+<script src="/js/copyUrl.js"></script>
+
+        
+
+<section class="section narrow">
+
+    <section id="articleHero" class="section narrow">
+    <div class="article-hero">
+        <header class="article-header">
+            <h1 class="article-hero-heading">On Kubeflow</h1>
+            <div class="article-hero-subtitle">
+                <div class="article-meta">
+                    
+
+
+    
+            <a href="/authors/hugo-authors/" class="article-author-link">
+                
+                    <div class="article-author-avatar">
+                        <img src="/images/profile-02.jpg" />
+                    </div>
+                
+                
+                <strong>Yu Wong</strong>
+                
+                <span class="hide-on-mobile">,&nbsp;</span>
+            </a>
+    
+
+
+
+<script src="/js/collapseAuthors.js"></script>
+                    July 7, 2024
+                    • 12 min read
+                </div>
+            </div>
+        </header>
+        
+        <div class="article-hero-image" id="ArticleImage__Hero">
+            <img src="/images/on_kubeflow/cover-img.png">
+        </div>
+        
+    </div>
+</section>
+
+
+    <aside id="progressBar" class="aside-container">
+    <div class="aside-align">
+      <div>
+        <div class="overlap-container">
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-container" tabIndex={-1}>
+        <div class="track-line" aria-hidden="true">
+            <div id="progressIndicator" class="progress-line"></div>
+        </div>
+    </div>
+</aside>
+
+
+    <article  id="articleContent" class="post-content" style="position:relative;">
+        <p>After discussing on MLFlow in the last <a href="https://fishwongy.github.io/post/20240706_mlflow/">post</a>, in today&rsquo;s post, let&rsquo;s have a look at Kubeflow</p>
+<p><u><b>Architecture</b></u></p>
+<p>Here is an overview of the MLOPS workflow with Kubeflow.</p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/mlops-kubeflow-flow.png'/>
+</p>
+<p>And in today&rsquo;s post, we will focus on this part.</p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/kubeflow-focus.png'/>
+</p>
+<p><u><b>
+<p style="font-size:20pt ">
+What is Kubeflow?
+</b></u></p>
+<p>Kubeflow is an open-source machine learning (ML) toolkit for Kubernetes. It is dedicated to making deployments of machine learning workflows on Kubernetes simple, portable, and scalable. Kubeflow can facilitate the orchestration of Kubernetes ML workloads and to empower users to deploy best-in-class open-source tools on any Cloud infrastructure.</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Deploying Kubeflow on GCP
+</b></u></p>
+<h3 id="account-set-up">Account Set up</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud config set project &lt;PROJECT-ID&gt;
+</code></pre></div><p>Open cloud console</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud services enable <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  serviceusage.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  compute.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  container.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  iam.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  servicemanagement.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  cloudresourcemanager.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  ml.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  iap.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  sqladmin.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  meshconfig.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  krmapihosting.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  servicecontrol.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  endpoints.googleapis.com <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  cloudbuild.googleapis.com
+</code></pre></div><p>And then execute the below commands in GCP&rsquo;s cloud shell</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud beta container clusters create tmp-cluster <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --release-channel regular <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --workload-pool<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>PROJECT_ID<span style="color:#e6db74">}</span>.svc.id.goog <span style="color:#ae81ff">\ </span>
+  --region us-central1
+
+  
+gcloud beta container clusters delete tmp-cluster <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --region us-central1
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl --request POST <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --header <span style="color:#e6db74">&#34;Authorization: Bearer </span><span style="color:#66d9ef">$(</span>gcloud auth print-access-token<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  --data <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  https://meshconfig.googleapis.com/v1alpha1/projects/<span style="color:#e6db74">${</span>PROJECT_ID<span style="color:#e6db74">}</span>:initialize
+</code></pre></div><hr>
+<h3 id="setting-up-oauth-client"><strong>Setting up OAuth client</strong></h3>
+<ol>
+<li>
+<p>Navigate to <a href="https://console.cloud.google.com/apis/credentials/consent">https://console.cloud.google.com/apis/credentials/consent</a></p>
+</li>
+<li>
+<p>Edit Application:</p>
+<p>Authorised domain:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&lt;project-id&gt;.cloud.goog
+</code></pre></div><ul>
+<li>On the <a href="https://console.cloud.google.com/apis/credentials">credentials screen</a>:
+<ul>
+<li>Click <strong>Create credentials</strong>, and then click <strong>OAuth client ID</strong>.</li>
+<li>Under <strong>Application type</strong>, select <strong>Web application</strong>.</li>
+<li>In the <strong>Name</strong> box enter any name for your OAuth client ID. This is <em>not</em>
+the name of your application nor the name of your Kubeflow deployment. It’s
+just a way to help you identify the OAuth client ID.</li>
+</ul>
+</li>
+</ul>
+<p>The Client ID and Client Secret are generated.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&lt;client-id&gt;.googleusercontent.com
+</code></pre></div><p>In the <strong>Authorized redirect URIs</strong> box, enter the following (if it’s not
+already present in the list of authorized redirect URIs):</p>
+<p><code>https://iap.googleapis.com/v1/oauth/clientIds/&lt;client-id&gt;.apps.googleusercontent.com:handleRedirect</code></p>
+<h3 id="deploying-management-cluster"><strong>Deploying Management cluster</strong></h3>
+<ol>
+<li>On cloud console</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud components install kubectl kustomize kpt anthoscli beta
+gcloud components update
+<span style="color:#75715e"># If the output said the Cloud SDK component manager is disabled for installation, copy the command from output and run it.</span>
+</code></pre></div><ol>
+<li>Clone github repo</li>
+</ol>
+<p>Note that, on the official kubeflow documentation, it mentioned that the repo needs to be clone again when deploy the kubeflow cluster, however, it is not necessary to clone the repo again.</p>
+<p>Also, it maybe easier to run the below command in your local terminal instead of cloud shell. Since I found that the cloud shell is likely to lost connection while creating the cluster, since it takes a bit of time to create.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone https://github.com/googlecloudplatform/kubeflow-distribution.git 
+cd kubeflow-distribution
+git checkout master
+</code></pre></div><p>Go to <code>kubeflow-distribution/management</code> directory for Management cluster configurations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd management
+</code></pre></div><h3 id="configure-environment-variables">Configure Environment Variables</h3>
+<p>Fill in environment variables in</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">kubeflow-distribution/management/env.sh
+</code></pre></div><p>Run the followings:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nano env.sh
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">MGMT_PROJECT<span style="color:#f92672">=</span>&lt;the project where you deploy your management cluster&gt;
+MGMT_NAME<span style="color:#f92672">=</span>&lt;name of your management cluster&gt;
+LOCATION<span style="color:#f92672">=</span>&lt;location of your management cluster, use either us-central1 or us-east1&gt;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">source env.sh
+</code></pre></div><h3 id="configure-kpt-setter-values">Configure kpt setter values</h3>
+<p>Use kpt to <a href="https://catalog.kpt.dev/apply-setters/v0.2/">set values</a> for the name, project, and location of your management cluster. Run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bash kpt-set.sh
+</code></pre></div><p>Enable the Anthos API if it is not already enabled:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud services enable anthos.googleapis.com --project<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>PROJECT_ID<span style="color:#e6db74">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kpt fn eval -i list-setters:v0.1 ./manifests
+</code></pre></div><h3 id="deploy-management-cluster">Deploy Management Cluster</h3>
+<ul>
+<li>Deploy the management cluster by applying cluster resources:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">make create-cluster
+</code></pre></div><ul>
+<li>Create a kubectl <strong>context</strong> for the management cluster, it will be named <code>${MGMT_NAME}</code>:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">make create-context
+</code></pre></div><ul>
+<li>Grant permission to Config Controller service account:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">make grant-owner-permission
+</code></pre></div><h3 id="deploying-kubeflow-cluster"><strong>Deploying Kubeflow cluster</strong></h3>
+<ul>
+<li>Run the following command to pull upstream manifests from <code>kubeflow/manifests</code> repository.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd kubeflow
+
+bash ./pull-upstream.sh
+</code></pre></div><h3 id="environment-variables">Environment Variables</h3>
+<p>Log in to gcloud. You only need to run this command once:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud auth login
+</code></pre></div><ul>
+<li>Review and fill all the environment variables in <code>kubeflow-distribution/kubeflow/env.sh</code>, they will be used by <code>kpt</code> later on, and some of them will be used in this deployment guide.</li>
+</ul>
+<p>Review the comment in <code>env.sh</code> for the explanation for each environment variable.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nano env.sh
+</code></pre></div><p>After defining these environment variables, run:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">source env.sh
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export CLIENT_ID<span style="color:#f92672">=</span>&lt;client-id&gt;
+export CLIENT_SECRET<span style="color:#f92672">=</span>&lt;client-secret&gt;
+export MGMT_PROJECT<span style="color:#f92672">=</span>&lt;project-id&gt;
+export MGMT_NAME<span style="color:#f92672">=</span>&lt;name-of-management-cluster-on-gke&gt;
+</code></pre></div><h3 id="kpt-setter-config">kpt setter config</h3>
+<p>Run the following commands to configure kpt setter for your Kubeflow cluster:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">bash ./kpt-set.sh
+</code></pre></div><p>Everytime you change environment variables, make sure you run the command above to apply kpt setter change to all packages. Otherwise, kustomize build will not be able to pick up new changes.</p>
+<p>Note, you can find out which setters exist in a package and their
+current values by running the following commands:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kpt fn eval -i list-setters:v0.1 ./apps
+kpt fn eval -i list-setters:v0.1 ./common
+</code></pre></div><p>You can learn more about <code>list-setters</code> in <a href="https://catalog.kpt.dev/list-setters/v0.1/">kpt documentation</a>.</p>
+<h3 id="authorize-cloud-config-connector-for-each-kubeflow-project">Authorize Cloud Config Connector for each Kubeflow project</h3>
+<ol>
+<li>Set the Management environment variable if you haven’t:</li>
+</ol>
+<p>Apply ConfigConnectorContext for <code>${KF_PROJECT}</code> in management cluster:</p>
+<p><code>make apply-kcc</code></p>
+<h3 id="configure-kubeflow">Configure Kubeflow</h3>
+<p>Make sure you are using KF_PROJECT in the gcloud CLI tool:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud config set project <span style="color:#e6db74">${</span>KF_PROJECT<span style="color:#e6db74">}</span>
+</code></pre></div><h3 id="deploy-kubeflow">Deploy Kubeflow</h3>
+<p>To deploy Kubeflow, run the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">make apply
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl -n kubeflow get all
+</code></pre></div><p>Access the Kubeflow user interface (UI)</p>
+<p>To access the Kubeflow central dashboard, follow these steps:</p>
+<p>Use the following command to grant yourself the IAP-secured Web App User role:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcloud projects add-iam-policy-binding <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>KF_PROJECT<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --member<span style="color:#f92672">=</span>user:user@email.com --role<span style="color:#f92672">=</span>roles/iap.httpsResourceAccessor
+</code></pre></div><p>Enter the following URI into your browser address bar. It can take 20 minutes for the URI to become available: <code>https://${KF_NAME}.endpoints.${KF_PROJECT}.cloud.goog/</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl -n istio-system get ingress
+export HOST<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>kubectl -n istio-system get ingress envoy-ingress -o<span style="color:#f92672">=</span>jsonpath<span style="color:#f92672">={</span>.spec.rules<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>.host<span style="color:#f92672">}</span><span style="color:#66d9ef">)</span>
+</code></pre></div><p>Kubeflow dashboard is now available at the following URL: <code>https://${KF_NAME}.endpoints.${KF_PROJECT}.cloud.goog/</code></p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/kf-hmpg.png'/>
+</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Setting up Kubeflow
+</b></u></p>
+<p>Now we have set up both the management and kubeflow cluster, we can start exploring and using the kubeflow dashboard.</p>
+<p><u><b>Set up Notebook instance</b></u></p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/create-notbook.png'/>
+</p>
+<p><u><b>GitHub Connection</b></u></p>
+<p>To integrate with GitHub, you need to create a GitHub token and we will use it when cloning the repo in the notebook instance.</p>
+<p>First we will need to install the <code>pexpect</code> package in the notebook instance.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#960050;background-color:#1e0010">!</span> pip install pexpect<span style="color:#f92672">==</span><span style="color:#ae81ff">4.9</span><span style="color:#f92672">.</span><span style="color:#ae81ff">0</span>
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_kubeflow/git-connect.png'/>
+</p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/git-connect2.png'/>
+</p>
+<p>Now we are all set, we can start building ML pipelines with Kubeflow!</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Building ML Pipelines with Kubeflow
+</b></u></p>
+<p>When working with notebooks in Kubeflow, you can use the Kubeflow Pipelines SDK to create reusable components and pipelines. The SDK allows you to define a pipeline using Python code, which can be executed in a Jupyter notebook or a Python script. The SDK provides a set of high-level abstractions that make it easy to define and run pipelines in Kubeflow.</p>
+<p>In this section, we will walk through the process of building a machine learning pipeline using the Kubeflow Pipelines SDK. We will start by building the pipelines on Vertex AI and then move on to deploy the pipelines on Kubeflow.</p>
+<p><u><b>Building Vertex AI ML Pipelines with Kubeflow</b></u></p>
+<p>To begin using the Kubeflow Pipelines SDK, you need to install the most recent version of protobuf then install the version <code>3.20.x</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#960050;background-color:#1e0010">!</span> pip install protobuf <span style="color:#f92672">--</span>upgrade
+<span style="color:#960050;background-color:#1e0010">!</span> pip install protobuf<span style="color:#f92672">==</span><span style="color:#ae81ff">3.20</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Import library</span>
+
+<span style="color:#f92672">import</span> kfp
+<span style="color:#f92672">from</span> kfp <span style="color:#f92672">import</span> dsl
+<span style="color:#f92672">from</span> kfp.dsl <span style="color:#f92672">import</span> (Output,Metrics,component)
+<span style="color:#f92672">from</span> kfp <span style="color:#f92672">import</span> compiler
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Define the pipeline for training a machine learning model</span>
+
+<span style="color:#a6e22e">@component</span>(
+packages_to_install<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;google-cloud-aiplatform&#34;</span>,<span style="color:#e6db74">&#34;gcsfs&#34;</span>,<span style="color:#e6db74">&#34;xgboost&#34;</span>,<span style="color:#e6db74">&#34;category_encoders&#34;</span>,<span style="color:#e6db74">&#34;imbalanced-learn==0.11.0&#34;</span>,<span style="color:#e6db74">&#34;pandas&#34;</span>,<span style="color:#e6db74">&#34;google-cloud-storage&#34;</span>]
+)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">custom_training_job_component</span>(
+    max_depth:int,
+    learning_rate:float,
+    n_estimators:int,
+    metrics: Output[Metrics]
+)<span style="color:#f92672">-&gt;</span>NamedTuple(<span style="color:#e6db74">&#34;output&#34;</span>, [(<span style="color:#e6db74">&#34;model_validation&#34;</span>, str)]):
+
+    <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+    <span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> precision_score, recall_score, roc_auc_score, accuracy_score
+    <span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+    <span style="color:#f92672">from</span> category_encoders <span style="color:#f92672">import</span> HashingEncoder
+    <span style="color:#f92672">from</span> imblearn.over_sampling <span style="color:#f92672">import</span> SMOTE
+    <span style="color:#f92672">from</span> xgboost <span style="color:#f92672">import</span> XGBClassifier
+    <span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> storage
+
+    storage_client <span style="color:#f92672">=</span> storage<span style="color:#f92672">.</span>Client()
+    bucket <span style="color:#f92672">=</span> storage_client<span style="color:#f92672">.</span>bucket(<span style="color:#e6db74">&#34;gcp-bucket-kubeflow&#34;</span>)
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_data</span>(file_path):
+        df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(file_path)
+        <span style="color:#66d9ef">return</span> df
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">preprocess_data</span>(df):
+
+        df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>drop(columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;car&#39;</span>, <span style="color:#e6db74">&#39;toCoupon_GEQ5min&#39;</span>, <span style="color:#e6db74">&#39;direction_opp&#39;</span>])
+        df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>fillna(df<span style="color:#f92672">.</span>mode()<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>])
+        df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>drop_duplicates()
+
+        df_dummy <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>copy()
+        age_list <span style="color:#f92672">=</span> []
+        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> df[<span style="color:#e6db74">&#39;age&#39;</span>]:
+            <span style="color:#66d9ef">if</span> i <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;below21&#39;</span>:
+                age <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;21&#39;</span>
+            <span style="color:#66d9ef">elif</span> i <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;21&#39;</span>, <span style="color:#e6db74">&#39;26&#39;</span>]:
+                age <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;21-30&#39;</span>
+            <span style="color:#66d9ef">elif</span> i <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;31&#39;</span>, <span style="color:#e6db74">&#39;36&#39;</span>]:
+                age <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;31-40&#39;</span>
+            <span style="color:#66d9ef">elif</span> i <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;41&#39;</span>, <span style="color:#e6db74">&#39;46&#39;</span>]:
+                age <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;41-50&#39;</span>
+            <span style="color:#66d9ef">else</span>:
+                age <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&gt;50&#39;</span>
+            age_list<span style="color:#f92672">.</span>append(age)
+        df_dummy[<span style="color:#e6db74">&#39;age&#39;</span>] <span style="color:#f92672">=</span> age_list
+
+        df_dummy[<span style="color:#e6db74">&#39;passanger_destination&#39;</span>] <span style="color:#f92672">=</span> df_dummy[<span style="color:#e6db74">&#39;passanger&#39;</span>]<span style="color:#f92672">.</span>astype(str) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">+</span> df_dummy[<span style="color:#e6db74">&#39;destination&#39;</span>]<span style="color:#f92672">.</span>astype(str)
+        df_dummy[<span style="color:#e6db74">&#39;marital_hasChildren&#39;</span>] <span style="color:#f92672">=</span> df_dummy[<span style="color:#e6db74">&#39;maritalStatus&#39;</span>]<span style="color:#f92672">.</span>astype(str) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">+</span> df_dummy[<span style="color:#e6db74">&#39;has_children&#39;</span>]<span style="color:#f92672">.</span>astype(str)
+        df_dummy[<span style="color:#e6db74">&#39;temperature_weather&#39;</span>] <span style="color:#f92672">=</span> df_dummy[<span style="color:#e6db74">&#39;temperature&#39;</span>]<span style="color:#f92672">.</span>astype(str) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">+</span> df_dummy[<span style="color:#e6db74">&#39;weather&#39;</span>]<span style="color:#f92672">.</span>astype(str)
+        df_dummy <span style="color:#f92672">=</span> df_dummy<span style="color:#f92672">.</span>drop(columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;passanger&#39;</span>, <span style="color:#e6db74">&#39;destination&#39;</span>, <span style="color:#e6db74">&#39;maritalStatus&#39;</span>, <span style="color:#e6db74">&#39;has_children&#39;</span>, <span style="color:#e6db74">&#39;temperature&#39;</span>,<span style="color:#e6db74">&#39;weather&#39;</span>, <span style="color:#e6db74">&#39;Y&#39;</span>])
+
+        df_dummy <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([df_dummy, df[<span style="color:#e6db74">&#39;Y&#39;</span>]], axis <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+        df_dummy <span style="color:#f92672">=</span> df_dummy<span style="color:#f92672">.</span>drop(columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;gender&#39;</span>, <span style="color:#e6db74">&#39;RestaurantLessThan20&#39;</span>])
+        df_le <span style="color:#f92672">=</span> df_dummy<span style="color:#f92672">.</span>replace({
+            <span style="color:#e6db74">&#39;expiration&#39;</span>:{<span style="color:#e6db74">&#39;2h&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;1d&#39;</span> : <span style="color:#ae81ff">1</span>},
+            <span style="color:#e6db74">&#39;age&#39;</span>:{<span style="color:#e6db74">&#39;&lt;21&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;21-30&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;31-40&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;41-50&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;&gt;50&#39;</span>: <span style="color:#ae81ff">4</span>},
+            <span style="color:#e6db74">&#39;education&#39;</span>:{<span style="color:#e6db74">&#39;Some High School&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;High School Graduate&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;Some college - no degree&#39;</span>: <span style="color:#ae81ff">2</span>,
+                         <span style="color:#e6db74">&#39;Associates degree&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;Bachelors degree&#39;</span>: <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;Graduate degree (Masters or Doctorate)&#39;</span>: <span style="color:#ae81ff">5</span>},
+            <span style="color:#e6db74">&#39;Bar&#39;</span>:{<span style="color:#e6db74">&#39;never&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;less1&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;1~3&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;4~8&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;gt8&#39;</span>: <span style="color:#ae81ff">4</span>},
+            <span style="color:#e6db74">&#39;CoffeeHouse&#39;</span>:{<span style="color:#e6db74">&#39;never&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;less1&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;1~3&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;4~8&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;gt8&#39;</span>: <span style="color:#ae81ff">4</span>}, 
+            <span style="color:#e6db74">&#39;CarryAway&#39;</span>:{<span style="color:#e6db74">&#39;never&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;less1&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;1~3&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;4~8&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;gt8&#39;</span>: <span style="color:#ae81ff">4</span>}, 
+            <span style="color:#e6db74">&#39;Restaurant20To50&#39;</span>:{<span style="color:#e6db74">&#39;never&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;less1&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;1~3&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;4~8&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;gt8&#39;</span>: <span style="color:#ae81ff">4</span>},
+            <span style="color:#e6db74">&#39;income&#39;</span>:{<span style="color:#e6db74">&#39;Less than $12500&#39;</span>:<span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;$12500 - $24999&#39;</span>:<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;$25000 - $37499&#39;</span>:<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;$37500 - $49999&#39;</span>:<span style="color:#ae81ff">3</span>,
+                      <span style="color:#e6db74">&#39;$50000 - $62499&#39;</span>:<span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;$62500 - $74999&#39;</span>:<span style="color:#ae81ff">5</span>, <span style="color:#e6db74">&#39;$75000 - $87499&#39;</span>:<span style="color:#ae81ff">6</span>, <span style="color:#e6db74">&#39;$87500 - $99999&#39;</span>:<span style="color:#ae81ff">7</span>,
+                      <span style="color:#e6db74">&#39;$100000 or More&#39;</span>:<span style="color:#ae81ff">8</span>},
+            <span style="color:#e6db74">&#39;time&#39;</span>:{<span style="color:#e6db74">&#39;7AM&#39;</span>:<span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;10AM&#39;</span>:<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;2PM&#39;</span>:<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;6PM&#39;</span>:<span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;10PM&#39;</span>:<span style="color:#ae81ff">4</span>}
+        })
+
+        x <span style="color:#f92672">=</span> df_le<span style="color:#f92672">.</span>drop(<span style="color:#e6db74">&#39;Y&#39;</span>, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+        y <span style="color:#f92672">=</span> df_le<span style="color:#f92672">.</span>Y
+
+        <span style="color:#66d9ef">return</span> x, y
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_model</span>(x_train, y_train,max_depth,learning_rate,n_estimators):
+        
+        model <span style="color:#f92672">=</span> XGBClassifier(
+            max_depth<span style="color:#f92672">=</span>max_depth,
+            learning_rate<span style="color:#f92672">=</span>learning_rate,
+            n_estimators<span style="color:#f92672">=</span>n_estimators,
+            random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>,
+            use_label_encoder<span style="color:#f92672">=</span>False
+        )
+        model<span style="color:#f92672">.</span>fit(x_train, y_train)
+        <span style="color:#66d9ef">return</span> model
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">evaluate_model</span>(model, x_test, y_test, x_sm_train_hashing, y_sm_train):
+        y_pred <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(x_test)
+        y_pred_proba <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict_proba(x_test)
+        y_pred_train <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(x_sm_train_hashing)
+        y_pred_train_proba <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict_proba(x_sm_train_hashing)
+
+        accuracy <span style="color:#f92672">=</span> accuracy_score(y_test, y_pred)
+        precision <span style="color:#f92672">=</span> precision_score(y_test, y_pred)
+        recall <span style="color:#f92672">=</span> recall_score(y_test, y_pred)
+
+
+        <span style="color:#66d9ef">return</span> accuracy,precision,recall
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">encode_features</span>(x, n_components<span style="color:#f92672">=</span><span style="color:#ae81ff">27</span>):
+        hashing_ros_enc <span style="color:#f92672">=</span> HashingEncoder(cols<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;passanger_destination&#39;</span>, <span style="color:#e6db74">&#39;marital_hasChildren&#39;</span>, <span style="color:#e6db74">&#39;occupation&#39;</span>, <span style="color:#e6db74">&#39;coupon&#39;</span>,
+                                               <span style="color:#e6db74">&#39;temperature_weather&#39;</span>], n_components<span style="color:#f92672">=</span>n_components)<span style="color:#f92672">.</span>fit(x)
+        x_test_hashing <span style="color:#f92672">=</span> hashing_ros_enc<span style="color:#f92672">.</span>transform(x<span style="color:#f92672">.</span>reset_index(drop<span style="color:#f92672">=</span>True))
+        <span style="color:#66d9ef">return</span> x_test_hashing
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">oversample_data</span>(x_train_hashing, y_train):
+        sm <span style="color:#f92672">=</span> SMOTE(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>)
+        x_sm_train_hashing, y_sm_train <span style="color:#f92672">=</span> sm<span style="color:#f92672">.</span>fit_resample(x_train_hashing, y_train)
+        <span style="color:#66d9ef">return</span> x_sm_train_hashing, y_sm_train
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">save_model_artifact</span>(pipeline):
+        artifact_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;model.bst&#39;</span>
+        pipeline<span style="color:#f92672">.</span>save_model(artifact_name)
+        model_artifact <span style="color:#f92672">=</span> bucket<span style="color:#f92672">.</span>blob(<span style="color:#e6db74">&#39;coupon-recommendation/artifacts/&#39;</span><span style="color:#f92672">+</span>artifact_name)
+        model_artifact<span style="color:#f92672">.</span>upload_from_filename(artifact_name)
+
+    df <span style="color:#f92672">=</span> load_data(<span style="color:#e6db74">&#34;./in-vehicle-coupon-recommendation.csv&#34;</span>)
+    
+    x, y <span style="color:#f92672">=</span> preprocess_data(df)
+
+    x_train, x_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(x, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>)
+
+    x_train<span style="color:#f92672">.</span>fillna(x_train<span style="color:#f92672">.</span>mode()<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>], inplace<span style="color:#f92672">=</span>True)
+    x_test<span style="color:#f92672">.</span>fillna(x_train<span style="color:#f92672">.</span>mode()<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>], inplace<span style="color:#f92672">=</span>True)
+    
+    model_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;xgboost&#39;</span>
+    x_train_hashing <span style="color:#f92672">=</span> encode_features(x_train)
+    x_test_hashing <span style="color:#f92672">=</span> encode_features(x_test)
+    x_sm_train_hashing, y_sm_train <span style="color:#f92672">=</span> oversample_data(x_train_hashing,y_train)
+
+    pipeline <span style="color:#f92672">=</span> train_model(x_sm_train_hashing,y_sm_train,max_depth,learning_rate,n_estimators)
+
+    accuracy,precision,recall <span style="color:#f92672">=</span> evaluate_model(pipeline,x_test_hashing,y_test,x_sm_train_hashing,y_sm_train)
+    metrics<span style="color:#f92672">.</span>log_metric(<span style="color:#e6db74">&#34;accurancy&#34;</span>, accuracy)
+    metrics<span style="color:#f92672">.</span>log_metric(<span style="color:#e6db74">&#34;precision&#34;</span>, precision)
+    metrics<span style="color:#f92672">.</span>log_metric(<span style="color:#e6db74">&#34;recall&#34;</span>, recall)
+    
+    model_validation <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;true&#34;</span>
+    <span style="color:#66d9ef">if</span> accuracy<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0.5</span> <span style="color:#f92672">and</span> precision<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0.5</span> <span style="color:#f92672">and</span> recall<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0.5</span> :
+        save_model_artifact(pipeline)
+        model_validation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;true&#34;</span>
+    <span style="color:#66d9ef">else</span> :
+        model_validation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>
+
+    <span style="color:#66d9ef">return</span> (model_validation,)
+
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@dsl.pipeline</span>(
+    pipeline_root<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gs://gcp-bucket-kubeflow/ml-pipeline-v1&#34;</span>,
+    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ml-model-training-pipeline&#34;</span>,
+)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">pipeline</span>(
+    project: str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;kubeflow-mlops&#34;</span>,
+    region: str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;us-central1&#34;</span>
+    ):
+    
+    max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+    learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>
+    n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>
+
+    model_training <span style="color:#f92672">=</span> custom_training_job_component(
+        max_depth<span style="color:#f92672">=</span>max_depth,
+        learning_rate<span style="color:#f92672">=</span>learning_rate,
+        n_estimators<span style="color:#f92672">=</span>n_estimators,
+    )<span style="color:#f92672">.</span>after(input_validation_task)
+        
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">compiler<span style="color:#f92672">.</span>Compiler()<span style="color:#f92672">.</span>compile(pipeline_func<span style="color:#f92672">=</span>pipeline,package_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ml-pipeline.json&#39;</span>)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">start_pipeline <span style="color:#f92672">=</span> pipeline_jobs<span style="color:#f92672">.</span>PipelineJob(
+    display_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;simple-kubeflow-pipeline&#34;</span>,
+    template_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;coupon-pipeline.json&#34;</span>,
+    enable_caching<span style="color:#f92672">=</span>False,
+    location<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;us-central1&#34;</span>,
+)
+
+start_pipeline<span style="color:#f92672">.</span>run()
+</code></pre></div><p><u><b>Building kubeflow ML Pipelines with Kubeflow</b></u></p>
+<p>Now, since we already have a running kubeflow pipeline, to deploy it to the kubeflow cluster, we can use the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pipeline_file_path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ml-pipeline.yaml&#39;</span> 
+pipeline_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ml-model-training-pipeline&#39;</span>
+
+compiler<span style="color:#f92672">.</span>Compiler()<span style="color:#f92672">.</span>compile(pipeline_func<span style="color:#f92672">=</span>pipeline,package_path<span style="color:#f92672">=</span>pipeline_file_path)
+
+client <span style="color:#f92672">=</span> kfp<span style="color:#f92672">.</span>Client()
+pipeline <span style="color:#f92672">=</span> client<span style="color:#f92672">.</span>pipeline_uploads<span style="color:#f92672">.</span>upload_pipeline(
+                        pipeline_file_path, name<span style="color:#f92672">=</span>pipeline_name, description<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Kubeflow ML pipeline&#34;</span>)
+</code></pre></div><p>After the execution of the above command, you can see the pipeline appear on the kubeflow UI under the <code>Pipelines</code> tab.</p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/kf-pipeline.png'/>
+</p>
+<p>Once you have a running pipeline, on the kubeflow UI, we can also <code>Create Experiment</code> and <code>Create Runs</code> etc. as well.</p>
+<p><u><b>
+<p style="font-size:20pt ">
+Deploying ML Endpoints with Kubeflow
+</b></u></p>
+<p>Similar to building ML pipelines, you can deploy ML endpoints, both Vertex AI model registry and kubeflow endpoint with Kubeflow SDK.</p>
+<p>In this section, we will walk through the process of deploying ML endpoints on Vertex AI and Kubeflow.</p>
+<p><u><b>Deploying Vertex AI endpoints with kubeflow for predictions</b></u></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> kfp
+<span style="color:#f92672">from</span> kfp.v2 <span style="color:#f92672">import</span> dsl
+<span style="color:#f92672">from</span> kfp.v2.dsl <span style="color:#f92672">import</span> (Input,Output,Metrics,component,Model)
+<span style="color:#f92672">from</span> kfp.v2 <span style="color:#f92672">import</span> compiler
+
+<span style="color:#f92672">from</span> typing <span style="color:#f92672">import</span> NamedTuple
+
+<span style="color:#f92672">from</span> google.cloud.aiplatform <span style="color:#f92672">import</span> pipeline_jobs
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@component</span>(
+    packages_to_install<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;google-cloud-aiplatform&#34;</span>]
+)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">model_deployment</span>()<span style="color:#f92672">-&gt;</span> NamedTuple(<span style="color:#e6db74">&#34;endpoint&#34;</span>, [(<span style="color:#e6db74">&#34;endpoint&#34;</span>, str)]):
+    
+    <span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> aiplatform
+    
+    aiplatform<span style="color:#f92672">.</span>init(project<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gcp-prj-id-123&#34;</span>, location<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;us-central1&#34;</span>, staging_bucket<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gs://gcp-bucket-kubeflow&#34;</span>)
+    
+    model <span style="color:#f92672">=</span> aiplatform<span style="color:#f92672">.</span>Model<span style="color:#f92672">.</span>upload(
+        display_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;coupon-recommendation-model&#34;</span>,
+        artifact_uri<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gs://gcp-bucket-kubeflow/ml-model/artifacts/&#34;</span>,
+        serving_container_image_uri <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;us-docker.pkg.dev/vertex-ai/prediction/xgboost-cpu.1-6:latest&#34;</span>,
+        sync<span style="color:#f92672">=</span>False
+    )
+    
+    DEPLOYED_NAME <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;coupon-model-endpoint&#34;</span>
+    TRAFFIC_SPLIT <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;0&#34;</span>: <span style="color:#ae81ff">100</span>}
+    MIN_NODES <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+    MAX_NODES <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+
+    endpoint <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>deploy(
+        deployed_model_display_name<span style="color:#f92672">=</span>DEPLOYED_NAME,
+        traffic_split<span style="color:#f92672">=</span>TRAFFIC_SPLIT,
+        machine_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;n1-standard-4&#34;</span>,
+        min_replica_count<span style="color:#f92672">=</span>MIN_NODES,
+        max_replica_count<span style="color:#f92672">=</span>MAX_NODES
+    )
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@dsl.pipeline</span>(
+    pipeline_root<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gs://gcp-bcuket-kubeflow/ml-pipeline-v1&#34;</span>,
+    name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ml-model-training-ep-deplyment-pipeline&#34;</span>,
+)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">pipeline</span>(
+    project: str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;kubeflow-mlops&#34;</span>,
+    region: str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;us-central1&#34;</span>
+    ):
+    
+    max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+    learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>
+    n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>
+
+    input_validation_task <span style="color:#f92672">=</span> validate_input_ds()
+    
+
+    model_training <span style="color:#f92672">=</span> custom_training_job_component(
+        max_depth<span style="color:#f92672">=</span>max_depth,
+        learning_rate<span style="color:#f92672">=</span>learning_rate,
+        n_estimators<span style="color:#f92672">=</span>n_estimators,
+    )<span style="color:#f92672">.</span>after(input_validation_task)
+    
+    <span style="color:#66d9ef">with</span> dsl<span style="color:#f92672">.</span>Condition(model_training<span style="color:#f92672">.</span>outputs[<span style="color:#e6db74">&#34;model_validation&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;true&#34;</span>):
+        task_deploy_model <span style="color:#f92672">=</span> model_deployment()<span style="color:#f92672">.</span>after(model_training)
+
+        
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">compiler<span style="color:#f92672">.</span>Compiler()<span style="color:#f92672">.</span>compile(pipeline_func<span style="color:#f92672">=</span>pipeline,package_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ml-pipeline-ep-deploy.json&#39;</span>)
+
+start_pipeline <span style="color:#f92672">=</span> pipeline_jobs<span style="color:#f92672">.</span>PipelineJob(
+    display_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ml-model-ep-deployment-pipeline&#34;</span>,
+    template_path<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ml-pipeline-ep-deploy.json&#34;</span>,
+    enable_caching<span style="color:#f92672">=</span>False,
+    location<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;us-central1&#34;</span>,
+)
+
+start_pipeline<span style="color:#f92672">.</span>run()
+</code></pre></div><p>After the above command executed successfully, you can see the endpoint deployed on Vertex AI on the Vertex AI UI under <code>Online Predictions</code> &gt; <code>Endpoints</code></p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/vertexai-endpoint.png'/>
+</p>
+<p><u><b>Deploying Kubeflow endpoints with Kubeflow for predictions</b></u></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Import the necessary libraries</span>
+
+<span style="color:#f92672">from</span> kubernetes <span style="color:#f92672">import</span> client
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> KServeClient
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> constants
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> utils
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> V1beta1InferenceService
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> V1beta1InferenceServiceSpec
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> V1beta1PredictorSpec
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> V1beta1XGBoostSpec
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">namespace <span style="color:#f92672">=</span> utils<span style="color:#f92672">.</span>get_default_target_namespace()
+name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;xgboost-ml-model&#39;</span>
+kserve_version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;v1beta1&#39;</span>
+api_version <span style="color:#f92672">=</span> constants<span style="color:#f92672">.</span>KSERVE_GROUP <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> kserve_version
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Define InferenceService</span>
+isvc <span style="color:#f92672">=</span> V1beta1InferenceService(api_version<span style="color:#f92672">=</span>api_version,
+                               kind<span style="color:#f92672">=</span>constants<span style="color:#f92672">.</span>KSERVE_KIND,
+                               metadata<span style="color:#f92672">=</span>client<span style="color:#f92672">.</span>V1ObjectMeta(
+                                   name<span style="color:#f92672">=</span>name, namespace<span style="color:#f92672">=</span>namespace, annotations<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;sidecar.istio.io/inject&#39;</span>: <span style="color:#e6db74">&#39;false&#39;</span>}),
+                               spec<span style="color:#f92672">=</span>V1beta1InferenceServiceSpec(
+                                   predictor<span style="color:#f92672">=</span>V1beta1PredictorSpec(
+                                       xgboost<span style="color:#f92672">=</span>V1beta1XGBoostSpec(
+                                           storage_uri<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gs://gcp-bucket-kubeflow/ml-model/artifacts/&#34;</span>,
+                                       )
+                                   )
+                               )
+)
+
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Create InferenceService </span>
+
+KServe <span style="color:#f92672">=</span> KServeClient()
+KServe<span style="color:#f92672">.</span>create(isvc)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># For tracking</span>
+
+KServe<span style="color:#f92672">.</span>get(name, namespace<span style="color:#f92672">=</span>namespace, watch<span style="color:#f92672">=</span>True, timeout_seconds<span style="color:#f92672">=</span><span style="color:#ae81ff">120</span>)
+status <span style="color:#f92672">=</span> KServe<span style="color:#f92672">.</span>get(name, namespace<span style="color:#f92672">=</span>namespace)
+<span style="color:#66d9ef">print</span>(status)
+</code></pre></div><p>After the above command executed successfully, you can see the endpoint deployed on Kubeflow on the Kubeflow UI under <code>Endpoints</code></p>
+<p align="center">
+<img alt = 'png' src='/images/on_kubeflow/kf-endpoint.png'/>
+</p>
+<p><u><b>Making predictions with Vertex AI Endpoints</b></u></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> json
+
+<span style="color:#f92672">from</span> google.oauth2 <span style="color:#f92672">import</span> service_account
+<span style="color:#f92672">from</span> google.auth.transport.requests <span style="color:#f92672">import</span> Request
+<span style="color:#f92672">from</span> google.cloud <span style="color:#f92672">import</span> secretmanager
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
+<span style="color:#75715e"># Construct the headers with the authorization token</span>
+headers <span style="color:#f92672">=</span> {
+    <span style="color:#e6db74">&#34;Authorization&#34;</span>: f<span style="color:#e6db74">&#34;Bearer {credentials.token}&#34;</span>,
+    <span style="color:#e6db74">&#34;Content-Type&#34;</span>: <span style="color:#e6db74">&#34;application/json&#34;</span>,
+}
+
+<span style="color:#75715e"># Make the POST request to the Vertex AI endpoint</span>
+response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(endpoint_url, headers<span style="color:#f92672">=</span>headers, json<span style="color:#f92672">=</span>inference_input)
+
+<span style="color:#75715e"># Check the response</span>
+<span style="color:#66d9ef">if</span> response<span style="color:#f92672">.</span>status_code <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Prediction results:&#34;</span>, response<span style="color:#f92672">.</span>json())
+<span style="color:#66d9ef">else</span>:
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Error during prediction:&#34;</span>, response<span style="color:#f92672">.</span>text)
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_kubeflow/api-pred.png'/>
+</p>
+<p><u><b>Making predictions with Kubeflow Endpoints</b></u></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> kubernetes <span style="color:#f92672">import</span> client
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> KServeClient
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> constants
+<span style="color:#f92672">from</span> kserve <span style="color:#f92672">import</span> utils
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Get the InferenceService URL</span>
+KServe <span style="color:#f92672">=</span> KServeClient()
+name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ml-model&#39;</span>
+kserve_version <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;v1beta1&#39;</span>
+api_version <span style="color:#f92672">=</span> constants<span style="color:#f92672">.</span>KSERVE_GROUP <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> kserve_version
+namespace <span style="color:#f92672">=</span> utils<span style="color:#f92672">.</span>get_default_target_namespace()
+isvc_resp <span style="color:#f92672">=</span> KServe<span style="color:#f92672">.</span>get(name, namespace<span style="color:#f92672">=</span>namespace)
+isvc_url <span style="color:#f92672">=</span> isvc_resp[<span style="color:#e6db74">&#39;status&#39;</span>][<span style="color:#e6db74">&#39;address&#39;</span>][<span style="color:#e6db74">&#39;url&#39;</span>]
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">input_data <span style="color:#f92672">=</span> x_test_hashing<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>to_dict()
+
+inference_input <span style="color:#f92672">=</span> {
+    <span style="color:#e6db74">&#39;instances&#39;</span>: [list(input_data<span style="color:#f92672">.</span>values())]
+}
+
+response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(f<span style="color:#e6db74">&#34;{isvc_url}/v1/models/ml-model:predict&#34;</span>, json<span style="color:#f92672">=</span>inference_input)
+<span style="color:#66d9ef">print</span>(response<span style="color:#f92672">.</span>text)
+</code></pre></div><p><u><b>
+<p style="font-size:20pt ">
+Using MLFlow with Kubeflow
+</b></u></p>
+<p>Within the Kubeflow Notebook, you can also use MLFlow to track and manage your machine learning experiments.</p>
+<p>In the below example, I am using the wine data to train a XGBoost model and track the experiment with MLFlow.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Data Pre-processing</span>
+
+white_wine <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;./winequality-white.csv&#34;</span>, sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;;&#34;</span>)
+red_wine <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;./winequality-red.csv&#34;</span>, sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;;&#34;</span>)
+
+
+red_wine[<span style="color:#e6db74">&#39;is_red&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+white_wine[<span style="color:#e6db74">&#39;is_red&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+
+data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([red_wine, white_wine], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+data<span style="color:#f92672">.</span>rename(columns<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39; &#39;</span>, <span style="color:#e6db74">&#39;_&#39;</span>), inplace<span style="color:#f92672">=</span>True)
+high_quality <span style="color:#f92672">=</span> (data<span style="color:#f92672">.</span>quality <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">7</span>)<span style="color:#f92672">.</span>astype(int)
+data<span style="color:#f92672">.</span>quality <span style="color:#f92672">=</span> high_quality
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Split the data into train, validation, and test sets</span>
+
+X <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>drop([<span style="color:#e6db74">&#34;quality&#34;</span>], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+y <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>quality
+
+X_train, X_rem, y_train, y_rem <span style="color:#f92672">=</span> train_test_split(X, y, train_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.6</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">123</span>)
+
+X_val, X_test, y_val, y_test <span style="color:#f92672">=</span> train_test_split(X_rem, y_rem, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">123</span>)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Define the search space for hyperparameter tuning</span>
+
+search_space <span style="color:#f92672">=</span> {
+  <span style="color:#e6db74">&#39;max_depth&#39;</span>: scope<span style="color:#f92672">.</span>int(hp<span style="color:#f92672">.</span>quniform(<span style="color:#e6db74">&#39;max_depth&#39;</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">1</span>)),
+  <span style="color:#e6db74">&#39;learning_rate&#39;</span>: hp<span style="color:#f92672">.</span>loguniform(<span style="color:#e6db74">&#39;learning_rate&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0</span>),
+  <span style="color:#e6db74">&#39;reg_alpha&#39;</span>: hp<span style="color:#f92672">.</span>loguniform(<span style="color:#e6db74">&#39;reg_alpha&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>),
+  <span style="color:#e6db74">&#39;reg_lambda&#39;</span>: hp<span style="color:#f92672">.</span>loguniform(<span style="color:#e6db74">&#39;reg_lambda&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">6</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>),
+  <span style="color:#e6db74">&#39;min_child_weight&#39;</span>: hp<span style="color:#f92672">.</span>loguniform(<span style="color:#e6db74">&#39;min_child_weight&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>),
+  <span style="color:#e6db74">&#39;objective&#39;</span>: <span style="color:#e6db74">&#39;binary:logistic&#39;</span>,
+  <span style="color:#e6db74">&#39;seed&#39;</span>: <span style="color:#ae81ff">123</span>, 
+}
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">mlflow<span style="color:#f92672">.</span>xgboost<span style="color:#f92672">.</span>autolog()
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_model</span>(params):
+    <span style="color:#66d9ef">with</span> mlflow<span style="color:#f92672">.</span>start_run(nested<span style="color:#f92672">=</span>True):
+        train <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(data<span style="color:#f92672">=</span>X_train, label<span style="color:#f92672">=</span>y_train)
+        validation <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(data<span style="color:#f92672">=</span>X_val, label<span style="color:#f92672">=</span>y_val)
+        booster <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>train(params<span style="color:#f92672">=</span>params, dtrain<span style="color:#f92672">=</span>train, num_boost_round<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>,
+                            evals<span style="color:#f92672">=</span>[(validation, <span style="color:#e6db74">&#34;validation&#34;</span>)], early_stopping_rounds<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>)
+        validation_predictions <span style="color:#f92672">=</span> booster<span style="color:#f92672">.</span>predict(validation)
+        auc_score <span style="color:#f92672">=</span> roc_auc_score(y_val, validation_predictions)
+        mlflow<span style="color:#f92672">.</span>log_metric(<span style="color:#e6db74">&#39;auc&#39;</span>, auc_score)
+
+        signature <span style="color:#f92672">=</span> infer_signature(X_train, booster<span style="color:#f92672">.</span>predict(train))
+        mlflow<span style="color:#f92672">.</span>xgboost<span style="color:#f92672">.</span>log_model(booster, <span style="color:#e6db74">&#34;model&#34;</span>, signature<span style="color:#f92672">=</span>signature)
+        
+        <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;status&#39;</span>: STATUS_OK, <span style="color:#e6db74">&#39;loss&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">*</span>auc_score, <span style="color:#e6db74">&#39;booster&#39;</span>: booster<span style="color:#f92672">.</span>attributes()}
+
+    
+<span style="color:#75715e"># A reasonable value for parallelism is the square root of max_evals.</span>
+spark_trials <span style="color:#f92672">=</span> SparkTrials(parallelism<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Run fmin within an MLflow run context so that each hyperparameter configuration is logged as a child run of a parent</span>
+
+<span style="color:#66d9ef">with</span> mlflow<span style="color:#f92672">.</span>start_run(run_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;xgboost_models&#39;</span>):
+    best_params <span style="color:#f92672">=</span> fmin(
+    fn<span style="color:#f92672">=</span>train_model, 
+    space<span style="color:#f92672">=</span>search_space, 
+    algo<span style="color:#f92672">=</span>tpe<span style="color:#f92672">.</span>suggest, 
+    max_evals<span style="color:#f92672">=</span><span style="color:#ae81ff">96</span>,
+    trials<span style="color:#f92672">=</span>spark_trials,
+    )
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Retrieve the best run and log the AUC of the best run</span>
+
+best_run <span style="color:#f92672">=</span> mlflow<span style="color:#f92672">.</span>search_runs(order_by<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;metrics.auc DESC&#39;</span>])<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>]
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;AUC of Best Run: {best_run[&#34;metrics.auc&#34;]}&#39;</span>)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Register the best model version with MLflow</span>
+
+new_model_version <span style="color:#f92672">=</span> mlflow<span style="color:#f92672">.</span>register_model(f<span style="color:#e6db74">&#34;runs:/{best_run.run_id}/model&#34;</span>, model_name)
+
+<span style="color:#66d9ef">print</span>(new_model_version)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Promote the new model version to Production</span>
+client<span style="color:#f92672">.</span>set_registered_model_alias(
+  name<span style="color:#f92672">=</span>model_name,
+  version<span style="color:#f92672">=</span>new_model_version<span style="color:#f92672">.</span>version,
+  alias<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Production&#34;</span>
+)
+
+<span style="color:#75715e"># Transition the new model version to the Production stage</span>
+client<span style="color:#f92672">.</span>transition_model_version_stage(
+  name<span style="color:#f92672">=</span>model_name,
+  version<span style="color:#f92672">=</span>new_model_version<span style="color:#f92672">.</span>version,
+  stage<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Production&#34;</span>,
+)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Load the best model using alias set above and evaluate it on the test set</span>
+
+model <span style="color:#f92672">=</span> mlflow<span style="color:#f92672">.</span>xgboost<span style="color:#f92672">.</span>load_model(f<span style="color:#e6db74">&#34;models:/{model_name}@Production&#34;</span>)
+
+X_test_dmatrix <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(X_test)
+test_predictions <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(X_test_dmatrix)
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;AUC: {roc_auc_score(y_test, test_predictions)}&#39;</span>)
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_kubeflow/mlflow-auc.png'/>
+</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Make predictions with the model</span>
+
+prediction <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(xgb<span style="color:#f92672">.</span>DMatrix(X_test<span style="color:#f92672">.</span>iloc[:<span style="color:#ae81ff">3</span>]))
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;Prediction: {prediction}&#34;</span>)
+<span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;Prediction list: {prediction.tolist()}&#34;</span>)
+</code></pre></div><p align="center">
+<img alt = 'png' src='/images/on_kubeflow/mlflow-predict.png'/>
+</p>
+<p>And that&rsquo;s it, now you have a running kubeflow application for your MLOps workload with MLFlow integration.</p>
+<p>Thank you for reading and have a nice day!</p>
+<p>If you want to support my work,</p>
+<p><a href="https://buymeacoffee.com/yuwong">Buy me a coffee</a></p>
+<p>Honestly, if you made it this far you already made my day :)</p>
+
+    </article>
+
+
+    
+
+
+
+
+
+    
+    
+    
+        
+    
+
+
+
+
+<section id="articleNext" class="section nartrow">
+    <h3 class="footer-next-heading">More articles from Yu Wong</h3>
+    <div class="footer-spacer"></div>
+    <div class="next-articles-grid" numberOfArticles={numberOfArticles}>
+        <div class="post-row">
+            
+                <a href="/post/20240706_mlflow/" class="article-link"
+                 id="article-link-bigger">
+                    <div>
+                        <div class="image-container">
+                            <img src="/images/on_mlflow/cover-img.png" class="article-image" />
+                        </div>
+                        <div>
+                            <h2 class="article-title">
+                                On ML Flow
+                            </h2>
+                            <p class="article-excerpt">
+                                How to set up MLflow on GCP and building end-to-end machine learning pipelines with it
+                            </p>
+                            <div class="article-metadata">
+                                July 6, 2024 · 9 min read
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            
+                <a href="/post/20240616_aks/" class="article-link"
+                >
+                    <div>
+                        <div class="image-container">
+                            <img src="/images/on_aks/cover-photo.png" class="article-image" />
+                        </div>
+                        <div>
+                            <h2 class="article-title">
+                                On AKS
+                            </h2>
+                            <p class="article-excerpt">
+                                Step by step guide to setup Azure Kubernetes Service (AKS) and deploy application
+                            </p>
+                            <div class="article-metadata">
+                                June 16, 2024 · 5 min read
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+</section>
+
+</section>
+
+
+ <script src="/js/progressBar.js"></script>
+
+        
+        <div class="footer-gradient"></div>
+    <div class="section narrow">
+      <div class="footer-hr"></div>
+      <div class="footer-container">
+        <div class="footer-text">
+          © 2024 Yu Wong
+        </div>
+        <div class="social-icon-outer">
+    <div class="social-icon-container">
+        
+            
+                
+                <a href="https://fishwongy.github.io/about"><svg
+class="social-icon-image"
+width="14"
+height="14"
+viewBox="0 0 14 14"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+>
+<path
+  d="M7 0C3.14016 0 0 3.14019 0 7C0 10.8598 3.14016 14 7 14C10.8598 14 14 10.8598 14 7C14 3.14019 10.8598 0 7 0ZM11.5616 3.30136C12.3475 4.26869 12.8313 5.48966 12.8715 6.82062C11.4158 6.51926 10.0977 6.55462 8.93404 6.78278C8.72334 6.29005 8.50523 5.82062 8.28509 5.37697C9.55235 4.83104 10.6556 4.13375 11.5616 3.30136ZM10.7731 2.49993C9.87371 3.32085 8.83147 3.92867 7.76427 4.37742C6.98097 2.945 6.23154 1.86633 5.775 1.25333C6.17032 1.16911 6.57995 1.12393 7 1.12393C8.4354 1.12393 9.75151 1.64199 10.7731 2.49993ZM4.63984 1.62041C4.98459 2.06714 5.80572 3.18567 6.68777 4.77709C4.47095 5.49933 2.31992 5.62101 1.28629 5.63232C1.71713 3.83253 2.97749 2.35262 4.63984 1.62041ZM1.13006 6.7591C1.14115 6.7591 1.15187 6.75918 1.16318 6.75918C1.8774 6.75918 3.18594 6.71115 4.72646 6.43024C5.60536 6.26997 6.43879 6.05425 7.22081 5.7869C7.42439 6.19264 7.62677 6.62064 7.82301 7.06923C6.72801 7.42177 5.8046 7.92904 5.07315 8.43271C3.84658 9.27739 2.9873 10.2145 2.51811 10.7939C1.64939 9.76944 1.12392 8.4453 1.12392 7C1.12392 6.91923 1.12677 6.83913 1.13006 6.7591ZM3.328 11.5826C3.73194 11.074 4.55412 10.1482 5.74346 9.33591C6.55171 8.78383 7.3879 8.37367 8.24875 8.10445C8.74822 9.39907 9.17464 10.8295 9.42887 12.3484C8.68798 12.6862 7.86602 12.8761 7 12.8761C5.61143 12.8761 4.33474 12.3909 3.328 11.5826ZM10.4629 11.7432C10.2009 10.3483 9.8101 9.03664 9.35836 7.83793C10.4695 7.65046 11.618 7.68912 12.7975 7.95407C12.5431 9.50435 11.6805 10.8519 10.4629 11.7432Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://fishwongy.github.io/about</span>
+            
+        
+            
+                
+                <a href="https://github.com/FISHWONGY"><svg
+class="social-icon-image"
+width="14"
+height="14"
+viewBox="0 0 14 14"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M7 0C3.1325 0 0 3.21173 0 7.17706C0 10.3529 2.00375 13.0353 4.78625 13.9863C5.13625 14.0491 5.2675 13.8338 5.2675 13.6454C5.2675 13.4749 5.25875 12.9097 5.25875 12.3087C3.5 12.6406 3.045 11.8691 2.905 11.4653C2.82625 11.259 2.485 10.622 2.1875 10.4516C1.9425 10.317 1.5925 9.98508 2.17875 9.97611C2.73 9.96714 3.12375 10.4964 3.255 10.7118C3.885 11.7973 4.89125 11.4923 5.29375 11.3039C5.355 10.8374 5.53875 10.5234 5.74 10.3439C4.1825 10.1645 2.555 9.54549 2.555 6.80026C2.555 6.01976 2.82625 5.37382 3.2725 4.87143C3.2025 4.692 2.9575 3.95635 3.3425 2.96951C3.3425 2.96951 3.92875 2.78111 5.2675 3.70516C5.8275 3.54367 6.4225 3.46293 7.0175 3.46293C7.6125 3.46293 8.2075 3.54367 8.7675 3.70516C10.1063 2.77214 10.6925 2.96951 10.6925 2.96951C11.0775 3.95635 10.8325 4.692 10.7625 4.87143C11.2087 5.37382 11.48 6.01079 11.48 6.80026C11.48 9.55446 9.84375 10.1645 8.28625 10.3439C8.54 10.5682 8.75875 10.9988 8.75875 11.6717C8.75875 12.6316 8.75 13.4032 8.75 13.6454C8.75 13.8338 8.88125 14.0581 9.23125 13.9863C11.9963 13.0353 14 10.3439 14 7.17706C14 3.21173 10.8675 0 7 0Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://github.com/FISHWONGY</span>
+            
+        
+            
+                
+                <a href="https://instagram.com/datavizofficial"><svg
+class="social-icon-image"
+width="13"
+height="13"
+viewBox="0 0 13 13"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M-3.05176e-05 3.97163C-3.05176e-05 1.77803 1.77824 -0.000244141 3.97184 -0.000244141H9.0281C11.2217 -0.000244141 13 1.77802 13 3.97163V9.02788C13 11.2215 11.2217 12.9998 9.0281 12.9998H3.97184C1.77824 12.9998 -3.05176e-05 11.2215 -3.05176e-05 9.02789V3.97163ZM3.97184 1.281C2.48585 1.281 1.28122 2.48564 1.28122 3.97163V9.02789C1.28122 10.5139 2.48585 11.7185 3.97184 11.7185H9.0281C10.5141 11.7185 11.7187 10.5139 11.7187 9.02788V3.97163C11.7187 2.48564 10.5141 1.281 9.0281 1.281H3.97184Z"
+  fill="#73737D"
+/>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M3.07483 6.55115C3.07483 4.64454 4.61242 3.09253 6.51702 3.09253C8.42162 3.09253 9.95921 4.64454 9.95921 6.55115C9.95921 8.45776 8.42162 10.0098 6.51702 10.0098C4.61242 10.0098 3.07483 8.45776 3.07483 6.55115ZM6.51702 4.37378C5.32709 4.37378 4.35608 5.34508 4.35608 6.55115C4.35608 7.75722 5.32709 8.72853 6.51702 8.72853C7.70695 8.72853 8.67796 7.75722 8.67796 6.55115C8.67796 5.34508 7.70695 4.37378 6.51702 4.37378Z"
+  fill="#73737D"
+/>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M9.95062 3.87075C10.4035 3.87075 10.7706 3.50149 10.7706 3.04597C10.7706 2.59046 10.4035 2.22119 9.95062 2.22119C9.49776 2.22119 9.13065 2.59046 9.13065 3.04597C9.13065 3.50149 9.49776 3.87075 9.95062 3.87075Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://instagram.com/datavizofficial</span>
+            
+        
+            
+                
+                <a href="https://www.linkedin.com/in/%F0%9F%92%BB-yu-wong-981612142/"><svg
+class="social-icon-image"
+width="14"
+height="14"
+viewBox="0 0 14 14"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+{...props}
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M3.59615 13.125H0.871552V4.36523H3.59615V13.125ZM2.24847 3.16406C1.81878 3.16406 1.44769 3.00781 1.13519 2.69531C0.822692 2.38281 0.666443 2.01171 0.666443 1.58203C0.666443 1.15234 0.822692 0.781248 1.13519 0.468749C1.44769 0.156249 1.81878 0 2.24847 0C2.67816 0 3.04925 0.156249 3.36175 0.468749C3.67425 0.781248 3.8305 1.15234 3.8305 1.58203C3.8305 2.01171 3.67425 2.38281 3.36175 2.69531C3.04925 3.00781 2.67816 3.16406 2.24847 3.16406ZM13.7915 13.125H11.0669V8.84765C11.0669 8.14452 11.0083 7.63671 10.8911 7.32421C10.6763 6.79687 10.2563 6.5332 9.63134 6.5332C9.00634 6.5332 8.56689 6.76757 8.31298 7.23632C8.11767 7.58788 8.02001 8.10546 8.02001 8.78905V13.125H5.32471V4.36523H7.93212V5.5664H7.96142C8.15673 5.17578 8.46923 4.85351 8.89892 4.59961C9.36767 4.28711 9.91454 4.13086 10.5395 4.13086C11.8091 4.13086 12.6977 4.53125 13.2055 5.33203C13.5962 5.97656 13.7915 6.97265 13.7915 8.3203V13.125Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://www.linkedin.com/in/%F0%9F%92%BB-yu-wong-981612142/</span>
+            
+        
+            
+                
+                <a href="https://twitter.com/fishwongxd"><svg
+class="social-icon-image"
+width="16"
+height="13"
+viewBox="0 0 16 13"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+{...props}
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M14.0658 2.34438C14.7013 1.96349 15.1892 1.3604 15.419 0.641811C14.8244 0.994439 14.1658 1.25056 13.4648 1.3886C12.9034 0.7905 12.1036 0.416748 11.2185 0.416748C9.51888 0.416748 8.14096 1.79461 8.14096 3.49411C8.14096 3.7353 8.16822 3.97019 8.22068 4.19542C5.66301 4.06708 3.39543 2.84191 1.8776 0.980064C1.6127 1.43458 1.46094 1.96322 1.46094 2.52719C1.46094 3.59485 2.00428 4.5368 2.83003 5.08865C2.32553 5.07268 1.85104 4.93425 1.43608 4.70376C1.43586 4.71659 1.43586 4.72949 1.43586 4.74244C1.43586 6.23349 2.49666 7.47732 3.90448 7.75999C3.64622 7.83033 3.37436 7.86792 3.09366 7.86792C2.89537 7.86792 2.70257 7.84866 2.51471 7.81272C2.90629 9.03537 4.0428 9.92509 5.38945 9.94994C4.33623 10.7753 3.00928 11.2673 1.56749 11.2673C1.31911 11.2673 1.07413 11.2528 0.833374 11.2243C2.19527 12.0975 3.81291 12.6069 5.55081 12.6069C11.2113 12.6069 14.3067 7.91763 14.3067 3.85096C14.3067 3.71753 14.3037 3.5848 14.2978 3.45285C14.899 3.01896 15.4208 2.47694 15.8334 1.8598C15.2815 2.10456 14.6884 2.26998 14.0658 2.34438Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://twitter.com/fishwongxd</span>
+            
+        
+    </div>
+</div>
+    </div>
+</div>
+
+    </div>
+
+    
+    <script src="/js/prism.js"></script>
+</body>
+
+</html>

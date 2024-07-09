@@ -1,7 +1,7 @@
 ---
 title: About Yu Wong
 ---
-Data Engineer based in London after pursuing a master degree @LSE.
+Data Engineering Lead in Cisco currently based in Toronto, Canada. I have lived in Hong Kong, Australia and UK before coming to Canada.
 
 I enjoy working with data, talking about data architecture and telling story through data.
 

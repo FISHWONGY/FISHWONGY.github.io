@@ -239,7 +239,7 @@ re <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</s
         headers<span style="color:#f92672">=</span>headers,
         json<span style="color:#f92672">=</span>subscription_data,
     )
-</code></pre></div><p>We can see on both of the above examples, there is a parameter called notificationUrl. This is the URL that Microsoft Graph will send the notification to, and we can obtain it either by setting up GCP cloud run or Azure container apps.
+</code></pre></div><p>We can see on both of the above examples, there is a parameter called <code>notificationUrl</code>. This is the URL that Microsoft Graph will send the notification to, and we can obtain it either by setting up GCP cloud run or Azure container apps.
 We will dive deeper in the next section.</p>
 <p><u><b>
 <p style="font-size:20pt ">
@@ -356,7 +356,7 @@ Building the application on GCP
   <span style="color:#f92672">cloudrun</span>:
     <span style="color:#f92672">projectid</span>: <span style="color:#ae81ff">gcp-prj-123/repo</span>
     <span style="color:#f92672">region</span>: <span style="color:#ae81ff">us-central1</span>
-</code></pre></div><p>After finally, to deploy our app to GCP Cloud Run.</p>
+</code></pre></div><p>And finally, to deploy our app to GCP Cloud Run.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">skaffold run -p production -v info
 </code></pre></div><p>If you application is successfully deployed, you can see the URL of the application on the GCP console if we navigate to Cloud Run.</p>
 <p>The url will look something in the format of <code>https://my-app-xxxx.a.run.app</code></p>
@@ -367,8 +367,8 @@ Building the application on Azure
 <p align="center">
 <img alt = 'png' src='/images/on_msgraph/azure-aca-flow.png'/>
 </p>
-<p>We will first configure our Azure environment.
-1 - Local setup</p>
+<p>We will first configure our Azure environment.</p>
+<p>1 - Local setup</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew update <span style="color:#f92672">&amp;&amp;</span> brew install azure-cli
 
 az login
@@ -463,12 +463,14 @@ The application URL will look something like <code>https://my-app.xxx.centralus.
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> az containerapp update --name my-app --resource-group myResourceGroup --set-env-vars <span style="color:#e6db74">&#34;SUPERSECRETS=secretref:supersecrets&#34;</span>
 </code></pre></div><p>2 - Azure Key Vault</p>
 <p>There are a few steps to set up on Azure to configure permission.</p>
-<p>a) We first need to enable Managed Identity for the container app. To do so, go to the &ldquo;Settings&rdquo; section of our container app on the Azure Portal and select &ldquo;Identity&rdquo;.</p>
-<p>In the &ldquo;System assigned&rdquo; tab, switch the &ldquo;Status&rdquo; to &ldquo;On&rdquo; to enable a system-assigned managed identity. Azure will create an identity associated with the Container App and manage its credentials.</p>
-<p>Click &ldquo;Save&rdquo; at the top of the panel to apply the changes and we will obtain an object/ principal ID for our system managed identity.</p>
-<p>b) Set apporiate permission on the Key Vault. Go to the &ldquo;Access policies&rdquo; section of the Key Vault and click on &ldquo;Add Access Policy&rdquo; or &ldquo;Create&rdquo;.</p>
+<p>a) We first need to enable Managed Identity for the container app.</p>
+<p>To do so, go to the <code>&quot;Settings&quot;</code> section of our container app on the Azure Portal and select <code>&quot;Identity&quot;</code>.</p>
+<p>In the <code>&quot;System assigned&quot;</code> tab, switch the <code>&quot;Status&quot;</code> to <code>&quot;On&quot;</code> to enable a system-assigned managed identity. Azure will create an identity associated with the Container App and manage its credentials.</p>
+<p>Click <code>&quot;Save&quot;</code> at the top of the panel to apply the changes and we will obtain an object/ principal ID for our system managed identity.</p>
+<p>b) Set apporiate permission on the Key Vault.</p>
+<p>Go to the <code>&quot;Access policies&quot;</code> section of the Key Vault and click on <code>&quot;Add Access Policy&quot;</code> or <code>&quot;Create&quot;</code>.</p>
 <p>Choose the secret permissions you want to grant to the Container App (at minimum, it needs &ldquo;Get&rdquo; permission).</p>
-<p>Click on &ldquo;Select principal&rdquo; and search for the system-assigned managed identity we created in the previous step. After reviewing the settings, click &ldquo;Add&rdquo; to apply the changes.</p>
+<p>Click on <code>&quot;Select principal&quot;</code> and search for the system-assigned managed identity we created in the previous step. After reviewing the settings, click <code>&quot;Add&quot;</code> to apply the changes.</p>
 <p>c) Reference the secret in the application.</p>
 <p>Using the Azure SDK, we can retrieve the secret from the Key Vault.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> azure.identity <span style="color:#f92672">import</span> DefaultAzureCredential
@@ -551,6 +553,9 @@ Final Thoughts
 <p>The development experiences of the 2 cloud platforms are quite similar. On their Web their, they both of metrics to monitor data volumes and performance, logs are available to debug the application. GCP will provide a deployment YAML template on the UI for user to view and edit, while Azure provides a deployment JSON that we can view on the UI.
 I&rsquo;m more familiar with the GCP umbrella, so I found it easier to build the application on GCP. However, I found it interesting to build the architecture on Azure as well, especially the data source is originally from an Azure application.</p>
 <p>Thank you for reading and have a nice day!</p>
+<p>If you want to support my work,</p>
+<p><a href="https://buymeacoffee.com/yuwong">Buy me a coffee</a></p>
+<p>Honestly, if you made it this far you already made my day :)</p>
 
     </article>
 

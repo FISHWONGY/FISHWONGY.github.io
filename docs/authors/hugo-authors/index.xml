@@ -6,7 +6,59 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 09 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Streamlit application for ML in production</title>
+      <link>https://FISHWONGY.github.io/post/20240709_streamlit/</link>
+      <pubDate>Tue, 09 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240709_streamlit/</guid>
+      <description>Let&amp;rsquo;s take a look at what we have disuccsed so far:
+1 - Setting up MLFlow with CLoud Run with IAP
+2 - Setting up Kubeflow with GKE and IAP
+3 - Setting up ML endpoint for prediction with FastAPI and Cloud Run, also with Vertex AI Endpoint Serving and KServe
+Now, in this last article of the MLOps series, we will look in to Streamlit app for machine learning prediction in Cloud Run and GKE.</description>
+    </item>
+    
+    <item>
+      <title>On Deploying ML Endpoints</title>
+      <link>https://FISHWONGY.github.io/post/20240708_mlep/</link>
+      <pubDate>Mon, 08 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240708_mlep/</guid>
+      <description>Introduction In my previous articles, we have talked about how to set up a Cloud Run application with for MLFlow Server and Kubflow on GKE with Ingress, load balancer, IAP set up for only allowing traffic from specific IP addresses. In this article, I will talk about how to deploy ML endpoints to serve predictions as a Cloud Run applications with Ingress control to communicate with each other, also how to deploy a Vertex AI serving endpoint and a kubeflow KServe endpoint.</description>
+    </item>
+    
+    <item>
+      <title>On Kubeflow</title>
+      <link>https://FISHWONGY.github.io/post/20240707_kubeflow/</link>
+      <pubDate>Sun, 07 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240707_kubeflow/</guid>
+      <description>After discussing on MLFlow in the last post, in today&amp;rsquo;s post, let&amp;rsquo;s have a look at Kubeflow
+Architecture
+Here is an overview of the MLOPS workflow with Kubeflow.
+And in today&amp;rsquo;s post, we will focus on this part.
+ What is Kubeflow? 
+Kubeflow is an open-source machine learning (ML) toolkit for Kubernetes. It is dedicated to making deployments of machine learning workflows on Kubernetes simple, portable, and scalable. Kubeflow can facilitate the orchestration of Kubernetes ML workloads and to empower users to deploy best-in-class open-source tools on any Cloud infrastructure.</description>
+    </item>
+    
+    <item>
+      <title>On ML Flow</title>
+      <link>https://FISHWONGY.github.io/post/20240706_mlflow/</link>
+      <pubDate>Sat, 06 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240706_mlflow/</guid>
+      <description>This is a series of blog post about MLOPS, the series consists of 4 posts, which we will discuss:
+1 - Deploying and setting up MLFlow
+2 - Deploying and setting up Kubeflow
+3 - Deploying Machine Learning endpoints with different tools
+4 - Deploying Streamlit applications using various ML endpoints for a user interface
+To follow along this blog post, the repo is here
+Architecture
+Here is an overview of the MLOPS workflow with MLFlow</description>
+    </item>
+    
     <item>
       <title>On AKS</title>
       <link>https://FISHWONGY.github.io/post/20240616_aks/</link>
@@ -82,9 +134,9 @@ Adaptive Card is a platform-agnostic schema for card exchange. It is a simple wa
       <pubDate>Tue, 23 Apr 2024 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20240423_chatbot/</guid>
-      <description>I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
-With the current popularity of LLM, one way to interact with the model is through chat bots.
-In this blog post, I will share with you the step by step guide to building a simple function chat bot on various platforms, and hopefully by the end of the post, you will be able to take away some ideas on how to build your own chat bot on your preferred platform and integrate with your own AI model!</description>
+      <description>To follow along this blog post, the repo is here
+Introduction I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
+With the current popularity of LLM, one way to interact with the model is through chat bots.</description>
     </item>
     
     <item>
@@ -105,8 +157,9 @@ Microsoft Graph exposes REST APIs and client libraries to access data on the fol
       <pubDate>Mon, 01 Apr 2024 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20240401_jiraoauth/</guid>
-      <description>A while back, I have talked about some use case with Jira REST API using api token. To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
- What is GCP Cloud Run</description>
+      <description>To use any Jira API related application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
+ What is GCP Cloud Run 
+On Cloud Run, your code can either run continuously as a service or as a job.</description>
     </item>
     
     <item>

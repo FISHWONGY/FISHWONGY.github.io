@@ -25,14 +25,14 @@
 
 
 <title>On Building Chat Bots | Yu Wong</title>
-<meta name="description" content="I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
-With the current popularity of LLM, one way to interact with the model is through chat bots.
-In this blog post, I will share with you the step by step guide to building a simple function chat bot on various platforms, and hopefully by the end of the post, you will be able to take away some ideas on how to build your own chat bot on your preferred platform and integrate with your own AI model!">
+<meta name="description" content="To follow along this blog post, the repo is here
+Introduction I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
+With the current popularity of LLM, one way to interact with the model is through chat bots.">
 <meta property="og:title" content="On Building Chat Bots | Yu Wong">
 <meta property="og:site_name" content="Yu Wong">
-<meta property="og:description" content="I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
-With the current popularity of LLM, one way to interact with the model is through chat bots.
-In this blog post, I will share with you the step by step guide to building a simple function chat bot on various platforms, and hopefully by the end of the post, you will be able to take away some ideas on how to build your own chat bot on your preferred platform and integrate with your own AI model!">
+<meta property="og:description" content="To follow along this blog post, the repo is here
+Introduction I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
+With the current popularity of LLM, one way to interact with the model is through chat bots.">
 <meta property="og:url" content="https://FISHWONGY.github.io/post/20240423_chatbot/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -45,9 +45,9 @@ In this blog post, I will share with you the step by step guide to building a si
 	<meta name="twitter:site" content="@https://twitter.com/fishwongxd">
 	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
 
-	<meta name="twitter:description" content="I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
-With the current popularity of LLM, one way to interact with the model is through chat bots.
-In this blog post, I will share with you the step by step guide to building a simple function chat bot on various platforms, and hopefully by the end of the post, you will be able to take away some ideas on how to build your own chat bot on your preferred platform and integrate with your own AI model!">
+	<meta name="twitter:description" content="To follow along this blog post, the repo is here
+Introduction I have a couple of previous blog post that talks about my journey in building chat bots with Webex and Discord, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.
+With the current popularity of LLM, one way to interact with the model is through chat bots.">
 <meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_chatbot/chatbot-cover.png">
 <meta property="article:published_time" content="2024-04-23T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2024-04-23T00:00:00&#43;00:00">
@@ -172,7 +172,9 @@ In this blog post, I will share with you the step by step guide to building a si
 
 
     <article  id="articleContent" class="post-content" style="position:relative;">
-        <p>I have a couple of previous blog post that talks about my journey in building chat bots with <a href="https://fishwongy.github.io/post/20231228_aiwebexbot/">Webex</a> and <a href="https://fishwongy.github.io/post/20240301_discordaibot_pt1/">Discord</a>, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.</p>
+        <p>To follow along this blog post, the repo is <a href="https://github.com/FISHWONGY/chatbot-collections">here</a></p>
+<h2 id="introduction">Introduction</h2>
+<p>I have a couple of previous blog post that talks about my journey in building chat bots with <a href="https://fishwongy.github.io/post/20231228_aiwebexbot/">Webex</a> and <a href="https://fishwongy.github.io/post/20240301_discordaibot_pt1/">Discord</a>, and using them as an AI assistant with the combination of LLM. In th past, I have also built chat bots on various other platforms like Line, Telegram, Slack, and WhatsApp.</p>
 <p>With the current popularity of LLM, one way to interact with the model is through chat bots.</p>
 <p>In this blog post, I will share with you the step by step guide to building a simple function chat bot on various platforms, and hopefully by the end of the post, you will be able to take away some ideas on how to build your own chat bot on your preferred platform and integrate with your own AI model!</p>
 <p>I will go through the steps of setting up chat bots on the following platforms: Discord, Line, Slack, Telegram, Webex and WhatsApp.</p>
@@ -183,7 +185,7 @@ Discord
 </b></u></p>
 <h3 id="step-1-create-a-discord-bot">Step 1: Create a Discord Bot</h3>
 <p>To do so, we will have to create a Discord bot on the <a href="https://discord.com/developers/applications">Discord Developer Portal</a>.</p>
-<p>Go on to the Discord Developer Portal and click on the &ldquo;New Application&rdquo; button. Give your application a name and click on the &ldquo;Create&rdquo; button.</p>
+<p>Go on to the Discord Developer Portal and click on the <code>&quot;New Application&quot;</code> button. Give your application a name and click on the <code>&quot;Create&quot;</code> button.</p>
 <p align="center">
 <img alt = 'png' src='/images/on_chatbot/dc-create.png'/>
 </p>
@@ -240,11 +242,11 @@ Line
 </b></u></p>
 <h3 id="step-1-create-a-line-bot">Step 1: Create a Line Bot</h3>
 <p>To do so, we will have to create an application on the <a href="https://developers.line.biz/console">Line Developer Console</a>.</p>
-<p>1 -  Create a provider. Click on the &ldquo;Create Provider&rdquo; button and fill in the necessary details.</p>
+<p>1 -  Create a provider. Click on the <code>&quot;Create Provider&quot;</code> button and fill in the necessary details.</p>
 <p align="center">
 <img alt = 'png' src='/images/on_chatbot/line-create.png'/>
 </p>
-<p>2 - Click on the &ldquo;Create New Channel&rdquo; button, you will see there are different channel type, in our case, to create a Line bot, we will select the &ldquo;Messaging API&rdquo; channel type.</p>
+<p>2 - Click on the <code>&quot;Create New Channel&quot;</code> button, you will see there are different channel type, in our case, to create a Line bot, we will select the <code>&quot;Messaging API&quot;</code> channel type.</p>
 <p align="center">
 <img alt = 'png' src='/images/on_chatbot/line-create2.png'/>
 </p>
@@ -256,7 +258,7 @@ Line
 <p align="center">
 <img alt = 'png' src='/images/on_chatbot/line-create4.png'/>
 </p>
-<p>If we navigate to Basic settings, we will be able to see the Channel Secret, and under messaging API, we will be able to see the Channel Access Token and the field to add a webhook URL.
+<p>If we navigate to Basic settings, we will be able to see the <code>Channel Secret</code>, and under messaging API, we will be able to see the <code>Channel Access Token</code> and the field to add a webhook URL.
 We will need these information to authenticate our bot.</p>
 <h3 id="step-2-code-implementation-with-python-1">Step 2: Code implementation with Python</h3>
 <p>We can use either <code>Flask</code> or <code>FastAPI</code> to create a webhook server to listen to the incoming messages from Line.</p>
@@ -375,7 +377,7 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> app .<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;poetry&#34;</span>, <span style="color:#e6db74">&#34;run&#34;</span>, <span style="color:#e6db74">&#34;uvicorn&#34;</span>, <span style="color:#e6db74">&#34;main:app&#34;</span>, <span style="color:#e6db74">&#34;--host&#34;</span>, <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>, <span style="color:#e6db74">&#34;--port&#34;</span>, <span style="color:#e6db74">&#34;80&#34;</span>]<span style="color:#960050;background-color:#1e0010">
 </span></code></pre></div><p>skaffold.yaml</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-skaffold.yaml" data-lang="skaffold.yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">skaffold/v4beta2</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">skaffold/v4beta2</span>
 <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Config</span>
 <span style="color:#f92672">metadata</span>:
   <span style="color:#f92672">name</span>: <span style="color:#ae81ff">line-bot-fastapi-app</span>
@@ -396,7 +398,7 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_
     <span style="color:#f92672">projectid</span>: <span style="color:#ae81ff">gcp-prj-123</span>
     <span style="color:#f92672">region</span>: <span style="color:#ae81ff">us-central1</span>
 </code></pre></div><p>service.yaml</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-service.yaml" data-lang="service.yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">serving.knative.dev/v1</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">serving.knative.dev/v1</span>
 <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
 <span style="color:#f92672">metadata</span>:
   <span style="color:#f92672">name</span>: <span style="color:#ae81ff">line-bot-fastapi-app</span>
@@ -438,7 +440,7 @@ Slack
 <p align="center">
 <img alt = 'png' src='/images/on_chatbot/slack-app-token.png'/>
 </p>
-<p>4 - Under OAuth &amp; Permissions, you will be able to see the Bot Token Scopes, you can add the necessary scopes for your bot to interact with the Slack workspace, at the minimum, you will need the <code>chat:write</code> scope to send messages to the workspace.</p>
+<p>4 - Under OAuth &amp; Permissions, you will be able to see the <code>Bot Token Scopes</code>, you can add the necessary scopes for your bot to interact with the Slack workspace, at the minimum, you will need the <code>chat:write</code> scope to send messages to the workspace.</p>
 <p align="center">
 <img alt = 'png' src='/images/on_chatbot/slack-scope.png'/>
 </p>
@@ -769,7 +771,7 @@ WhatsApp
 <img alt = 'png' src='/images/on_chatbot/whatasapp-system-user.png'/>
 </p>
 <p>7 - To obtain a long-lived access token, you will need to add assets under the user system we created from the above step.
-**NOTE: ** We need to allow ALL of the permissions for the app to be able to send messages to the WhatsApp number, only allowing messaging permissions will not work.</p>
+**NOTE: ** We need to allow <code>ALL</code> of the permissions for the app to be able to send messages to the WhatsApp number, only allowing messaging permissions will not work.</p>
 <p>8 - After setting up all of the access, we will have to grab the required config.</p>
 <p>For <code>App ID</code> and <code>App Secret</code>, navigate to App Dasboard under <code>Basic</code> of <code>App settings</code></p>
 <p align="center">
@@ -917,6 +919,9 @@ async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">webhook
 <p>And that&rsquo;s it! We have successfully created a chat bot on 6 communication platforms, Discord, Line, Slack, Telegram, Webex, and WhatsApp. To further enhance the chat bot, you can integrate it with your own AI model to provide more intelligent responses to the user&rsquo;s queries. Please check by my previous blog post on how I integrate OpenAI GPT with <a href="https://fishwongy.github.io/post/20231228_aiwebexbot/">Webex</a> and Gemini with <a href="https://fishwongy.github.io/post/20240301_discordaibot_pt1/">Discord</a> chat bots.</p>
 <p>I hope you find this blog post helpful and informative.
 Thank you for reading and have a nice day!</p>
+<p>If you want to support my work,</p>
+<p><a href="https://buymeacoffee.com/yuwong">Buy me a coffee</a></p>
+<p>Honestly, if you made it this far you already made my day :)</p>
 
     </article>
 
