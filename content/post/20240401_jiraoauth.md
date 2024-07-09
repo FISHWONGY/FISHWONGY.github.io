@@ -10,8 +10,7 @@ title: On Jira OAuth with GCP Cloud Run
 <br />
 <br />
 
-A while back, I have talked about some [use case with Jira REST API](https://fishwongy.github.io/post/20231228_aiwebexbot) using api token.
-To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO.
+To use any Jira API related application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO.
 In this article,  we will discuss how to set up [Jira OAuth 2.0 (3LO) application](https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/) with GCP Cloud Run.
 
 <u><b>
