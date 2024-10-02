@@ -427,11 +427,3 @@ And that's it! We have successfully deployed our AI chat bot to GKE!
  In the [next blog post](https://fishwongy.github.io/post/20240303_discordaibot_pt3), I will be discussing the implementation of RAG with Google Vertex AI.
 
 Thank you for reading and have a nice day!
-
-
-If you want to support my work,
-
-[Buy me a coffee](https://buymeacoffee.com/yuwong)
-
-
-Honestly, if you made it this far you already made my day :)
