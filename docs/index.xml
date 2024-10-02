@@ -6,7 +6,54 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 09 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Airflow in Production with GCP</title>
+      <link>https://FISHWONGY.github.io/post/20241001_airflow_gcp_prod/</link>
+      <pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20241001_airflow_gcp_prod/</guid>
+      <description>A while ago, I wrote a post about deploying Apache Airflow on using Kind and integrating it with Google Cloud Platform. Today, I want to dive deeper into deploying Apache Airflow as a production level application on Google Cloud Platform.
+In this post, we will cover the following topics:
+1 - Setting up GKE
+2 - Creating node pool for scaling
+3 - Deploying Airflow to GKE with Helm
+4 - Setting up Ingress and DNS for Airflow server</description>
+    </item>
+    
+    <item>
+      <title>On UV</title>
+      <link>https://FISHWONGY.github.io/post/20240918_uv/</link>
+      <pubDate>Wed, 18 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240918_uv/</guid>
+      <description>A while ago, I wrote a post about using poetry as a python package manager. Today, I want to introduce you to another package manager called uv.
+ What is UV? 
+According to Astral, the author of uv, uv is an extremely fast Python package installer and resolver, written in Rust, and designed as a drop-in replacement for pip and pip-tools workflows.
+uv represents a milestone in our pursuit of a &amp;ldquo;Cargo for Python&amp;rdquo;: a comprehensive Python project and package manager that&amp;rsquo;s fast, reliable, and easy to use.</description>
+    </item>
+    
+    <item>
+      <title>On Creating Static Public IP on GCP</title>
+      <link>https://FISHWONGY.github.io/post/20240901_gcp_staticip/</link>
+      <pubDate>Sun, 01 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240901_gcp_staticip/</guid>
+      <description>Sometimes when we are working with Public Cloud, we need to have a static public IP address for our instances. This is useful when we want to whitelist the IP address on some services or when we want to access the instances from the internet. In this post, we will learn how to create a static public IP address on Google Cloud Platform. To have a static public IP address on Google Cloud Platform, we will first create a VPC network and then create Cloud NAT to allow the instances to access the internet.</description>
+    </item>
+    
+    <item>
+      <title>On GitHub Actions - GCP</title>
+      <link>https://FISHWONGY.github.io/post/20240803_ghactions_gcp/</link>
+      <pubDate>Sat, 03 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20240803_ghactions_gcp/</guid>
+      <description>In one of my previous post, I discussed how to use GitHub Actions for automating DBT model build process and hosting DBT documentations on GitHub Pages.
+In this post, I will take a closer look into how to use GitHub Actions for CI/CD with Google Cloud Platform, including deploying to Google Cloud Functions, Google Cloud Run, and Google Kubernetes Engine (GKE).
+The workflow will look something like below:
+ Deploying to Google Cloud Functions</description>
+    </item>
+    
     <item>
       <title>On Streamlit application for ML in production</title>
       <link>https://FISHWONGY.github.io/post/20240709_streamlit/</link>

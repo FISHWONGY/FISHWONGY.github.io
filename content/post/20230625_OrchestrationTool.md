@@ -164,11 +164,3 @@ However, both of their documentations are clear. So, for a mini-project this tim
 That's it for now. 
 
 Thank you for reading and have a nice day!
-
-
-If you want to support my work,
-
-[Buy me a coffee](https://buymeacoffee.com/yuwong)
-
-
-Honestly, if you made it this far you already made my day :)

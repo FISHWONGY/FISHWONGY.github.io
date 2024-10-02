@@ -470,10 +470,3 @@ preds = loaded_pipelineModel.transform(df)
 And that's it! We have successfully set up a Databricks environment on GCP, extracted data from Open Weather API to Databricks, predicted the temperature with Boosting and build a ML pipeline with that.
 
 Thank you for reading and have a nice day!
-
-If you want to support my work,
-
-[Buy me a coffee](https://buymeacoffee.com/yuwong)
-
-
-Honestly, if you made it this far you already made my day :)

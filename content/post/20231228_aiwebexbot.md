@@ -447,11 +447,3 @@ Can't wait to see what lies ahead in 2024.
 
 
 Thank you for reading and have a nice day!
-
-
-If you want to support my work,
-
-[Buy me a coffee](https://buymeacoffee.com/yuwong)
-
-
-Honestly, if you made it this far you already made my day :)
