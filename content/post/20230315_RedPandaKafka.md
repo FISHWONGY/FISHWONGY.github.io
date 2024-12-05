@@ -339,4 +339,3 @@ And that's it! The data now stream from data source to cloud storage via RedPand
 
 
 Thank you for reading and have a nice day!
-
