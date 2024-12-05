@@ -215,7 +215,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: airflow-ingress-ip
 spec:
   rules:
-    - host: 'wfcdeoairflow.com'
+    - host: 'mydomain.com'
       http:
         paths:
           - path: /*
