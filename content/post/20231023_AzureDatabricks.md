@@ -673,4 +673,3 @@ GRANT MODIFY ON ANY FILE TO `user@email.com`;
 That's it for now, hope you found this helpful.
 
 Thank you for reading and have a nice day!
-

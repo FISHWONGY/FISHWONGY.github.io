@@ -25,12 +25,14 @@
 
 
 <title>On Jira OAuth with GCP Cloud Run | Yu Wong</title>
-<meta name="description" content="A while back, I have talked about some use case with Jira REST API using api token. To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
- What is GCP Cloud Run">
+<meta name="description" content="To use any Jira API related application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
+ What is GCP Cloud Run 
+On Cloud Run, your code can either run continuously as a service or as a job.">
 <meta property="og:title" content="On Jira OAuth with GCP Cloud Run | Yu Wong">
 <meta property="og:site_name" content="Yu Wong">
-<meta property="og:description" content="A while back, I have talked about some use case with Jira REST API using api token. To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
- What is GCP Cloud Run">
+<meta property="og:description" content="To use any Jira API related application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
+ What is GCP Cloud Run 
+On Cloud Run, your code can either run continuously as a service or as a job.">
 <meta property="og:url" content="https://FISHWONGY.github.io/post/20240401_jiraoauth/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -43,8 +45,9 @@
 	<meta name="twitter:site" content="@https://twitter.com/fishwongxd">
 	<meta name="twitter:creator" content="@https://twitter.com/fishwongxd">
 
-	<meta name="twitter:description" content="A while back, I have talked about some use case with Jira REST API using api token. To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
- What is GCP Cloud Run">
+	<meta name="twitter:description" content="To use any Jira API related application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO. In this article, we will discuss how to set up Jira OAuth 2.0 (3LO) application with GCP Cloud Run.
+ What is GCP Cloud Run 
+On Cloud Run, your code can either run continuously as a service or as a job.">
 <meta name="twitter:image" content="https://FISHWONGY.github.io/images/on_jiraoauth/jira-oauth-cover.png">
 <meta property="article:published_time" content="2024-04-01T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2024-04-01T00:00:00&#43;00:00">
@@ -171,8 +174,7 @@
     <article  id="articleContent" class="post-content" style="position:relative;">
         <p><br />
 <br /></p>
-<p>A while back, I have talked about some <a href="https://fishwongy.github.io/post/20231228_aiwebexbot">use case with Jira REST API</a> using api token.
-To use the application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO.
+<p>To use any Jira API related application in production, best practices will be either to obtain the the api token with a generic account or use OAuth 2.0 for SSO.
 In this article,  we will discuss how to set up <a href="https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/">Jira OAuth 2.0 (3LO) application</a> with GCP Cloud Run.</p>
 <p><u><b>
 <p style="font-size:20pt ">

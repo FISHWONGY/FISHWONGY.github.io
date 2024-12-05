@@ -164,4 +164,3 @@ However, both of their documentations are clear. So, for a mini-project this tim
 That's it for now. 
 
 Thank you for reading and have a nice day!
-

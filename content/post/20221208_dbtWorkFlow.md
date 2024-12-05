@@ -500,4 +500,3 @@ This is just one use case; there's so much more GitHub Actions can do, such as e
 That's it for now.
 
 Thank you for reading, and have a nice day!
-
