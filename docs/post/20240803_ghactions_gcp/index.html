@@ -194,6 +194,7 @@ Deploying to Google Cloud Functions
 </p>
 <p>3 - Add sufficient permissions to the service account, e.g. <code>Cloud Functions Developer</code> role.</p>
 <p><u><b>Setup GitHub Actions</b></u></p>
+<p>First of all, under the file <code>.gitignore</code>, we should add a line <code>gha-creds-*.json</code> to prevent any creds that generated via the actions process to be pushed to the code.</p>
 <p>At the root of your repository, create a <code>.github/workflows</code> folder and create a new yml file, e.g. <code>deploy-cloud-functions.yml</code>.</p>
 <p>After adding the following code to the yml file, whenever a pull request is merged to the main branch, the workflow will be triggered.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Cloud Functions</span>
@@ -506,7 +507,7 @@ In this exmaple, we are assuming that we have a GKE cluster named <code>autopilo
       <div class="footer-hr"></div>
       <div class="footer-container">
         <div class="footer-text">
-          © 2024 Yu Wong
+          © 2025 Yu Wong
         </div>
         <div class="social-icon-outer">
     <div class="social-icon-container">

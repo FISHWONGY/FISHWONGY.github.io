@@ -6,7 +6,45 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On API Wrapper with FastAPI</title>
+      <link>https://FISHWONGY.github.io/post/20250203_fastapi_f1/</link>
+      <pubDate>Mon, 03 Feb 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20250203_fastapi_f1/</guid>
+      <description>In some of my previous, we have discussed the use of FastAPI, such as using it as a webhook for a chatbot, and creating a machine learning API using FastAPI for prediction. In this post, we will discuss about using FastAPI to develop a API Wrapper for F1 data.
+Project Overview
+1 - Create a Cloud SQL database to store client scopes for authentication 2 - Scrape F1 drivers and team results from Formula1.</description>
+    </item>
+    
+    <item>
+      <title>On Azure Data Factory</title>
+      <link>https://FISHWONGY.github.io/post/20241218_adf_lc/</link>
+      <pubDate>Wed, 18 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20241218_adf_lc/</guid>
+      <description>In this post, we’ll build on the previous post and explore how to save the daily LeetCode results into Azure Blob Storage using a second Azure Function, and trigger both functions using Azure Data Factory.
+To follow with the post, you can check the code here
+Project Overview
+We’ll cover the following:
+1 - Creating a second Azure Function to write the LeetCode summary to Azure Blob
+2 - Setting up Azure Data Factory to trigger both functions daily</description>
+    </item>
+    
+    <item>
+      <title>On Azure Function</title>
+      <link>https://FISHWONGY.github.io/post/20241108_afa_lc/</link>
+      <pubDate>Fri, 08 Nov 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20241108_afa_lc/</guid>
+      <description>In this post, we’ll walk through the process of building and deploying an Azure Function App using Python to automatically post your LeetCode progress to a Webex room. The app is serverless, integrates with Azure Key Vault for secret management, and is scheduled to run with a timer trigger.
+To follow with the post, you can check the code here
+Project Overview
+We’ll cover the following:
+ Building the Azure Function App using Python The app contains the function of: Fetching recent LeetCode submissions with GraphQL, posting messages to Webex using their API and Securing secrets with Azure Key Vault Deploying and testing the app  Creating the Function App - Azure Portal</description>
+    </item>
+    
     <item>
       <title>On Airflow in Production with GCP</title>
       <link>https://FISHWONGY.github.io/post/20241001_airflow_gcp_prod/</link>
@@ -112,18 +150,6 @@ Here is an overview of the MLOPS workflow with MLFlow</description>
       <pubDate>Sun, 16 Jun 2024 00:00:00 +0000</pubDate>
       
       <guid>https://FISHWONGY.github.io/post/20240616_aks/</guid>
-      <description>In the past, I have wrote blog posts on how to setup Google Kubernetes Engine (GKE) and deploy an application, and how to deploy a python endpoint using Azure Container Apps. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.
- Prerequisites 
-1 - Install Helm if you haven&amp;rsquo;t already.
-Helm is a package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications.</description>
-    </item>
-    
-    <item>
-      <title>On AKS</title>
-      <link>https://FISHWONGY.github.io/post/20240628_aks/</link>
-      <pubDate>Sun, 16 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://FISHWONGY.github.io/post/20240628_aks/</guid>
       <description>In the past, I have wrote blog posts on how to setup Google Kubernetes Engine (GKE) and deploy an application, and how to deploy a python endpoint using Azure Container Apps. This time, I will blog about how to setup Azure Kubernetes Service (AKS) and deploy a simple python application.
  Prerequisites 
 1 - Install Helm if you haven&amp;rsquo;t already.

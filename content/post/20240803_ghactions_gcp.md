@@ -40,6 +40,8 @@ Google Cloud Functions is a serverless execution environment for building and co
 
 <u><b>Setup GitHub Actions</b></u>
 
+First of all, under the file `.gitignore`, we should add a line `gha-creds-*.json` to prevent any creds that generated via the actions process to be pushed to the code.
+
 At the root of your repository, create a `.github/workflows` folder and create a new yml file, e.g. `deploy-cloud-functions.yml`.
 
 After adding the following code to the yml file, whenever a pull request is merged to the main branch, the workflow will be triggered.
