@@ -74,6 +74,8 @@ gcloud container node-pools create airflow-external-pool-e2standard4 \
     --disk-type=pd-balanced \
     --image-type=COS_CONTAINERD \
     --metadata disable-legacy-endpoints=true \
+    --scopes=https://www.googleapis.com/auth/cloud-platform \
+    --service-account=svc@gcp-prj-123.iam.gserviceaccount.com \
     --enable-private-nodes \
     --node-locations=us-central1-a,us-central1-b,us-central1-c
 ```

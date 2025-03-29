@@ -145,7 +145,7 @@ uv represents a milestone in our pursuit of a &ldquo;Cargo for Python&rdquo;: a 
 
 <script src="/js/collapseAuthors.js"></script>
                     September 18, 2024
-                    • 2 min read
+                    • 3 min read
                 </div>
             </div>
         </header>
@@ -310,6 +310,12 @@ Setting Up uv
       <span style="color:#f92672">kustomize</span>:
         <span style="color:#f92672">paths</span>:
           - <span style="color:#ae81ff">./deploy/development</span>
+</code></pre></div><p>Be aware that in the <code>skaffold.yaml</code> file, this part has to be added for git ssh</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">build</span>:
+  <span style="color:#f92672">local</span>:
+    <span style="color:#f92672">useBuildkit</span>: <span style="color:#66d9ef">true</span>
+</code></pre></div><p>And to deploy</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">skaffold -p production -v info
 </code></pre></div><p>That’s it for now.</p>
 <p>Thank you for reading and have a nice day!</p>
 
@@ -392,7 +398,7 @@ Setting Up uv
       <div class="footer-hr"></div>
       <div class="footer-container">
         <div class="footer-text">
-          © 2024 Yu Wong
+          © 2025 Yu Wong
         </div>
         <div class="social-icon-outer">
     <div class="social-icon-container">

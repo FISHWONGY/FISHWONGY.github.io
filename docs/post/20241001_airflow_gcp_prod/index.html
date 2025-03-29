@@ -225,6 +225,8 @@ Creating Node Pool for Scaling
     --disk-type=pd-balanced \
     --image-type=COS_CONTAINERD \
     --metadata disable-legacy-endpoints=true \
+    --scopes=https<span style="color:#960050;background-color:#1e0010">:</span>//www.googleapis.com/auth/cloud-platform \
+    --service-account=svc@gcp-prj-123.iam.gserviceaccount.com \
     --enable-private-nodes \
     --node-locations=us-central1-a,us-central1-b,us-central1-c
 </code></pre></div><p>The above command will create a node pool named <code>airflow-external-pool-e2standard4</code> in the <code>airflow-standard-cluster</code> cluster. The node pool will have 1 node initially and will autoscale based on the workload. The node pool will have a machine type of <code>e2-standard-4</code> and a disk size of 100GB. The node pool will be within the <code>us-central1-a</code>, <code>us-central1-b</code>, and <code>us-central1-c</code> zones.</p>
@@ -669,7 +671,7 @@ kubectl get pods -n airflow
                                 Using uv as python package manager
                             </p>
                             <div class="article-metadata">
-                                September 18, 2024 · 2 min read
+                                September 18, 2024 · 3 min read
                             </div>
                         </div>
                     </div>
@@ -710,7 +712,7 @@ kubectl get pods -n airflow
       <div class="footer-hr"></div>
       <div class="footer-container">
         <div class="footer-text">
-          © 2024 Yu Wong
+          © 2025 Yu Wong
         </div>
         <div class="social-icon-outer">
     <div class="social-icon-container">
