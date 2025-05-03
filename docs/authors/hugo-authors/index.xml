@@ -6,7 +6,17 @@
     <description>Recent content on Yu Wong</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 01 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://FISHWONGY.github.io/authors/hugo-authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>On Django</title>
+      <link>https://FISHWONGY.github.io/post/20250501_f1_django/</link>
+      <pubDate>Thu, 01 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://FISHWONGY.github.io/post/20250501_f1_django/</guid>
+      <description>In the last post, we have discussed about using FastAPI to develop a API Wrapper for F1 data. In this post, we will discuss about using Django to develop an API client control portal that will be deployed to Cloud Run, so that we can use it to manage the API clients and their access to the API.
+There will be two main functions we will implement in this project:</description>
+    </item>
+    
     <item>
       <title>On API Wrapper with FastAPI</title>
       <link>https://FISHWONGY.github.io/post/20250203_fastapi_f1/</link>
@@ -15,7 +25,8 @@
       <guid>https://FISHWONGY.github.io/post/20250203_fastapi_f1/</guid>
       <description>In some of my previous, we have discussed the use of FastAPI, such as using it as a webhook for a chatbot, and creating a machine learning API using FastAPI for prediction. In this post, we will discuss about using FastAPI to develop a API Wrapper for F1 data.
 Project Overview
-1 - Create a Cloud SQL database to store client scopes for authentication 2 - Scrape F1 drivers and team results from Formula1.</description>
+1 - Create a Cloud SQL database to store client scopes for authentication
+2 - Scrape F1 drivers and team results from Formula1.</description>
     </item>
     
     <item>
